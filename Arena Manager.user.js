@@ -3647,7 +3647,7 @@
                     }
                 };
                 item.querySelector('.lmm-delete-btn').onclick = () => {
-                    if (confirm(this.t('confirmDelete').replace('{0}', name))) {
+                    if (confirm(this.t('confirmDelete').替换('{0}', name))) {
                         this.dm.deleteGroup(name);
                         this.renderGroupList();
                         this.updateTopbar();
