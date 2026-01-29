@@ -37,6 +37,48 @@
 5。 **已启动**中调整模型顺序
 6. 其余功能欢迎自行探索！
 
+### ☁️ GitHub Gist 云同步配置指南
+
+#### 步骤 1：创建 GitHub Personal Access Token
+
+1. 登录 [GitHub](https://github.com)
+2. 点击右上角头像 → **Settings**
+3. 左侧菜单滚动到底部 → **Developer settings**
+4. 点击 **Personal access tokens** → **Tokens (classic)**
+5. 点击 **Generate new token** → **Generate new token (classic)**
+6. 设置：
+   - **Note**：`Arena Manager GitHub Gist 云同步`（或任意名称）
+   - **Expiration**：建议选择 `No expiration`（永不过期）
+   - **Select scopes**：勾选 `gist`（仅需此权限）
+7. 点击 **Generate token**
+8. ⚠️ **立即复制 Token**（页面刷新后将无法再次查看！）
+
+#### 步骤 2：在脚本中配置
+
+1. 打开 Arena Manager 面板
+2. 点击顶栏 **⚙️ 设置**
+3. 在 **GitHub Gist 云同步** 区域：
+   - **GitHub Token**：粘贴刚才复制的 Token
+   - **Gist ID**：首次使用请**留空**（将自动创建）
+4. 点击 **上传到云端**
+
+#### 步骤 3：多设备同步
+
+在其他设备上：
+1. 安装脚本并打开设置
+2. 输入**相同的 Token**
+3. 输入**首次同步时生成的 Gist ID**（可在 [gist.github.com](https://gist.github.com) 查看）
+4. 点击同步即可拉取配置
+
+> 💡 **提示**：
+> 1. 目前同步为手动触发。建议在调整完配置后点击一次同步，换设备前再同步一次。
+> 2. 引用Github 文档[《确保 API 凭据安全》](https://docs.github.com/zh/rest/authentication/keeping-your-api-credentials-secure#store-your-authentication-credentials-securely)内容：
+>> **不要将未加密的身份验证凭据（如令牌或密钥）推送到任何存储库，即使存储库是专用存储库。**
+
+> 亲测，Github扫描到该做法后会撤销该Token，导致Token失效。
+
+脚本郑重承诺：Personal Access Token仅在Tampermonkey GM_setValue中存储，不会出现在本地导出的和上传至Gist的json中。
+
 ## ⌨️ 快捷键
 
 | 快捷键 | 功能 |
