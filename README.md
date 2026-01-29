@@ -71,6 +71,15 @@
 
 ## 📝 更新日志
 
+### v4.6.1 (2025-01-28)
+
+#### 🔧 紧急修复
+- **适配 Arena 新域名**：LMArena 更名为 Arena，域名从 `lmarena.ai` 迁移至 `arena.ai`
+- **修复模式检测失效**：适配新 UI 的按钮激活状态类名变更（`bg-surface-secondary` → `bg-surface-primary`）
+- **修复 URL 模式检测**：支持新的查询参数格式（`?chat-modality=image`）
+- **修复特性图标检测**：适配新 SVG 内联图标结构，通过 path 特征识别 Vision/RIU/Generation 能力
+- **修复语言切换不完整**：扫描按钮在点击后切换语言时文字现在会立即更新
+
 ### v4.6.0 (2025-01-28)
 
 #### 🎉 核心亮点
@@ -164,7 +173,7 @@
 - 新增 `createSettingsModal()`、`createGroupSelectModal()` 等模态框
 - 多选模式状态管理：`isMultiSelectMode`、`selectedModels`、`multiSelectBackup`
 
-####v4.5.1 (2026-01-27)
+### v4.5.1 (2026-01-27)
 
 - 添加了“molmo”特征词至“Allen AI”组织
 - 紧急修复Side by Side模式下只有一个下拉栏被展示的严重漏洞
