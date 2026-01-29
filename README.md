@@ -69,6 +69,10 @@
 
 </details>
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=JimAchievo/LMArena-Manager&type=date&legend=top-left)](https://www.star-history.com/#JimAchievo/LMArena-Manager&type=date&legend=top-left)
+
 ## 📝 更新日志
 
 ### v4.6.2 (2025-01-29)
