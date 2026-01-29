@@ -1,11 +1,10 @@
 // ==UserScript==
-// @name         LMArena Manager
+// @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.6.0
-// @description  智能管理 LMArena 模型显示 - 搜索增强、自定义分组、多视图模式
-// @author       LMArena Manager Team
-// @match        https://lmarena.ai/*
-// @match        https://web.lmarena.ai/*
+// @version      4.6.1
+// @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
+// @author       Arena Manager Team
+// @match        https://arena.ai/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
@@ -16,15 +15,15 @@
 (function() {
     'use strict';
 
-    const STORAGE_KEY = 'lmarena_manager_v5';
-    const VERSION = '4.6.0';
+    const STORAGE_KEY = 'arena_manager_v5';
+    const VERSION = '4.6.1';
 
     // ==================== 1. 国际化系统 ====================
     const I18N = {
         'zh-CN': {
             name: '简体中文',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: '开始扫描',
                 endScan: '结束扫描',
                 export: '导出',
@@ -140,7 +139,7 @@
         'en': {
             name: 'English',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: 'Start Scan',
                 endScan: 'End Scan',
                 export: 'Export',
@@ -256,7 +255,7 @@
         'zh-TW': {
             name: '繁體中文',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: '開始掃描',
                 endScan: '結束掃描',
                 export: '匯出',
@@ -372,7 +371,7 @@
         'ja': {
             name: '日本語',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: 'スキャン開始',
                 endScan: 'スキャン終了',
                 export: 'エクスポート',
@@ -488,7 +487,7 @@
         'ko': {
             name: '한국어',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: '스캔 시작',
                 endScan: '스캔 종료',
                 export: '내보내기',
@@ -604,7 +603,7 @@
         'es': {
             name: 'Español',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: 'Iniciar Escaneo',
                 endScan: 'Finalizar Escaneo',
                 export: 'Exportar',
@@ -720,7 +719,7 @@
         'fr': {
             name: 'Français',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: 'Démarrer le Scan',
                 endScan: 'Terminer le Scan',
                 export: 'Exporter',
@@ -836,7 +835,7 @@
         'de': {
             name: 'Deutsch',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: 'Scan Starten',
                 endScan: 'Scan Beenden',
                 export: 'Exportieren',
@@ -952,7 +951,7 @@
         'ru': {
             name: 'Русский',
             ui: {
-                title: 'LMArena Manager',
+                title: 'Arena Manager',
                 startScan: 'Начать сканирование',
                 endScan: 'Завершить сканирование',
                 export: 'Экспорт',
@@ -1170,11 +1169,13 @@
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
         static detect() {
+            // 优先检测按钮状态
             const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
                 const buttons = btnContainer.querySelectorAll('button');
                 for (const btn of buttons) {
-                    if (btn.classList.contains('bg-surface-secondary')) {
+                    // 新 UI 使用 bg-surface-primary 表示激活状态
+                    if (btn.classList.contains('bg-surface-primary')) {
                         const text = (btn.textContent || '').trim().toLowerCase();
                         if (text.includes('text')) return 'text';
                         if (text.includes('code')) return 'code';
@@ -1184,11 +1185,22 @@
                     }
                 }
             }
-            const url = window.location.href;
-            if (url.includes('/code')) return 'code';
-            if (url.includes('/search')) return 'search';
-            if (url.includes('/image')) return 'image';
-            if (url.includes('/video')) return 'video';
+            // 备用：检测 URL 参数
+            const url = new URL(window.location.href);
+            const modality = url.searchParams.get('chat-modality');
+            if (modality) {
+                if (modality === 'code') return 'code';
+                if (modality === 'image') return 'image';
+                if (modality === 'search') return 'search';
+                if (modality === 'video') return 'video';
+                if (modality === 'text') return 'text';
+            }
+            // 兜底：检测 URL 路径（兼容旧版）
+            const pathname = url.pathname;
+            if (pathname.includes('/code')) return 'code';
+            if (pathname.includes('/search')) return 'search';
+            if (pathname.includes('/image')) return 'image';
+            if (pathname.includes('/video')) return 'video';
             return 'text';
         }
     }
@@ -1433,10 +1445,32 @@
                 iconCompany = alt.replace(/\s*icon\s*/i, '').trim() || null;
             }
 
+            // 新 UI 特性检测：通过 SVG path 的 d 属性特征识别
+            const svgPaths = el.querySelectorAll('svg path');
+            let hasVision = false;
+            let hasRIU = false;
+            let hasGeneration = false;
+
+            svgPaths.forEach(path => {
+                const d = path.getAttribute('d') || '';
+                // Vision（眼镜图标）：两个圆形节点 + 连线
+                if (d.startsWith('M2 14C2 16.2') || d.includes('M2 14C2 16.2')) {
+                    hasVision = true;
+                }
+                // RIU（图片+加号）：图片框 + 右下角十字
+                if (d.includes('M13 21H3.6') || d.includes('19 19V16')) {
+                    hasRIU = true;
+                }
+                // Image Generation（纯风景画框）
+                if (d.startsWith('M21 3.6V20.4') || d.includes('M21 3.6V20.4')) {
+                    hasGeneration = true;
+                }
+            });
+
             const imageFlags = {
-                vision: !!el.querySelector('svg.lucide-glasses, [class*="lucide-glasses"]'),
-                riu: !!el.querySelector('svg.lucide-image-up, [class*="lucide-image-up"]'),
-                generation: !!el.querySelector('svg.lucide-image, [class*="lucide-image"]')
+                vision: hasVision,
+                riu: hasRIU,
+                generation: hasGeneration
             };
 
             return { name, iconCompany, imageFlags };
@@ -1830,7 +1864,7 @@
             const fab = document.createElement('button');
             fab.className = 'lmm-fab';
             fab.innerHTML = '🎛️';
-            fab.title = 'LMArena Manager (Ctrl+Shift+M)';
+            fab.title = 'Arena Manager (Ctrl+Shift+M)';
             fab.onclick = () => this.toggle();
             document.body.appendChild(fab);
             this.fab = fab;
@@ -1872,7 +1906,7 @@
             panel.className = 'lmm-panel';
             panel.innerHTML = `
                 <div class="lmm-header">
-                    <div class="lmm-title"><span>🎛️</span> LMArena Manager <span style="font-size:10px;color:var(--lmm-text2)">v${VERSION}</span></div>
+                    <div class="lmm-title"><span>🎛️</span> Arena Manager <span style="font-size:10px;color:var(--lmm-text2)">v${VERSION}</span></div>
                     <div class="lmm-header-btns">
                         <button class="lmm-btn" id="lmm-scan-toggle">🔍 <span data-i18n="startScan"></span></button>
                         <button class="lmm-btn" id="lmm-export">📤 <span data-i18n="export"></span></button>
@@ -1956,6 +1990,7 @@
                     }
                 });
             }
+            // 修复：更新扫描按钮文本（处理动态状态）
             const scanBtn = this.$('#lmm-scan-toggle');
             if (scanBtn) {
                 if (this.scanner.isScanActive()) {
@@ -2223,7 +2258,7 @@
             this.dm.save();
 
             const data = this.dm.export();
-            const filename = 'lmarena-manager-data.json';
+            const filename = 'Arena-manager-data.json';
 
             try {
                 if (gistId) {
@@ -2248,7 +2283,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            description: 'LMArena Manager Data',
+                            description: 'Arena Manager Data',
                             public: false,
                             files: { [filename]: { content: data } }
                         })
@@ -2349,7 +2384,7 @@
                 const blob = new Blob([this.dm.export()], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = `lmarena-manager-${new Date().toISOString().slice(0,10)}.json`;
+                a.download = `Arena-manager-${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
                 this.scanner.toast(this.t('exported'), 'success');
             };
@@ -3378,7 +3413,7 @@
                     }
                 };
                 item.querySelector('.lmm-delete-btn').onclick = () => {
-                    if (confirm(this.t('confirmDelete').替换('{0}', name))) {
+                    if (confirm(this.t('confirmDelete').replace('{0}', name))) {
                         this.dm.deleteGroup(name);
                         this.renderGroupList();
                         this.updateTopbar();
@@ -3412,7 +3447,7 @@
 
     // ==================== 初始化 ====================
     function init() {
-        console.log(`[LMM] LMArena Manager v${VERSION} 启动`);
+        console.log(`[LMM] Arena Manager v${VERSION} 启动`);
         const dm = new DataManager();
         const scanner = new Scanner(dm);
         const ui = new UI(dm, scanner);
