@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.6.2
+// @version      4.7.0
 // @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
 // @author       Arena Manager Team
 // @match        https://arena.ai/*
@@ -20,7 +20,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '4.6.2';
+    const VERSION = '4.7.0';
 
     // ==================== 1. 国际化系统 ====================
     const I18N = {
@@ -74,7 +74,7 @@
                 total: '总计',
                 noMatch: '没有匹配的模型',
                 noMatchHint: '请打开模型下拉框以触发自动扫描',
-                editModel: '编辑模型',
+                modelDetails: '模型详情',
                 modelName: '模型名称',
                 org: '所属组织',
                 orgPlaceholder: '输入组织名',
@@ -148,7 +148,32 @@
                 gistIdSaved: 'Gist ID 已自动保存',
                 networkError: '网络错误',
                 invalidToken: 'Token 无效或权限不足',
-                gistNotFound: 'Gist 不存在'
+                gistNotFound: 'Gist 不存在',
+                syncError: '同步错误',
+                note: '备注',
+                notePlaceholder: '输入备注...',
+                visibleStatus: '可见状态',
+                visibleYes: '已启用',
+                visibleNo: '已隐藏',
+                rankInMode: '排序位置',
+                rankOf: '第 {0} 位 / 共 {1} 个',
+                iconEdit: '图标',
+                iconPlaceholder: '单个字符',
+                resetOrg: '重置',
+                modes: '所属模式',
+                autoSync: '自动云同步',
+                autoSyncDesc: '自动将数据同步到云端',
+                syncOnChange: '变更时同步',
+                syncInterval: '定时同步',
+                minutes: '分钟',
+                lockFabPosition: '锁定按钮位置',
+                lockFabPositionDesc: '禁止拖动悬浮按钮',
+                exportGroup: '导出分组',
+                groupExported: '分组已导出',
+                invalidSyncInterval: '同步间隔必须是1-60之间的整数',
+                compact: '紧凑',
+                grid: '网格',
+                list: '列表'
             }
         },
         'en': {
@@ -201,7 +226,7 @@
                 total: 'Total',
                 noMatch: 'No matching models',
                 noMatchHint: 'Please open model dropdown to trigger auto scan',
-                editModel: 'Edit Model',
+                modelDetails: 'Model Details',
                 modelName: 'Model Name',
                 org: 'Organization',
                 orgPlaceholder: 'Enter organization name',
@@ -275,7 +300,32 @@
                 gistIdSaved: 'Gist ID saved',
                 networkError: 'Network error',
                 invalidToken: 'Invalid token or insufficient permissions',
-                gistNotFound: 'Gist not found'
+                gistNotFound: 'Gist not found',
+                syncError: 'Sync error',
+                note: 'Note',
+                notePlaceholder: 'Enter note...',
+                visibleStatus: 'Visibility',
+                visibleYes: 'Enabled',
+                visibleNo: 'Hidden',
+                rankInMode: 'Rank',
+                rankOf: '#{0} of {1}',
+                iconEdit: 'Icon',
+                iconPlaceholder: 'Single char',
+                resetOrg: 'Reset',
+                modes: 'Modes',
+                autoSync: 'Auto Sync',
+                autoSyncDesc: 'Automatically sync data to cloud',
+                syncOnChange: 'Sync on change',
+                syncInterval: 'Interval sync',
+                minutes: 'min',
+                lockFabPosition: 'Lock Button Position',
+                lockFabPositionDesc: 'Prevent dragging the floating button',
+                exportGroup: 'Export Group',
+                groupExported: 'Group exported',
+                invalidSyncInterval: 'Sync interval must be 1-60',
+                compact: 'Compact',
+                grid: 'Grid',
+                list: 'List'
             }
         },
         'zh-TW': {
@@ -328,7 +378,7 @@
                 total: '總計',
                 noMatch: '沒有匹配的模型',
                 noMatchHint: '請打開模型下拉框以觸發自動掃描',
-                editModel: '編輯模型',
+                modelDetails: '模型詳情',
                 modelName: '模型名稱',
                 org: '所屬組織',
                 orgPlaceholder: '輸入組織名',
@@ -402,7 +452,32 @@
                 gistIdSaved: 'Gist ID 已自動儲存',
                 networkError: '網路錯誤',
                 invalidToken: 'Token 無效或權限不足',
-                gistNotFound: 'Gist 不存在'
+                gistNotFound: 'Gist 不存在',
+                syncError: '同步錯誤',
+                note: '備註',
+                notePlaceholder: '輸入備註...',
+                visibleStatus: '可見狀態',
+                visibleYes: '已啟用',
+                visibleNo: '已隱藏',
+                rankInMode: '排序位置',
+                rankOf: '第 {0} 位 / 共 {1} 個',
+                iconEdit: '圖標',
+                iconPlaceholder: '單個字符',
+                resetOrg: '重置',
+                modes: '所屬模式',
+                autoSync: '自動雲同步',
+                autoSyncDesc: '自動將資料同步到雲端',
+                syncOnChange: '變更時同步',
+                syncInterval: '定時同步',
+                minutes: '分鐘',
+                lockFabPosition: '鎖定按鈕位置',
+                lockFabPositionDesc: '禁止拖動懸浮按鈕',
+                exportGroup: '匯出分組',
+                groupExported: '分組已匯出',
+                invalidSyncInterval: '同步間隔必須是1-60之間的整數',
+                compact: '緊湊',
+                grid: '網格',
+                list: '列表'
             }
         },
         'ja': {
@@ -455,7 +530,7 @@
                 total: '合計',
                 noMatch: '一致するモデルがありません',
                 noMatchHint: 'モデルドロップダウンを開いて自動スキャンを実行してください',
-                editModel: 'モデルを編集',
+                modelDetails: 'モデル詳細',
                 modelName: 'モデル名',
                 org: '組織',
                 orgPlaceholder: '組織名を入力',
@@ -529,7 +604,32 @@
                 gistIdSaved: 'Gist IDを保存しました',
                 networkError: 'ネットワークエラー',
                 invalidToken: 'Tokenが無効または権限不足',
-                gistNotFound: 'Gistが見つかりません'
+                gistNotFound: 'Gistが見つかりません',
+                syncError: '同期エラー',
+                note: 'メモ',
+                notePlaceholder: 'メモを入力...',
+                visibleStatus: '表示状態',
+                visibleYes: '有効',
+                visibleNo: '非表示',
+                rankInMode: '順位',
+                rankOf: '{1}中{0}位',
+                iconEdit: 'アイコン',
+                iconPlaceholder: '1文字',
+                resetOrg: 'リセット',
+                modes: 'モード',
+                autoSync: '自動同期',
+                autoSyncDesc: 'データを自動的にクラウドに同期',
+                syncOnChange: '変更時に同期',
+                syncInterval: '定期同期',
+                minutes: '分',
+                lockFabPosition: 'ボタン位置を固定',
+                lockFabPositionDesc: 'フローティングボタンのドラッグを無効化',
+                exportGroup: 'グループをエクスポート',
+                groupExported: 'グループをエクスポートしました',
+                invalidSyncInterval: '同期間隔は1〜60の整数である必要があります',
+                compact: 'コンパクト',
+                grid: 'グリッド',
+                list: 'リスト'
             }
         },
         'ko': {
@@ -582,7 +682,7 @@
                 total: '총',
                 noMatch: '일치하는 모델이 없습니다',
                 noMatchHint: '모델 드롭다운을 열어 자동 스캔을 실행하세요',
-                editModel: '모델 편집',
+                modelDetails: '모델 상세',
                 modelName: '모델 이름',
                 org: '조직',
                 orgPlaceholder: '조직 이름 입력',
@@ -656,7 +756,32 @@
                 gistIdSaved: 'Gist ID 저장됨',
                 networkError: '네트워크 오류',
                 invalidToken: '토큰이 유효하지 않거나 권한이 부족합니다',
-                gistNotFound: 'Gist를 찾을 수 없습니다'
+                gistNotFound: 'Gist를 찾을 수 없습니다',
+                syncError: '동기화 오류',
+                note: '메모',
+                notePlaceholder: '메모 입력...',
+                visibleStatus: '표시 상태',
+                visibleYes: '활성화',
+                visibleNo: '숨김',
+                rankInMode: '순위',
+                rankOf: '{1}개 중 {0}위',
+                iconEdit: '아이콘',
+                iconPlaceholder: '한 글자',
+                resetOrg: '초기화',
+                modes: '모드',
+                autoSync: '자동 동기화',
+                autoSyncDesc: '데이터를 클라우드에 자동 동기화',
+                syncOnChange: '변경 시 동기화',
+                syncInterval: '주기적 동기화',
+                minutes: '분',
+                lockFabPosition: '버튼 위치 고정',
+                lockFabPositionDesc: '플로팅 버튼 드래그 비활성화',
+                exportGroup: '그룹 내보내기',
+                groupExported: '그룹 내보내기 완료',
+                invalidSyncInterval: '동기화 간격은 1-60 사이의 정수여야 합니다',
+                compact: '컴팩트',
+                grid: '그리드',
+                list: '리스트'
             }
         },
         'es': {
@@ -709,7 +834,7 @@
                 total: 'Total',
                 noMatch: 'No hay modelos coincidentes',
                 noMatchHint: 'Abra el menú desplegable para activar el escaneo automático',
-                editModel: 'Editar Modelo',
+                modelDetails: 'Detalles del Modelo',
                 modelName: 'Nombre del Modelo',
                 org: 'Organización',
                 orgPlaceholder: 'Ingrese nombre de organización',
@@ -783,7 +908,32 @@
                 gistIdSaved: 'Gist ID guardado',
                 networkError: 'Error de red',
                 invalidToken: 'Token inválido o permisos insuficientes',
-                gistNotFound: 'Gist no encontrado'
+                gistNotFound: 'Gist no encontrado',
+                syncError: 'Error de sincronización',
+                note: 'Nota',
+                notePlaceholder: 'Ingrese nota...',
+                visibleStatus: 'Estado de Visibilidad',
+                visibleYes: 'Habilitado',
+                visibleNo: 'Oculto',
+                rankInMode: 'Posición',
+                rankOf: '#{0} de {1}',
+                iconEdit: 'Icono',
+                iconPlaceholder: 'Un carácter',
+                resetOrg: 'Restablecer',
+                modes: 'Modos',
+                autoSync: 'Sincronización Automática',
+                autoSyncDesc: 'Sincronizar datos automáticamente a la nube',
+                syncOnChange: 'Sincronizar al cambiar',
+                syncInterval: 'Sincronización periódica',
+                minutes: 'min',
+                lockFabPosition: 'Bloquear Posición del Botón',
+                lockFabPositionDesc: 'Evitar arrastrar el botón flotante',
+                exportGroup: 'Exportar Grupo',
+                groupExported: 'Grupo exportado',
+                invalidSyncInterval: 'El intervalo debe ser entre 1-60',
+                compact: 'Compacto',
+                grid: 'Cuadrícula',
+                list: 'Lista'
             }
         },
         'fr': {
@@ -836,7 +986,7 @@
                 total: 'Total',
                 noMatch: 'Aucun modèle correspondant',
                 noMatchHint: 'Ouvrez le menu déroulant pour déclencher le scan automatique',
-                editModel: 'Modifier le Modèle',
+                modelDetails: 'Détails du Modèle',
                 modelName: 'Nom du Modèle',
                 org: 'Organisation',
                 orgPlaceholder: 'Entrez le nom de l\'organisation',
@@ -910,7 +1060,32 @@
                 gistIdSaved: 'Gist ID enregistré',
                 networkError: 'Erreur réseau',
                 invalidToken: 'Token invalide ou permissions insuffisantes',
-                gistNotFound: 'Gist non trouvé'
+                gistNotFound: 'Gist non trouvé',
+                syncError: 'Erreur de synchronisation',
+                note: 'Note',
+                notePlaceholder: 'Entrez une note...',
+                visibleStatus: 'État de Visibilité',
+                visibleYes: 'Activé',
+                visibleNo: 'Masqué',
+                rankInMode: 'Position',
+                rankOf: '#{0} sur {1}',
+                iconEdit: 'Icône',
+                iconPlaceholder: 'Un caractère',
+                resetOrg: 'Réinitialiser',
+                modes: 'Modes',
+                autoSync: 'Synchronisation Automatique',
+                autoSyncDesc: 'Synchroniser automatiquement les données vers le cloud',
+                syncOnChange: 'Synchroniser à chaque modification',
+                syncInterval: 'Synchronisation périodique',
+                minutes: 'min',
+                lockFabPosition: 'Verrouiller la Position du Bouton',
+                lockFabPositionDesc: 'Empêcher le déplacement du bouton flottant',
+                exportGroup: 'Exporter le Groupe',
+                groupExported: 'Groupe exporté',
+                invalidSyncInterval: 'L\'intervalle doit être entre 1-60',
+                compact: 'Compact',
+                grid: 'Grille',
+                list: 'Liste'
             }
         },
         'de': {
@@ -963,7 +1138,7 @@
                 total: 'Gesamt',
                 noMatch: 'Keine passenden Modelle',
                 noMatchHint: 'Öffnen Sie das Dropdown-Menü, um den automatischen Scan auszulösen',
-                editModel: 'Modell Bearbeiten',
+                modelDetails: 'Modelldetails',
                 modelName: 'Modellname',
                 org: 'Organisation',
                 orgPlaceholder: 'Organisationsname eingeben',
@@ -1037,7 +1212,32 @@
                 gistIdSaved: 'Gist ID gespeichert',
                 networkError: 'Netzwerkfehler',
                 invalidToken: 'Token ungültig oder unzureichende Berechtigungen',
-                gistNotFound: 'Gist nicht gefunden'
+                gistNotFound: 'Gist nicht gefunden',
+                syncError: 'Synchronisierungsfehler',
+                note: 'Notiz',
+                notePlaceholder: 'Notiz eingeben...',
+                visibleStatus: 'Sichtbarkeitsstatus',
+                visibleYes: 'Aktiviert',
+                visibleNo: 'Versteckt',
+                rankInMode: 'Position',
+                rankOf: '#{0} von {1}',
+                iconEdit: 'Symbol',
+                iconPlaceholder: 'Ein Zeichen',
+                resetOrg: 'Zurücksetzen',
+                modes: 'Modi',
+                autoSync: 'Automatische Synchronisation',
+                autoSyncDesc: 'Daten automatisch in die Cloud synchronisieren',
+                syncOnChange: 'Bei Änderung synchronisieren',
+                syncInterval: 'Periodische Synchronisation',
+                minutes: 'Min',
+                lockFabPosition: 'Schaltflächenposition Sperren',
+                lockFabPositionDesc: 'Ziehen der schwebenden Schaltfläche verhindern',
+                exportGroup: 'Gruppe Exportieren',
+                groupExported: 'Gruppe exportiert',
+                invalidSyncInterval: 'Intervall muss zwischen 1-60 liegen',
+                compact: 'Kompakt',
+                grid: 'Raster',
+                list: 'Liste'
             }
         },
         'ru': {
@@ -1090,7 +1290,7 @@
                 total: 'Всего',
                 noMatch: 'Нет подходящих моделей',
                 noMatchHint: 'Откройте выпадающее меню для автоматического сканирования',
-                editModel: 'Редактировать модель',
+                modelDetails: 'Детали модели',
                 modelName: 'Название модели',
                 org: 'Организация',
                 orgPlaceholder: 'Введите название организации',
@@ -1164,7 +1364,32 @@
                 gistIdSaved: 'Gist ID сохранён',
                 networkError: 'Ошибка сети',
                 invalidToken: 'Недействительный токен или недостаточно прав',
-                gistNotFound: 'Gist не найден'
+                gistNotFound: 'Gist не найден',
+                syncError: 'Ошибка синхронизации',
+                note: 'Заметка',
+                notePlaceholder: 'Введите заметку...',
+                visibleStatus: 'Статус видимости',
+                visibleYes: 'Включено',
+                visibleNo: 'Скрыто',
+                rankInMode: 'Позиция',
+                rankOf: '#{0} из {1}',
+                iconEdit: 'Иконка',
+                iconPlaceholder: 'Один символ',
+                resetOrg: 'Сброс',
+                modes: 'Режимы',
+                autoSync: 'Автоматическая синхронизация',
+                autoSyncDesc: 'Автоматически синхронизировать данные в облако',
+                syncOnChange: 'Синхронизация при изменении',
+                syncInterval: 'Периодическая синхронизация',
+                minutes: 'мин',
+                lockFabPosition: 'Заблокировать позицию кнопки',
+                lockFabPositionDesc: 'Запретить перетаскивание плавающей кнопки',
+                exportGroup: 'Экспорт группы',
+                groupExported: 'Группа экспортирована',
+                invalidSyncInterval: 'Интервал должен быть от 1 до 60',
+                compact: 'Компактный',
+                grid: 'Сетка',
+                list: 'Список'
             }
         }
     };
@@ -1191,7 +1416,7 @@
             useFolder: false
         },
         image: {
-            tier1: ['OpenAI', 'Google', 'Tencent', 'Bytedance', 'Alibaba', 'Black Forest Labs', 'Z.ai'],
+            tier1: ['OpenAI', 'Google', 'xAI', 'Tencent', 'Bytedance', 'Alibaba', 'Black Forest Labs', 'Z.ai'],
             tier2: ['Shengshu', 'Pruna', 'Microsoft AI', 'Ideogram', 'Luma AI', 'Recraft', 'Leonardo AI', 'Reve'],
             useFolder: true
         },
@@ -1264,20 +1489,18 @@
     const IMAGE_TYPE_ORDER = { universal: 0, t2i: 1, i2i: 2 };
 
     const VIEW_MODES = {
-        grid: { icon: '⊞', label: '网格' },
-        compact: { icon: '⊟', label: '紧凑' },
-        list: { icon: '☰', label: '列表' }
+        grid: { icon: '⊞', label: 'grid' },
+        compact: { icon: '⊟', label: 'compact' },
+        list: { icon: '☰', label: 'list' }
     };
 
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
         static detect() {
-            // 优先检测按钮状态
             const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
                 const buttons = btnContainer.querySelectorAll('button');
                 for (const btn of buttons) {
-                    // 新 UI 使用 bg-surface-primary 表示激活状态
                     if (btn.classList.contains('bg-surface-primary')) {
                         const text = (btn.textContent || '').trim().toLowerCase();
                         if (text.includes('text')) return 'text';
@@ -1288,7 +1511,6 @@
                     }
                 }
             }
-            // 备用：检测 URL 参数
             const url = new URL(window.location.href);
             const modality = url.searchParams.get('chat-modality');
             if (modality) {
@@ -1298,7 +1520,6 @@
                 if (modality === 'video') return 'video';
                 if (modality === 'text') return 'text';
             }
-            // 兜底：检测 URL 路径（兼容旧版）
             const pathname = url.pathname;
             if (pathname.includes('/code')) return 'code';
             if (pathname.includes('/search')) return 'search';
@@ -1324,6 +1545,12 @@
             if (!this.data.settings.language) this.data.settings.language = 'zh-CN';
             if (!this.data.settings.gistId) this.data.settings.gistId = '';
             if (!this.data.settings.gistToken) this.data.settings.gistToken = '';
+            // 新增设置项
+            if (this.data.settings.autoSync === undefined) this.data.settings.autoSync = false;
+            if (this.data.settings.autoSyncMode === undefined) this.data.settings.autoSyncMode = 'change'; // 'change' | 'interval'
+            if (this.data.settings.autoSyncInterval === undefined) this.data.settings.autoSyncInterval = 5; // 分钟
+            if (this.data.settings.lockFabPosition === undefined) this.data.settings.lockFabPosition = false;
+            if (!this.data.settings.fabPosition) this.data.settings.fabPosition = { right: 12, top: null, bottom: null };
             if (!this.data.modelOrder) this.data.modelOrder = { text: [], search: [], image: [], code: [], video: [] };
             if (!this.data.groups) this.data.groups = {};
             ['text', 'search', 'image', 'code', 'video'].forEach(mode => {
@@ -1383,16 +1610,57 @@
         }
 
         clearNewFlags() { Object.keys(this.data.models).forEach(k => { this.data.models[k].isNew = false; }); this.save(); }
-        export() {
-            // 深拷贝，避免修改原数据
+
+        export(groupName = null) {
             const data = JSON.parse(JSON.stringify(this.data));
             // 导出时排除 Token
             if (data.settings) {
                 delete data.settings.gistToken;
             }
+            // 如果指定了分组，只导出该分组相关数据
+            if (groupName && this.data.groups[groupName]) {
+                const groupModels = this.data.groups[groupName];
+                const filteredModels = {};
+                groupModels.forEach(name => {
+                    if (this.data.models[name]) {
+                        filteredModels[name] = this.data.models[name];
+                    }
+                });
+                return JSON.stringify({
+                    exportType: 'group',
+                    groupName: groupName,
+                    models: filteredModels,
+                    exportedAt: new Date().toISOString()
+                }, null, 2);
+            }
             return JSON.stringify(data, null, 2);
         }
-        import(json) { try { this.data = JSON.parse(json); this.ensureDefaults(); this.save(); return true; } catch { return false; } }
+
+        import(json) {
+            try {
+                const imported = JSON.parse(json);
+                // 检查是否是分组导出
+                if (imported.exportType === 'group') {
+                    // 合并分组数据
+                    Object.entries(imported.models || {}).forEach(([name, data]) => {
+                        if (!this.data.models[name]) {
+                            this.data.models[name] = data;
+                        }
+                    });
+                    if (imported.groupName && !this.data.groups[imported.groupName]) {
+                        this.data.groups[imported.groupName] = Object.keys(imported.models || {});
+                    }
+                } else {
+                    this.data = imported;
+                }
+                this.ensureDefaults();
+                this.save();
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
         resetAll() { this.data = {}; this.ensureDefaults(); this.save(); }
 
         getLanguage() { return this.data.settings.language || 'zh-CN'; }
@@ -1475,7 +1743,6 @@
                 }
             }
 
-            // vision 字段处理
             let vision = false;
             if (strictMode === 'image') {
                 const hasVision = imageFlags.vision || false;
@@ -1489,7 +1756,7 @@
 
             return {
                 visible: this.data.settings.defaultVisible, company, icon, companyManual: false,
-                modes: [strictMode], starred: false, isNew: true, vision
+                modes: [strictMode], starred: false, isNew: true, vision, note: ''
             };
         }
 
@@ -1503,6 +1770,7 @@
             fresh.isNew = false;
             fresh.modes = model.modes;
             fresh.vision = model.vision;
+            fresh.note = model.note || '';
             this.data.models[name] = fresh;
             this.save();
         }
@@ -1513,6 +1781,7 @@
         constructor(dm) {
             this.dm = dm;
             this.scanSession = { active: false, startedAt: null, scannedModels: new Set(), scannedModes: new Set() };
+            this.observer = null;
             this.initHistoryHook();
         }
 
@@ -1557,7 +1826,6 @@
                 iconCompany = alt.replace(/\s*icon\s*/i, '').trim() || null;
             }
 
-            // 新 UI 特性检测：通过 SVG path 的 d 属性特征识别
             const svgPaths = el.querySelectorAll('svg path');
             let hasVision = false;
             let hasRIU = false;
@@ -1565,15 +1833,12 @@
 
             svgPaths.forEach(path => {
                 const d = path.getAttribute('d') || '';
-                // Vision（眼镜图标）：两个圆形节点 + 连线
                 if (d.startsWith('M2 14C2 16.2') || d.includes('M2 14C2 16.2')) {
                     hasVision = true;
                 }
-                // RIU（图片+加号）：图片框 + 右下角十字
                 if (d.includes('M13 21H3.6') || d.includes('19 19V16')) {
                     hasRIU = true;
                 }
-                // Image Generation（纯风景画框）
                 if (d.startsWith('M21 3.6V20.4') || d.includes('M21 3.6V20.4')) {
                     hasGeneration = true;
                 }
@@ -1612,7 +1877,6 @@
                         newModels.push(info.name);
                     } else {
                         this.dm.addModeToModel(info.name, currentMode);
-                        // 更新 vision 信息
                         if (currentMode === 'image' && typeof model.vision === 'boolean') {
                             const hasVision = info.imageFlags.vision;
                             const hasRIU = info.imageFlags.riu;
@@ -1668,7 +1932,6 @@
             const hasCustomOrder = customOrder && customOrder.length > 0;
 
             containers.forEach(({ container, options, mode: layoutMode }) => {
-                // 确保容器使用 flex 布局
                 const parent = options[0]?.parentElement;
                 if (parent) {
                     parent.style.display = 'flex';
@@ -1704,12 +1967,12 @@
                             const orgScore = (orgIndex !== -1 ? orgIndex : 900) * 100;
                             order = baseOrder + orgScore + (info.name.charCodeAt(0) || 0) * 0.01;
                         }
-                        // 使用 CSS order 而不是移动 DOM
                         el.style.order = Math.floor(order);
                     }
                 });
             });
         }
+
 
         toast(msg, type = 'info') {
             document.querySelectorAll('.lmm-toast').forEach(t => t.remove());
@@ -1720,14 +1983,21 @@
 
         startObserving() {
             let timer = null;
-            const observer = new MutationObserver(() => {
+            this.observer = new MutationObserver(() => {
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
                     clearTimeout(timer);
                     timer = setTimeout(() => { this.scan(); this.applyFilters(); }, 50);
                 }
             });
-            observer.observe(document.body, { childList: true, subtree: true });
+            this.observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        stopObserving() {
+            if (this.observer) {
+                this.observer.disconnect();
+                this.observer = null;
+            }
         }
     }
 
@@ -1744,12 +2014,14 @@
             this.currentMode = 'all';
             this.visibleSubMode = 'text';
             this.viewMode = 'grid';
-            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all', group: 'all' };
+            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
             this.sort = { by: 'org', order: 'asc' };
-            // 多选模式
             this.isMultiSelectMode = false;
             this.selectedModels = new Set();
-            this.multiSelectBackup = new Map(); // 用于还原
+            this.multiSelectBackup = new Map();
+            // 自动同步定时器
+            this.autoSyncTimer = null;
+            this.pendingSync = false;
         }
 
         t(key) {
@@ -1768,6 +2040,7 @@
             this.createSettingsModal();
             this.createGroupSelectModal();
             this.bindShortcuts();
+            this.initAutoSync();
         }
 
         injectStyles() {
@@ -1785,191 +2058,201 @@
                     }
                 }
 
-                .lmm-fab { position: fixed; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--lmm-primary), var(--lmm-primary-dark)); color: #fff; border: none; cursor: pointer; z-index: 99990; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 10px rgba(99,102,241,0.3); transition: transform 0.15s; }
+                .lmm-fab { position: fixed; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--lmm-primary), var(--lmm-primary-dark)); color: #fff; border: none; cursor: pointer; z-index: 99990; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 10px rgba(99,102,241,0.3); transition: transform 0.15s; user-select: none; }
                 .lmm-fab:hover { transform: scale(1.08); }
+                .lmm-fab.dragging { cursor: grabbing; transform: scale(1.1); opacity: 0.9; }
                 .lmm-fab.has-new::after { content: ''; position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: var(--lmm-danger); border-radius: 50%; border: 2px solid var(--lmm-bg); }
                 .lmm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 99995; opacity: 0; visibility: hidden; transition: all 0.2s; }
                 .lmm-overlay.open { opacity: 1; visibility: visible; }
 
                 .lmm-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 96vw; max-width: 1000px; height: 88vh; max-height: 720px; background: var(--lmm-bg); border-radius: 12px; z-index: 99999; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: all 0.2s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: var(--lmm-text); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-                .lmm-panel.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+.lmm-panel.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
 
-                .lmm-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 12px 12px 0 0; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
-                .lmm-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
-                .lmm-header-btns { display: flex; gap: 5px; align-items: center; margin-left: auto; flex-wrap: wrap; }
-                .lmm-close { width: 28px; height: 28px; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--lmm-text2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; }
-                .lmm-close:hover { background: var(--lmm-bg3); color: var(--lmm-danger); }
+.lmm-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 12px 12px 0 0; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
+.lmm-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
+.lmm-header-btns { display: flex; gap: 5px; align-items: center; margin-left: auto; flex-wrap: wrap; }
+.lmm-close { width: 28px; height: 28px; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--lmm-text2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; }
+.lmm-close:hover { background: var(--lmm-bg3); color: var(--lmm-danger); }
 
-                .lmm-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); color: var(--lmm-text); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; height: 28px; box-sizing: border-box; }
-                .lmm-btn:hover { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
-                .lmm-btn-primary { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-btn-primary:hover { background: var(--lmm-primary-dark); }
-                .lmm-btn-danger { background: var(--lmm-danger); color: #fff; border-color: var(--lmm-danger); }
-                .lmm-btn-success { background: var(--lmm-success); color: #fff; border-color: var(--lmm-success); }
-                .lmm-btn.scanning { animation: lmm-pulse 1.5s infinite; }
-                .lmm-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-btn-icon { padding: 5px 7px; min-width: 28px; justify-content: center; }
-                .lmm-btn-sm { padding: 3px 8px; height: 24px; font-size: 11px; }
-                @keyframes lmm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+.lmm-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); color: var(--lmm-text); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; height: 28px; box-sizing: border-box; }
+.lmm-btn:hover { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
+.lmm-btn-primary { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-btn-primary:hover { background: var(--lmm-primary-dark); }
+.lmm-btn-danger { background: var(--lmm-danger); color: #fff; border-color: var(--lmm-danger); }
+.lmm-btn-success { background: var(--lmm-success); color: #fff; border-color: var(--lmm-success); }
+.lmm-btn.scanning { animation: lmm-pulse 1.5s infinite; }
+.lmm-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-btn-icon { padding: 5px 7px; min-width: 28px; justify-content: center; }
+.lmm-btn-sm { padding: 3px 8px; height: 24px; font-size: 11px; }
+@keyframes lmm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-                .lmm-topbar { display: flex; gap: 5px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); overflow-x: auto; flex-shrink: 0; flex-wrap: wrap; }
-                .lmm-topbar-item { padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; }
-                .lmm-topbar-item:hover { border-color: var(--lmm-primary); color: var(--lmm-primary); }
-                .lmm-topbar-item.active { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
-                .lmm-topbar-item .cnt { font-size: 10px; background: rgba(0,0,0,0.1); padding: 1px 5px; border-radius: 8px; }
-                .lmm-topbar-item.active .cnt { background: rgba(255,255,255,0.2); }
-                .lmm-topbar-sep { border-left: 1px solid var(--lmm-border); margin: 0 4px; }
+.lmm-topbar { display: flex; gap: 5px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); overflow-x: auto; flex-shrink: 0; flex-wrap: wrap; }
+.lmm-topbar-item { padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; }
+.lmm-topbar-item:hover { border-color: var(--lmm-primary); color: var(--lmm-primary); }
+.lmm-topbar-item.active { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
+.lmm-topbar-item .cnt { font-size: 10px; background: rgba(0,0,0,0.1); padding: 1px 5px; border-radius: 8px; }
+.lmm-topbar-item.active .cnt { background: rgba(255,255,255,0.2); }
+.lmm-topbar-sep { border-left: 1px solid var(--lmm-border); margin: 0 4px; }
 
-                .lmm-subbar { display: flex; gap: 8px; padding: 8px 14px 0; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
-                .lmm-subbar-group { display: flex; background: var(--lmm-bg2); border-radius: 6px; padding: 2px; border: 1px solid var(--lmm-border); }
-                .lmm-subbar-item { padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
-                .lmm-subbar-item.active { background: var(--lmm-bg); color: var(--lmm-text); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.lmm-subbar { display: flex; gap: 8px; padding: 8px 14px 0; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+.lmm-subbar-group { display: flex; background: var(--lmm-bg2); border-radius: 6px; padding: 2px; border: 1px solid var(--lmm-border); }
+.lmm-subbar-item { padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
+.lmm-subbar-item.active { background: var(--lmm-bg); color: var(--lmm-text); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
-                .lmm-toolbar { display: flex; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); flex-wrap: wrap; align-items: center; flex-shrink: 0; }
-                .lmm-search { flex: 1; min-width: 140px; position: relative; }
-                .lmm-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--lmm-text2); font-size: 12px; }
-                .lmm-search input { width: 100%; padding: 6px 8px 6px 28px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 12px; background: var(--lmm-bg); color: var(--lmm-text); height: 30px; box-sizing: border-box; }
-                .lmm-search input::placeholder { color: var(--lmm-text2); font-size: 11px; }
-                .lmm-select { padding: 4px 22px 4px 8px; border: 1px solid var(--lmm-border); border-radius: 6px; background: var(--lmm-bg); color: var(--lmm-text); font-size: 11px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%2364748b' d='M1 3l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; height: 30px; box-sizing: border-box; }
-                .lmm-view-toggle { display: flex; gap: 2px; }
-                .lmm-view-btn { padding: 4px 8px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); cursor: pointer; font-size: 12px; transition: all 0.15s; }
-                .lmm-view-btn:first-child { border-radius: 6px 0 0 6px; }
-                .lmm-view-btn:last-child { border-radius: 0 6px 6px 0; }
-                .lmm-view-btn:not(:first-child) { border-left: none; }
-                .lmm-view-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-view-btn:hover:not(.active) { background: var(--lmm-bg3); }
+.lmm-toolbar { display: flex; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); flex-wrap: wrap; align-items: center; flex-shrink: 0; }
+.lmm-search { flex: 1; min-width: 140px; position: relative; }
+.lmm-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--lmm-text2); font-size: 12px; }
+.lmm-search input { width: 100%; padding: 6px 8px 6px 28px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 12px; background: var(--lmm-bg); color: var(--lmm-text); height: 30px; box-sizing: border-box; }
+.lmm-search input::placeholder { color: var(--lmm-text2); font-size: 11px; }
+.lmm-select { padding: 4px 22px 4px 8px; border: 1px solid var(--lmm-border); border-radius: 6px; background: var(--lmm-bg); color: var(--lmm-text); font-size: 11px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%2364748b' d='M1 3l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; height: 30px; box-sizing: border-box; }
+.lmm-view-toggle { display: flex; gap: 2px; }
+.lmm-view-btn { padding: 4px 8px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); cursor: pointer; font-size: 12px; transition: all 0.15s; }
+.lmm-view-btn:first-child { border-radius: 6px 0 0 6px; }
+.lmm-view-btn:last-child { border-radius: 0 6px 6px 0; }
+.lmm-view-btn:not(:first-child) { border-left: none; }
+.lmm-view-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-view-btn:hover:not(.active) { background: var(--lmm-bg3); }
 
-                .lmm-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
-                .lmm-sidebar { width: 170px; border-right: 1px solid var(--lmm-border); background: var(--lmm-bg2); overflow-y: auto; padding: 8px 6px; flex-shrink: 0; }
-                .lmm-content.visible-mode .lmm-sidebar { display: none; }
+.lmm-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+.lmm-sidebar { width: 170px; border-right: 1px solid var(--lmm-border); background: var(--lmm-bg2); overflow-y: auto; padding: 8px 6px; flex-shrink: 0; }
+.lmm-content.visible-mode .lmm-sidebar { display: none; }
 
-                .lmm-sidebar-item { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: all 0.1s; user-select: none; }
-                .lmm-sidebar-item:hover { background: var(--lmm-bg3); }
-                .lmm-sidebar-item.active { background: var(--lmm-primary); color: #fff; }
-                .lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
-                .lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
-                .lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
-                .lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
-                .lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
-                .lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
-                .lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
-                .lmm-sidebar-title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--lmm-text2); letter-spacing: 0.3px; }
-                .lmm-sidebar-btn { font-size: 10px; color: var(--lmm-primary); cursor: pointer; background: none; border: none; padding: 2px 4px; }
-                .lmm-sidebar-btn.active { color: var(--lmm-success); font-weight: 600; }
-                .lmm-sidebar-btn.reset { color: var(--lmm-warning); }
-                .lmm-sidebar-folder { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
-                .lmm-sidebar-folder:hover { background: var(--lmm-bg3); color: var(--lmm-text); }
-                .lmm-sidebar-folder .icon { display: inline-flex; width: 1.4em; justify-content: center; }
-                .lmm-sidebar-folder .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
-                .lmm-sidebar-folder-content { display: none; padding-left: 8px; }
-                .lmm-sidebar-folder-content.open { display: block; }
+.lmm-sidebar-item { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: all 0.1s; user-select: none; }
+.lmm-sidebar-item:hover { background: var(--lmm-bg3); }
+.lmm-sidebar-item.active { background: var(--lmm-primary); color: #fff; }
+.lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
+.lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
+.lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
+.lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
+.lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
+.lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
+.lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
+.lmm-sidebar-title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--lmm-text2); letter-spacing: 0.3px; }
+.lmm-sidebar-btn { font-size: 10px; color: var(--lmm-primary); cursor: pointer; background: none; border: none; padding: 2px 4px; }
+.lmm-sidebar-btn.active { color: var(--lmm-success); font-weight: 600; }
+.lmm-sidebar-btn.reset { color: var(--lmm-warning); }
+.lmm-sidebar-folder { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
+.lmm-sidebar-folder:hover { background: var(--lmm-bg3); color: var(--lmm-text); }
+.lmm-sidebar-folder .icon { display: inline-flex; width: 1.4em; justify-content: center; }
+.lmm-sidebar-folder .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
+.lmm-sidebar-folder-content { display: none; padding-left: 8px; }
+.lmm-sidebar-folder-content.open { display: block; }
 
-                .lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
-                .lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
-                .lmm-count { color: var(--lmm-text2); font-size: 12px; }
-                .lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
+.lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
+.lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+.lmm-count { color: var(--lmm-text2); font-size: 12px; }
+.lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
 
-                .lmm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
-                .lmm-grid.compact-view { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
-                .lmm-grid.list-view { display: flex; flex-direction: column; gap: 4px; }
+.lmm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.lmm-grid.compact-view { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+.lmm-grid.list-view { display: flex; flex-direction: column; gap: 4px; }
 
-                .lmm-card { display: flex; align-items: flex-start; gap: 8px; padding: 9px; border: 2px solid var(--lmm-border); border-radius: 8px; background: var(--lmm-bg); cursor: pointer; transition: all 0.15s; position: relative; }
-                .lmm-card:hover { border-color: var(--lmm-primary); }
-                .lmm-card.visible { border-color: var(--lmm-primary); }
-                .lmm-card.hidden { opacity: 0.5; background: var(--lmm-bg3); }
-                .lmm-card.new { box-shadow: inset 0 0 0 1px var(--lmm-success); }
-                .lmm-card.starred { box-shadow: inset 0 0 0 1px var(--lmm-warning); }
-                .lmm-card.selected { background: rgba(99,102,241,0.1); border-color: var(--lmm-primary); }
+.lmm-card { display: flex; align-items: flex-start; gap: 8px; padding: 9px; border: 2px solid var(--lmm-border); border-radius: 8px; background: var(--lmm-bg); cursor: pointer; transition: all 0.15s; position: relative; }
+.lmm-card:hover { border-color: var(--lmm-primary); }
+.lmm-card.visible { border-color: var(--lmm-primary); }
+.lmm-card.hidden { opacity: 0.5; background: var(--lmm-bg3); }
+.lmm-card.new { box-shadow: inset 0 0 0 1px var(--lmm-success); }
+.lmm-card.starred { box-shadow: inset 0 0 0 1px var(--lmm-warning); }
+.lmm-card.selected { background: rgba(99,102,241,0.1); border-color: var(--lmm-primary); }
 
-                .lmm-grid.compact-view .lmm-card { padding: 6px 8px; gap: 6px; }
-                .lmm-grid.compact-view .lmm-card-name { font-size: 10px; }
-                .lmm-grid.compact-view .lmm-tags { display: none; }
-                .lmm-grid.compact-view .lmm-card-actions { top: 2px; right: 2px; }
-                .lmm-grid.compact-view .lmm-check { width: 13px; height: 13px; font-size: 8px; }
+.lmm-grid.compact-view .lmm-card { padding: 6px 8px; gap: 6px; }
+.lmm-grid.compact-view .lmm-card-name { font-size: 10px; }
+.lmm-grid.compact-view .lmm-tags { display: none; }
+.lmm-grid.compact-view .lmm-card-actions { top: 2px; right: 2px; }
+.lmm-grid.compact-view .lmm-check { width: 13px; height: 13px; font-size: 8px; }
+.lmm-grid.compact-view .lmm-card-note { display: none; }
 
-                .lmm-grid.list-view .lmm-card { padding: 6px 10px; flex-direction: row; align-items: center; }
-                .lmm-grid.list-view .lmm-card-info { display: flex; align-items: center; gap: 8px; flex-direction: row; }
-                .lmm-grid.list-view .lmm-card-name { margin-bottom: 0; font-size: 12px; }
-                .lmm-grid.list-view .lmm-tags { margin-left: auto; }
-                .lmm-grid.list-view .lmm-card.dragging { opacity: 0.5; border-color: var(--lmm-primary); background: var(--lmm-bg3); }
+.lmm-grid.list-view .lmm-card { padding: 6px 10px; flex-direction: row; align-items: center; }
+.lmm-grid.list-view .lmm-card-info { display: flex; align-items: center; gap: 8px; flex-direction: row; }
+.lmm-grid.list-view .lmm-card-name { margin-bottom: 0; font-size: 12px; }
+.lmm-grid.list-view .lmm-tags { margin-left: auto; }
+.lmm-grid.list-view .lmm-card.dragging { opacity: 0.5; border-color: var(--lmm-primary); background: var(--lmm-bg3); }
 
-                .lmm-drag-handle { cursor: grab; color: var(--lmm-text2); font-size: 12px; margin-right: 4px; }
-                .lmm-check { width: 15px; height: 15px; border: 2px solid var(--lmm-border); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; margin-top: 2px; }
-                .lmm-check.on { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
-                .lmm-card-info { flex: 1; min-width: 0; }
-                .lmm-card-name { font-weight: 500; font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
-                .lmm-card-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-                .lmm-tags { display: flex; flex-wrap: wrap; gap: 2px; }
-                .lmm-tag { padding: 1px 4px; border-radius: 3px; font-size: 9px; background: var(--lmm-bg3); color: var(--lmm-text2); }
-                .lmm-tag.org { background: #e0e7ff; color: #4338ca; }
-                .lmm-tag.mode { background: #fef3c7; color: #92400e; }
-                .lmm-tag.new { background: #dcfce7; color: #166534; }
-                .lmm-tag.imgtype { background: #fce7f3; color: #9d174d; }
-                .lmm-tag.vision { background: #e0f2fe; color: #0369a1; }
-                .lmm-tag.group { background: #f0fdf4; color: #15803d; }
-                @media (prefers-color-scheme: dark) {
-                    .lmm-tag.org { background: #3730a3; color: #c7d2fe; }
-                    .lmm-tag.mode { background: #78350f; color: #fef3c7; }
-                    .lmm-tag.new { background: #166534; color: #bbf7d0; }
-                    .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
-                    .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
-                    .lmm-tag.group { background: #14532d; color: #bbf7d0; }
-                }
-                .lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
-                .lmm-card:hover .lmm-card-actions { opacity: 1; }
-                .lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
-                .lmm-card-btn:hover { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-card-btn.starred { color: var(--lmm-warning); }
+.lmm-drag-handle { cursor: grab; color: var(--lmm-text2); font-size: 12px; margin-right: 4px; }
+.lmm-check { width: 15px; height: 15px; border: 2px solid var(--lmm-border); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; margin-top: 2px; }
+.lmm-check.on { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
+.lmm-card-info { flex: 1; min-width: 0; }
+.lmm-card-name { font-weight: 500; font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+.lmm-card-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lmm-card-note { font-size: 10px; color: var(--lmm-text2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
+.lmm-tags { display: flex; flex-wrap: wrap; gap: 2px; }
+.lmm-tag { padding: 1px 4px; border-radius: 3px; font-size: 9px; background: var(--lmm-bg3); color: var(--lmm-text2); }
+.lmm-tag.org { background: #e0e7ff; color: #4338ca; }
+.lmm-tag.mode { background: #fef3c7; color: #92400e; }
+.lmm-tag.new { background: #dcfce7; color: #166534; }
+.lmm-tag.imgtype { background: #fce7f3; color: #9d174d; }
+.lmm-tag.vision { background: #e0f2fe; color: #0369a1; }
+.lmm-tag.group { background: #f0fdf4; color: #15803d; }
+@media (prefers-color-scheme: dark) {
+    .lmm-tag.org { background: #3730a3; color: #c7d2fe; }
+    .lmm-tag.mode { background: #78350f; color: #fef3c7; }
+    .lmm-tag.new { background: #166534; color: #bbf7d0; }
+    .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
+    .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
+    .lmm-tag.group { background: #14532d; color: #bbf7d0; }
+}
+.lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
+.lmm-card:hover .lmm-card-actions { opacity: 1; }
+.lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
+.lmm-card-btn:hover { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-card-btn.starred { color: var(--lmm-warning); }
 
-                .lmm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 0 0 12px 12px; font-size: 11px; color: var(--lmm-text2); flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
-                .lmm-stats { display: flex; gap: 12px; }
-                .lmm-stat b { color: var(--lmm-text); }
-                .lmm-empty { text-align: center; padding: 30px 20px; color: var(--lmm-text2); }
-                .lmm-empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
-                .lmm-toast { position: fixed; top: 60px; right: 12px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--lmm-bg); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 100001; animation: lmm-in 0.25s ease; border-left: 3px solid var(--lmm-primary); font-size: 13px; max-width: 350px; }
-                .lmm-toast-success { border-left-color: var(--lmm-success); }
-                .lmm-toast-warning { border-left-color: var(--lmm-warning); }
-                @keyframes lmm-in { from { transform: translateX(100%); opacity: 0; } }
-                .lmm-toast-x { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--lmm-text2); }
-                .lmm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); background: var(--lmm-bg); border-radius: 10px; padding: 16px; z-index: 100002; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.2s; }
-                .lmm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-                .lmm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100001; opacity: 0; visibility: hidden; transition: all 0.2s; }
-                .lmm-modal-overlay.open { opacity: 1; visibility: visible; }
-                .lmm-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-                .lmm-modal-body { margin-bottom: 14px; }
-                .lmm-modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
-                .lmm-form-group { margin-bottom: 12px; }
-                .lmm-form-label { display: block; font-size: 11px; font-weight: 500; margin-bottom: 4px; color: var(--lmm-text2); }
-                .lmm-form-input, .lmm-form-select { width: 100%; padding: 7px 10px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 13px; background: var(--lmm-bg); color: var(--lmm-text); box-sizing: border-box; }
-                .lmm-checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
-                .lmm-checkbox-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
-                .lmm-checkbox-item:hover { border-color: var(--lmm-primary); }
-                .lmm-checkbox-item.checked { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-scan-list { max-height: 300px; overflow-y: auto; margin: 10px 0; }
-                .lmm-scan-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--lmm-border); font-size: 12px; }
-                .lmm-scan-item:last-child { border-bottom: none; }
-                .lmm-group-list { max-height: 200px; overflow-y: auto; margin: 8px 0; }
-                .lmm-group-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; margin-bottom: 4px; font-size: 12px; }
-                .lmm-group-item:hover { background: var(--lmm-bg3); }
-                .lmm-group-item .name { flex: 1; }
-                .lmm-group-item .actions { display: flex; gap: 4px; }
-                .lmm-group-item .actions button { padding: 2px 6px; font-size: 10px; }
-                .lmm-switch { position: relative; width: 40px; height: 22px; background: var(--lmm-border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
-                .lmm-switch.on { background: var(--lmm-primary); }
-                .lmm-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
-                .lmm-switch.on::after { transform: translateX(18px); }
-                .lmm-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--lmm-border); }
-                .lmm-setting-row:last-child { border-bottom: none; }
-                .lmm-setting-info { flex: 1; }
-                .lmm-setting-title { font-weight: 500; margin-bottom: 2px; }
-                .lmm-setting-desc { font-size: 11px; color: var(--lmm-text2); }
+.lmm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 0 0 12px 12px; font-size: 11px; color: var(--lmm-text2); flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+.lmm-stats { display: flex; gap: 12px; }
+.lmm-stat b { color: var(--lmm-text); }
+.lmm-empty { text-align: center; padding: 30px 20px; color: var(--lmm-text2); }
+.lmm-empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+.lmm-toast { position: fixed; top: 60px; right: 12px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--lmm-bg); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 100001; animation: lmm-in 0.25s ease; border-left: 3px solid var(--lmm-primary); font-size: 13px; max-width: 350px; }
+.lmm-toast-success { border-left-color: var(--lmm-success); }
+.lmm-toast-warning { border-left-color: var(--lmm-warning); }
+@keyframes lmm-in { from { transform: translateX(100%); opacity: 0; } }
+    .lmm-toast-x { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--lmm-text2); }
+.lmm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); background: var(--lmm-bg); border-radius: 10px; padding: 16px; z-index: 100002; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.2s; }
+.lmm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+.lmm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100001; opacity: 0; visibility: hidden; transition: all 0.2s; }
+.lmm-modal-overlay.open { opacity: 1; visibility: visible; }
+.lmm-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.lmm-modal-body { margin-bottom: 14px; }
+.lmm-modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
+.lmm-form-group { margin-bottom: 12px; }
+.lmm-form-label { display: block; font-size: 11px; font-weight: 500; margin-bottom: 4px; color: var(--lmm-text2); }
+.lmm-form-input, .lmm-form-select { width: 100%; padding: 7px 10px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 13px; background: var(--lmm-bg); color: var(--lmm-text); box-sizing: border-box; }
+.lmm-form-row { display: flex; gap: 8px; align-items: center; }
+.lmm-form-row .lmm-form-input { flex: 1; }
+.lmm-checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.lmm-checkbox-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
+.lmm-checkbox-item:hover { border-color: var(--lmm-primary); }
+.lmm-checkbox-item.checked { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-scan-list { max-height: 300px; overflow-y: auto; margin: 10px 0; }
+.lmm-scan-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--lmm-border); font-size: 12px; }
+.lmm-scan-item:last-child { border-bottom: none; }
+.lmm-group-list { max-height: 200px; overflow-y: auto; margin: 8px 0; }
+.lmm-group-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; margin-bottom: 4px; font-size: 12px; }
+.lmm-group-item:hover { background: var(--lmm-bg3); }
+.lmm-group-item .name { flex: 1; }
+.lmm-group-item .actions { display: flex; gap: 4px; }
+.lmm-group-item .actions button { padding: 2px 6px; font-size: 10px; }
+.lmm-switch { position: relative; width: 40px; height: 22px; background: var(--lmm-border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
+.lmm-switch.on { background: var(--lmm-primary); }
+.lmm-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+.lmm-switch.on::after { transform: translateX(18px); }
+.lmm-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--lmm-border); }
+.lmm-setting-row:last-child { border-bottom: none; }
+.lmm-setting-info { flex: 1; }
+.lmm-setting-title { font-weight: 500; margin-bottom: 2px; }
+.lmm-setting-desc { font-size: 11px; color: var(--lmm-text2); }
+.lmm-detail-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
+.lmm-detail-row:last-child { border-bottom: none; }
+.lmm-detail-label { width: 80px; font-size: 11px; color: var(--lmm-text2); flex-shrink: 0; }
+.lmm-detail-value { flex: 1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+.lmm-detail-value input { max-width: 60px; }
 
-                @media (max-width: 600px) {
-                    .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
-                    .lmm-sidebar { display: none; }
-                    .lmm-grid { grid-template-columns: 1fr; }
-                }
-            `);
+@media (max-width: 600px) {
+    .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
+    .lmm-sidebar { display: none; }
+    .lmm-grid { grid-template-columns: 1fr; }
+}
+`);
         }
 
         createFab() {
@@ -1977,10 +2260,82 @@
             fab.className = 'lmm-fab';
             fab.innerHTML = '🎛️';
             fab.title = 'Arena Manager (Ctrl+Shift+M)';
-            fab.onclick = () => this.toggle();
+
+            // 设置初始位置
+            const pos = this.dm.data.settings.fabPosition || { right: 12 };
+            fab.style.right = pos.right + 'px';
+            if (pos.top !== null && pos.top !== undefined) {
+                fab.style.top = pos.top + 'px';
+            } else if (pos.bottom !== null && pos.bottom !== undefined) {
+                fab.style.bottom = pos.bottom + 'px';
+            } else {
+                fab.style.top = '50%';
+                fab.style.transform = 'translateY(-50%)';
+            }
+
+            fab.onclick = (e) => {
+                if (!fab.dataset.dragged) this.toggle();
+                delete fab.dataset.dragged;
+            };
+
+            // 拖动功能
+            this.bindFabDrag(fab);
+
             document.body.appendChild(fab);
             this.fab = fab;
             this.updateFabBadge();
+        }
+
+        bindFabDrag(fab) {
+            let startX, startY, startRight, startTop, isDragging = false;
+
+            fab.onmousedown = (e) => {
+                if (this.dm.data.settings.lockFabPosition) return;
+                e.preventDefault();
+                startX = e.clientX;
+                startY = e.clientY;
+                const rect = fab.getBoundingClientRect();
+                startRight = window.innerWidth - rect.right;
+                startTop = rect.top;
+                isDragging = false;
+
+                const onMove = (e) => {
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+                        isDragging = true;
+                        fab.classList.add('dragging');
+                        fab.dataset.dragged = 'true';
+                    }
+                    if (isDragging) {
+                        const newRight = Math.max(0, Math.min(window.innerWidth - 50, startRight - dx));
+                        const newTop = Math.max(0, Math.min(window.innerHeight - 50, startTop + dy));
+                        fab.style.right = newRight + 'px';
+                        fab.style.top = newTop + 'px';
+                        fab.style.bottom = 'auto';
+                        fab.style.transform = 'none';
+                    }
+                };
+
+                const onUp = () => {
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                    fab.classList.remove('dragging');
+                    if (isDragging) {
+                        // 保存位置
+                        const rect = fab.getBoundingClientRect();
+                        this.dm.data.settings.fabPosition = {
+                            right: window.innerWidth - rect.right,
+                            top: rect.top,
+                            bottom: null
+                        };
+                        this.dm.save();
+                    }
+                };
+
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            };
         }
 
         updateFabBadge() {
@@ -2007,16 +2362,78 @@
             return counts;
         }
 
-        createPanel() {
-            const overlay = document.createElement('div');
-            overlay.className = 'lmm-overlay';
-            overlay.onclick = () => this.close();
-            document.body.appendChild(overlay);
-            this.overlay = overlay;
+        // 自动同步相关
+        initAutoSync() {
+            if (this.dm.data.settings.autoSync) {
+                this.setupAutoSync();
+            }
+        }
 
-            const panel = document.createElement('div');
-            panel.className = 'lmm-panel';
-            panel.innerHTML = `
+        setupAutoSync() {
+            this.clearAutoSync();
+            if (!this.dm.data.settings.autoSync) return;
+
+            if (this.dm.data.settings.autoSyncMode === 'interval') {
+                const minutes = this.dm.data.settings.autoSyncInterval || 5;
+                this.autoSyncTimer = setInterval(() => {
+                    this.doAutoSync();
+                }, minutes * 60 * 1000);
+            }
+        }
+
+        clearAutoSync() {
+            if (this.autoSyncTimer) {
+                clearInterval(this.autoSyncTimer);
+                this.autoSyncTimer = null;
+            }
+        }
+
+        triggerSyncOnChange() {
+            if (this.dm.data.settings.autoSync && this.dm.data.settings.autoSyncMode === 'change') {
+                // 防抖：300ms 内只触发一次
+                if (this.pendingSync) return;
+                this.pendingSync = true;
+                setTimeout(() => {
+                    this.pendingSync = false;
+                    this.doAutoSync();
+                }, 300);
+            }
+        }
+
+        async doAutoSync() {
+            const token = this.dm.data.settings.gistToken;
+            const gistId = this.dm.data.settings.gistId;
+            if (!token || !gistId) return;
+
+            try {
+                const data = this.dm.export();
+                await this.gmFetch({
+                    method: 'PATCH',
+                    url: `https://api.github.com/gists/${gistId}`,
+headers: {
+    'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+},
+    data: JSON.stringify({
+        files: { 'arena-manager-data.json': { content: data } }
+    })
+});
+} catch (e) {
+    console.error('[Arena Manager] Auto sync failed:', e);
+}
+}
+
+createPanel() {
+    const overlay = document.createElement('div');
+    overlay.className = 'lmm-overlay';
+    overlay.onclick = () => this.close();
+    document.body.appendChild(overlay);
+    this.overlay = overlay;
+
+    const panel = document.createElement('div');
+    panel.className = 'lmm-panel';
+    panel.innerHTML = `
                 <div class="lmm-header">
                     <div class="lmm-title"><span>🎛️</span> Arena Manager <span style="font-size:10px;color:var(--lmm-text2)">v${VERSION}</span></div>
                     <div class="lmm-header-btns">
@@ -2049,11 +2466,11 @@
                     </div>
                     <select class="lmm-select" id="lmm-org"></select>
                     <select class="lmm-select" id="lmm-sort">
-                        <option value="org-asc" data-i18n="sortByOrg"></option>
-                        <option value="starred-desc" data-i18n="starredFirst"></option>
-                        <option value="name-asc" data-i18n="nameAZ"></option>
-                        <option value="name-desc" data-i18n="nameZA"></option>
-                        <option value="date-desc" data-i18n="latestAdded"></option>
+                        <option value="org-asc" data-i18n="sortByOrg" data-icon="🏢"></option>
+                        <option value="starred-desc" data-i18n="starredFirst" data-icon="⭐"></option>
+                        <option value="name-asc" data-i18n="nameAZ" data-icon="🔤"></option>
+                        <option value="name-desc" data-i18n="nameZA" data-icon="🔤"></option>
+                        <option value="date-desc" data-i18n="latestAdded" data-icon="🕐"></option>
                     </select>
                     <div class="lmm-view-toggle">
                         <button class="lmm-view-btn active" data-view="grid" title="Grid">⊞</button>
@@ -2080,87 +2497,76 @@
                     <span>Ctrl+Shift+M | / = Search</span>
                 </div>
             `;
-            document.body.appendChild(panel);
-            this.panel = panel;
-            this.bindEvents();
-            this.updateI18n();
-        }
+    document.body.appendChild(panel);
+    this.panel = panel;
+    this.bindEvents();
+    this.updateI18n();
+}
 
-        updateI18n() {
-            this.panel.querySelectorAll('[data-i18n]').forEach(el => {
-                el.textContent = this.t(el.dataset.i18n);
-            });
-            this.panel.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                el.placeholder = this.t(el.dataset.i18nPlaceholder);
-            });
-            // 更新排序下拉框
-            const sortSelect = this.$('#lmm-sort');
-            if (sortSelect) {
-                sortSelect.querySelectorAll('option').forEach(opt => {
-                    if (opt.dataset.i18n) {
-                        opt.textContent = '🏢 ' + this.t(opt.dataset.i18n);
-                    }
-                });
+updateI18n() {
+    this.panel.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = this.t(el.dataset.i18n);
+    });
+    this.panel.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = this.t(el.dataset.i18nPlaceholder);
+    });
+    // 更新排序下拉框（使用正确图标）
+    const sortSelect = this.$('#lmm-sort');
+    if (sortSelect) {
+        sortSelect.querySelectorAll('option').forEach(opt => {
+            if (opt.dataset.i18n) {
+                const icon = opt.dataset.icon || '';
+                opt.textContent = icon + ' ' + this.t(opt.dataset.i18n);
             }
-            // 修复：更新扫描按钮文本（处理动态状态）
-            const scanBtn = this.$('#lmm-scan-toggle');
-            if (scanBtn) {
-                if (this.scanner.isScanActive()) {
-                    scanBtn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
-                } else {
-                    scanBtn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
-                }
-            }
+        });
+    }
+    // 更新扫描按钮
+    const scanBtn = this.$('#lmm-scan-toggle');
+    if (scanBtn) {
+        if (this.scanner.isScanActive()) {
+            scanBtn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
+        } else {
+            scanBtn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
         }
+    }
+}
 
-        createEditModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'lmm-modal-overlay';
-            modalOverlay.onclick = () => this.closeEditModal();
-            document.body.appendChild(modalOverlay);
-            this.editModalOverlay = modalOverlay;
+createEditModal() {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'lmm-modal-overlay';
+    modalOverlay.onclick = () => this.closeEditModal();
+    document.body.appendChild(modalOverlay);
+    this.editModalOverlay = modalOverlay;
 
-            const modal = document.createElement('div');
-            modal.className = 'lmm-modal';
-            modal.innerHTML = `
-                <div class="lmm-modal-title">✏️ <span data-i18n="editModel"></span></div>
-                <div class="lmm-modal-body">
-                    <div class="lmm-form-group">
-                        <label class="lmm-form-label" data-i18n="modelName"></label>
-                        <input type="text" class="lmm-form-input" id="lmm-edit-name" readonly>
-                    </div>
-                    <div class="lmm-form-group">
-                        <label class="lmm-form-label" data-i18n="org"></label>
-                        <input type="text" class="lmm-form-input" id="lmm-edit-org" data-i18n-placeholder="orgPlaceholder">
-                    </div>
-                    <div class="lmm-form-group">
-                        <label class="lmm-form-label" data-i18n="belongGroups"></label>
-                        <div class="lmm-checkbox-group" id="lmm-edit-groups"></div>
-                    </div>
-                </div>
+    const modal = document.createElement('div');
+    modal.className = 'lmm-modal';
+    modal.style.minWidth = '400px';
+    modal.innerHTML = `
+                <div class="lmm-modal-title">📋 <span data-i18n="modelDetails"></span></div>
+                <div class="lmm-modal-body" id="lmm-edit-body"></div>
                 <div class="lmm-modal-footer">
                     <button class="lmm-btn" id="lmm-edit-reset" style="margin-right:auto">↺ <span data-i18n="restoreDefault"></span></button>
                     <button class="lmm-btn" id="lmm-edit-cancel" data-i18n="cancel"></button>
                     <button class="lmm-btn lmm-btn-primary" id="lmm-edit-save" data-i18n="save"></button>
                 </div>
             `;
-            document.body.appendChild(modal);
-            this.editModal = modal;
+    document.body.appendChild(modal);
+    this.editModal = modal;
 
-            modal.querySelector('#lmm-edit-cancel').onclick = () => this.closeEditModal();
-            modal.querySelector('#lmm-edit-save').onclick = () => this.saveEdit();
-            modal.querySelector('#lmm-edit-reset').onclick = () => this.resetEdit();
-        }
+    modal.querySelector('#lmm-edit-cancel').onclick = () => this.closeEditModal();
+    modal.querySelector('#lmm-edit-save').onclick = () => this.saveEdit();
+    modal.querySelector('#lmm-edit-reset').onclick = () => this.resetEdit();
+}
 
-        createConfirmModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'lmm-modal-overlay';
-            document.body.appendChild(modalOverlay);
-            this.confirmModalOverlay = modalOverlay;
+createConfirmModal() {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'lmm-modal-overlay';
+    document.body.appendChild(modalOverlay);
+    this.confirmModalOverlay = modalOverlay;
 
-            const modal = document.createElement('div');
-            modal.className = 'lmm-modal';
-            modal.innerHTML = `
+    const modal = document.createElement('div');
+    modal.className = 'lmm-modal';
+    modal.innerHTML = `
                 <div class="lmm-modal-title" id="lmm-confirm-title"></div>
                 <div class="lmm-modal-body"><p id="lmm-confirm-msg"></p></div>
                 <div class="lmm-modal-footer">
@@ -2168,20 +2574,20 @@
                     <button class="lmm-btn lmm-btn-danger" id="lmm-confirm-yes" data-i18n="confirm"></button>
                 </div>
             `;
-            document.body.appendChild(modal);
-            this.confirmModal = modal;
-        }
+    document.body.appendChild(modal);
+    this.confirmModal = modal;
+}
 
-        createScanResultModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'lmm-modal-overlay';
-            document.body.appendChild(modalOverlay);
-            this.scanModalOverlay = modalOverlay;
+createScanResultModal() {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'lmm-modal-overlay';
+    document.body.appendChild(modalOverlay);
+    this.scanModalOverlay = modalOverlay;
 
-            const modal = document.createElement('div');
-            modal.className = 'lmm-modal';
-            modal.style.minWidth = '400px';
-            modal.innerHTML = `
+    const modal = document.createElement('div');
+    modal.className = 'lmm-modal';
+    modal.style.minWidth = '400px';
+    modal.innerHTML = `
                 <div class="lmm-modal-title">🔍 <span data-i18n="scanResult"></span></div>
                 <div class="lmm-modal-body">
                     <p id="lmm-scan-summary"></p>
@@ -2192,21 +2598,21 @@
                     <button class="lmm-btn lmm-btn-danger" id="lmm-scan-delete" data-i18n="deleteSelected"></button>
                 </div>
             `;
-            document.body.appendChild(modal);
-            this.scanModal = modal;
-        }
+    document.body.appendChild(modal);
+    this.scanModal = modal;
+}
 
-        createGroupModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'lmm-modal-overlay';
-            modalOverlay.onclick = () => this.closeGroupModal();
-            document.body.appendChild(modalOverlay);
-            this.groupModalOverlay = modalOverlay;
+createGroupModal() {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'lmm-modal-overlay';
+    modalOverlay.onclick = () => this.closeGroupModal();
+    document.body.appendChild(modalOverlay);
+    this.groupModalOverlay = modalOverlay;
 
-            const modal = document.createElement('div');
-            modal.className = 'lmm-modal';
-            modal.style.minWidth = '360px';
-            modal.innerHTML = `
+    const modal = document.createElement('div');
+    modal.className = 'lmm-modal';
+    modal.style.minWidth = '360px';
+    modal.innerHTML = `
                 <div class="lmm-modal-title">📁 <span data-i18n="groupManage"></span></div>
                 <div class="lmm-modal-body">
                     <div class="lmm-form-group">
@@ -2221,132 +2627,188 @@
                     <button class="lmm-btn" id="lmm-group-close" data-i18n="close"></button>
                 </div>
             `;
-            document.body.appendChild(modal);
-            this.groupModal = modal;
+    document.body.appendChild(modal);
+    this.groupModal = modal;
 
-            modal.querySelector('#lmm-group-create').onclick = () => this.createGroup();
-            modal.querySelector('#lmm-group-close').onclick = () => this.closeGroupModal();
-        }
+    modal.querySelector('#lmm-group-create').onclick = () => this.createGroup();
+    modal.querySelector('#lmm-group-close').onclick = () => this.closeGroupModal();
+}
 
-        createSettingsModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'lmm-modal-overlay';
-            modalOverlay.onclick = () => this.closeSettingsModal();
-            document.body.appendChild(modalOverlay);
-            this.settingsModalOverlay = modalOverlay;
+createSettingsModal() {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'lmm-modal-overlay';
+    modalOverlay.onclick = () => this.closeSettingsModal();
+    document.body.appendChild(modalOverlay);
+    this.settingsModalOverlay = modalOverlay;
 
-            const modal = document.createElement('div');
-            modal.className = 'lmm-modal';
-            modal.style.minWidth = '400px';
-            modal.innerHTML = `
-        <div class="lmm-modal-title">⚙️ <span data-i18n="settingsTitle"></span></div>
-        <div class="lmm-modal-body">
-            <div class="lmm-setting-row">
-                <div class="lmm-setting-info">
-                    <div class="lmm-setting-title" data-i18n="language"></div>
+    const modal = document.createElement('div');
+    modal.className = 'lmm-modal';
+    modal.style.minWidth = '420px';
+    modal.innerHTML = `
+                <div class="lmm-modal-title">⚙️ <span data-i18n="settingsTitle"></span></div>
+                <div class="lmm-modal-body">
+                    <div class="lmm-setting-row">
+                        <div class="lmm-setting-info">
+                            <div class="lmm-setting-title" data-i18n="language"></div>
+                        </div>
+                        <select class="lmm-select" id="lmm-setting-lang" style="width:140px"></select>
+                    </div>
+                    <div class="lmm-setting-row">
+                        <div class="lmm-setting-info">
+                            <div class="lmm-setting-title" data-i18n="newModelAlert"></div>
+                            <div class="lmm-setting-desc" data-i18n="newModelAlertDesc"></div>
+                        </div>
+                        <div class="lmm-switch" id="lmm-setting-alert"></div>
+                    </div>
+                    <div class="lmm-setting-row">
+                        <div class="lmm-setting-info">
+                            <div class="lmm-setting-title" data-i18n="lockFabPosition"></div>
+                            <div class="lmm-setting-desc" data-i18n="lockFabPositionDesc"></div>
+                        </div>
+                        <div class="lmm-switch" id="lmm-setting-lock-fab"></div>
+                    </div>
+                    <div class="lmm-setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+                        <div class="lmm-setting-title" data-i18n="cloudSync"></div>
+                        <div class="lmm-form-group" style="margin:0">
+                            <label class="lmm-form-label" data-i18n="gistToken"></label>
+                            <input type="password" class="lmm-form-input" id="lmm-setting-gist-token" data-i18n-placeholder="gistTokenPlaceholder">
+                        </div>
+                        <div class="lmm-form-group" style="margin:0">
+                            <label class="lmm-form-label" data-i18n="gistId"></label>
+                            <input type="text" class="lmm-form-input" id="lmm-setting-gist-id" data-i18n-placeholder="gistIdPlaceholder">
+                        </div>
+                        <div style="display:flex;gap:8px">
+                            <button class="lmm-btn lmm-btn-primary" id="lmm-setting-upload">📤 <span data-i18n="syncUpload"></span></button>
+                            <button class="lmm-btn" id="lmm-setting-download">📥 <span data-i18n="syncDownload"></span></button>
+                        </div>
+                    </div>
+                    <div class="lmm-setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+                        <div style="display:flex;align-items:center;justify-content:space-between">
+                            <div class="lmm-setting-title" data-i18n="autoSync"></div>
+                            <div class="lmm-switch" id="lmm-setting-auto-sync"></div>
+                        </div>
+                        <div class="lmm-setting-desc" data-i18n="autoSyncDesc"></div>
+                        <div id="lmm-auto-sync-options" style="display:none">
+                            <div style="display:flex;gap:12px;margin-top:8px">
+                                <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer">
+                                    <input type="radio" name="lmm-sync-mode" value="change"> <span data-i18n="syncOnChange"></span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer">
+                                    <input type="radio" name="lmm-sync-mode" value="interval"> <span data-i18n="syncInterval"></span>
+                                    <input type="number" id="lmm-sync-interval" min="1" max="60" value="5" style="width:50px;padding:2px 4px;font-size:11px">
+                                    <span data-i18n="minutes"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lmm-setting-row" style="border-top:2px solid var(--lmm-danger);margin-top:12px;padding-top:12px">
+                        <div class="lmm-setting-info">
+                            <div class="lmm-setting-title" style="color:var(--lmm-danger)" data-i18n="resetData"></div>
+                            <div class="lmm-setting-desc" data-i18n="resetDataDesc"></div>
+                        </div>
+                        <button class="lmm-btn lmm-btn-danger" id="lmm-setting-reset" data-i18n="reset"></button>
+                    </div>
                 </div>
-                <select class="lmm-select" id="lmm-setting-lang" style="width:140px"></select>
-            </div>
-            <div class="lmm-setting-row">
-                <div class="lmm-setting-info">
-                    <div class="lmm-setting-title" data-i18n="newModelAlert"></div>
-                    <div class="lmm-setting-desc" data-i18n="newModelAlertDesc"></div>
+                <div class="lmm-modal-footer">
+                    <button class="lmm-btn lmm-btn-primary" id="lmm-settings-close" data-i18n="close"></button>
                 </div>
-                <div class="lmm-switch" id="lmm-setting-alert"></div>
-            </div>
-            <div class="lmm-setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-                <div class="lmm-setting-title" data-i18n="cloudSync"></div>
-                <div class="lmm-form-group" style="margin:0">
-                    <label class="lmm-form-label" data-i18n="gistToken"></label>
-                    <input type="password" class="lmm-form-input" id="lmm-setting-gist-token" data-i18n-placeholder="gistTokenPlaceholder">
-                </div>
-                <div class="lmm-form-group" style="margin:0">
-                    <label class="lmm-form-label" data-i18n="gistId"></label>
-                    <input type="text" class="lmm-form-input" id="lmm-setting-gist-id" data-i18n-placeholder="gistIdPlaceholder">
-                </div>
-                <div style="display:flex;gap:8px">
-                    <button class="lmm-btn lmm-btn-primary" id="lmm-setting-upload">📤 <span data-i18n="syncUpload"></span></button>
-                    <button class="lmm-btn" id="lmm-setting-download">📥 <span data-i18n="syncDownload"></span></button>
-                </div>
-            </div>
-            <div class="lmm-setting-row" style="border-top:2px solid var(--lmm-danger);margin-top:12px;padding-top:12px">
-                <div class="lmm-setting-info">
-                    <div class="lmm-setting-title" style="color:var(--lmm-danger)" data-i18n="resetData"></div>
-                    <div class="lmm-setting-desc" data-i18n="resetDataDesc"></div>
-                </div>
-                <button class="lmm-btn lmm-btn-danger" id="lmm-setting-reset" data-i18n="reset"></button>
-            </div>
-        </div>
-        <div class="lmm-modal-footer">
-            <button class="lmm-btn lmm-btn-primary" id="lmm-settings-close" data-i18n="close"></button>
-        </div>
-    `;
-            document.body.appendChild(modal);
-            this.settingsModal = modal;
+            `;
+    document.body.appendChild(modal);
+    this.settingsModal = modal;
 
-            // 填充语言选项
-            const langSelect = modal.querySelector('#lmm-setting-lang');
-            Object.entries(I18N).forEach(([code, data]) => {
-                const opt = document.createElement('option');
-                opt.value = code;
-                opt.textContent = data.name;
-                langSelect.appendChild(opt);
-            });
+    // 填充语言选项
+    const langSelect = modal.querySelector('#lmm-setting-lang');
+    Object.entries(I18N).forEach(([code, data]) => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = data.name;
+        langSelect.appendChild(opt);
+    });
 
-            langSelect.onchange = () => {
-                this.dm.setLanguage(langSelect.value);
-                this.updateI18n();
-                this.updateSettingsModalI18n();
-                this.updateTopbar();
-                this.updateSidebar();
-                this.refresh();
-            };
+    langSelect.onchange = () => {
+        this.dm.setLanguage(langSelect.value);
+        this.updateI18n();
+        this.updateSettingsModalI18n();
+        this.updateTopbar();
+        this.updateSidebar();
+        this.refresh();
+    };
 
-            modal.querySelector('#lmm-setting-alert').onclick = (e) => {
-                const sw = e.currentTarget;
-                sw.classList.toggle('on');
-                this.dm.data.settings.showNewAlert = sw.classList.contains('on');
-                this.dm.save();
-            };
+    modal.querySelector('#lmm-setting-alert').onclick = (e) => {
+        const sw = e.currentTarget;
+        sw.classList.toggle('on');
+        this.dm.data.settings.showNewAlert = sw.classList.contains('on');
+        this.dm.save();
+    };
 
-            modal.querySelector('#lmm-setting-upload').onclick = () => this.gistUpload();
-            modal.querySelector('#lmm-setting-download').onclick = () => this.gistDownload();
+    modal.querySelector('#lmm-setting-lock-fab').onclick = (e) => {
+        const sw = e.currentTarget;
+        sw.classList.toggle('on');
+        this.dm.data.settings.lockFabPosition = sw.classList.contains('on');
+        this.dm.save();
+    };
 
-            modal.querySelector('#lmm-setting-reset').onclick = () => {
-                this.closeSettingsModal();
-                this.showConfirm(this.t('resetData'), this.t('resetConfirm'), () => {
-                    this.dm.resetAll();
-                    this.scanner.toast(this.t('dataReset'), 'success');
-                    this.updateTopbar();
-                    this.updateSidebar();
-                    this.refresh();
-                    this.updateFabBadge();
-                });
-            };
+    modal.querySelector('#lmm-setting-auto-sync').onclick = (e) => {
+        const sw = e.currentTarget;
+        sw.classList.toggle('on');
+        this.dm.data.settings.autoSync = sw.classList.contains('on');
+        modal.querySelector('#lmm-auto-sync-options').style.display = sw.classList.contains('on') ? 'block' : 'none';
+        this.dm.save();
+        this.setupAutoSync();
+    };
 
-            modal.querySelector('#lmm-settings-close').onclick = () => this.closeSettingsModal();
-        }
+    modal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
+        radio.onchange = () => {
+            this.dm.data.settings.autoSyncMode = radio.value;
+            this.dm.save();
+            this.setupAutoSync();
+        };
+    });
 
-        updateSettingsModalI18n() {
-            this.settingsModal.querySelectorAll('[data-i18n]').forEach(el => {
-                el.textContent = this.t(el.dataset.i18n);
-            });
-            this.settingsModal.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                el.placeholder = this.t(el.dataset.i18nPlaceholder);
-            });
-        }
+    modal.querySelector('#lmm-sync-interval').onchange = (e) => {
+        this.dm.data.settings.autoSyncInterval = parseInt(e.target.value) || 5;
+        this.dm.save();
+        this.setupAutoSync();
+    };
 
-        createGroupSelectModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'lmm-modal-overlay';
-            modalOverlay.onclick = () => this.closeGroupSelectModal();
-            document.body.appendChild(modalOverlay);
-            this.groupSelectModalOverlay = modalOverlay;
+    modal.querySelector('#lmm-setting-upload').onclick = () => this.gistUpload();
+    modal.querySelector('#lmm-setting-download').onclick = () => this.gistDownload();
 
-            const modal = document.createElement('div');
-            modal.className = 'lmm-modal';
-            modal.style.minWidth = '300px';
-            modal.innerHTML = `
+    modal.querySelector('#lmm-setting-reset').onclick = () => {
+        this.closeSettingsModal();
+        this.showConfirm(this.t('resetData'), this.t('resetConfirm'), () => {
+            this.dm.resetAll();
+            this.scanner.toast(this.t('dataReset'), 'success');
+            this.updateTopbar();
+            this.updateSidebar();
+            this.refresh();
+            this.updateFabBadge();
+        });
+    };
+
+    modal.querySelector('#lmm-settings-close').onclick = () => this.closeSettingsModal();
+}
+
+updateSettingsModalI18n() {
+    this.settingsModal.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = this.t(el.dataset.i18n);
+    });
+    this.settingsModal.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = this.t(el.dataset.i18nPlaceholder);
+    });
+}
+
+createGroupSelectModal() {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'lmm-modal-overlay';
+    modalOverlay.onclick = () => this.closeGroupSelectModal();
+    document.body.appendChild(modalOverlay);
+    this.groupSelectModalOverlay = modalOverlay;
+
+    const modal = document.createElement('div');
+    modal.className = 'lmm-modal';
+    modal.style.minWidth = '300px';
+    modal.innerHTML = `
                 <div class="lmm-modal-title">📁 <span data-i18n="selectGroup"></span></div>
                 <div class="lmm-modal-body">
                     <div class="lmm-group-list" id="lmm-group-select-list"></div>
@@ -2355,979 +2817,987 @@
                     <button class="lmm-btn" id="lmm-group-select-close" data-i18n="cancel"></button>
                 </div>
             `;
-            document.body.appendChild(modal);
-            this.groupSelectModal = modal;
+    document.body.appendChild(modal);
+    this.groupSelectModal = modal;
 
-            modal.querySelector('#lmm-group-select-close').onclick = () => this.closeGroupSelectModal();
-        }
+    modal.querySelector('#lmm-group-select-close').onclick = () => this.closeGroupSelectModal();
+}
 
-        // 使用 GM_xmlhttpRequest 封装的 Promise 请求
-        gmFetch(options) {
-            const self = this;// 保存 this 引用
-            return new Promise((resolve, reject) => {
-                GM_xmlhttpRequest({
-                    ...options,
-                    onload: (response) => {
-                        if (response.status >= 200 && response.status < 300) {
-                            resolve({
-                                ok: true,
-                                status: response.status,
-                                json: () => Promise.resolve(JSON.parse(response.responseText)),
-                                text: () => Promise.resolve(response.responseText)
-                            });
-                        } else {
-                            resolve({
-                                ok: false,
-                                status: response.status,
-                                statusText: response.statusText
-                            });
-                        }
-                    },
-                    onerror: (error) => {
-                        reject(new Error(self.t('networkError')));
-                    },
-                    ontimeout: () => {
-                        reject(new Error(self.t('networkError')));
-                    }
-                });
+gmFetch(options) {
+    const self = this;
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            ...options,
+            onload: (response) => {
+                if (response.status >= 200 && response.status < 300) {
+                    resolve({
+                        ok: true,
+                        status: response.status,
+                        json: () => Promise.resolve(JSON.parse(response.responseText)),
+                        text: () => Promise.resolve(response.responseText)
+                    });
+                } else {
+                    resolve({
+                        ok: false,
+                        status: response.status,
+                        statusText: response.statusText
+                    });
+                }
+            },
+            onerror: (error) => {
+                reject(new Error(self.t('networkError')));
+            },
+            ontimeout: () => {
+                reject(new Error(self.t('networkError')));
+            }
+        });
+    });
+}
+
+async gistUpload() {
+    const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
+    let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
+
+    if (!token) {
+        this.scanner.toast(this.t('tokenRequired'), 'warning');
+        return;
+    }
+
+    // 保存 Token 和 gistId 到本地存储
+    this.dm.data.settings.gistToken = token;
+    this.dm.data.settings.gistId = gistId;
+    this.dm.save();
+
+    const data = this.dm.export();
+    const filename = 'arena-manager-data.json';
+
+    try {
+        let res;
+        if (gistId) {
+            res = await this.gmFetch({
+                method: 'PATCH',
+                url: `https://api.github.com/gists/${gistId}`,
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                data: JSON.stringify({
+                    files: { [filename]: { content: data } }
+                })
+            });
+        } else {
+            res = await this.gmFetch({
+                method: 'POST',
+                url: 'https://api.github.com/gists',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                data: JSON.stringify({
+                    description: 'Arena Manager Data Backup',
+                    public: false,
+                    files: { [filename]: { content: data } }
+                })
             });
         }
 
-        async gistUpload() {
-            const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
-            let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
+        if (!res.ok) {
+            if (res.status === 401) throw new Error(this.t('invalidToken'));
+            if (res.status === 404) throw new Error(this.t('gistNotFound'));
+            throw new Error(`HTTP ${res.status}`);
+        }
 
-            if (!token) {
-                this.scanner.toast(this.t('tokenRequired'), 'warning');
-                return;
-            }
+        const result = await res.json();
 
-            // 保存 Token 和 gistId 到本地存储
-            this.dm.data.settings.gistToken = token;
+        if (!gistId && result.id) {
+            gistId = result.id;
+            this.settingsModal.querySelector('#lmm-setting-gist-id').value = gistId;
             this.dm.data.settings.gistId = gistId;
             this.dm.save();
+            this.scanner.toast(`${this.t('uploadSuccess')} - ${this.t('gistIdSaved')}`, 'success');
+        } else {
+            this.scanner.toast(this.t('uploadSuccess'), 'success');
+        }
+    } catch (e) {
+        console.error('[Arena Manager] Gist upload error:', e);
+        this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+    }
+}
 
-            // export() 会自动排除 Token
-            const data = this.dm.export();
+async gistDownload() {
+    const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
+    let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
+    if (!gistId) gistId = this.dm.data.settings.gistId || '';
+
+    if (!token) {
+        this.scanner.toast(this.t('tokenRequired'), 'warning');
+        return;
+    }
+
+    if (!gistId) {
+        this.scanner.toast(this.t('noGistId'), 'warning');
+        return;
+    }
+
+    // 保存 Token 和 gistId（下载前先保存，这样即使下载覆盖也能恢复）
+    const savedToken = token;
+    const savedGistId = gistId;
+    this.dm.data.settings.gistToken = token;
+    this.dm.data.settings.gistId = gistId;
+    this.dm.save();
+
+    this.closeSettingsModal();
+
+    this.showConfirm(this.t('syncDownload'), this.t('confirmDownload'), async () => {
+        try {
+            const res = await this.gmFetch({
+                method: 'GET',
+                url: `https://api.github.com/gists/${gistId}`,
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (!res.ok) {
+                if (res.status === 401) throw new Error(this.t('invalidToken'));
+                if (res.status === 404) throw new Error(this.t('gistNotFound'));
+                throw new Error(`HTTP ${res.status}`);
+            }
+
+            const result = await res.json();
             const filename = 'arena-manager-data.json';
 
-            try {
-                let res;
-                if (gistId) {
-                    res = await this.gmFetch({
-                        method: 'PATCH',
-                        url: `https://api.github.com/gists/${gistId}`,
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        data: JSON.stringify({
-                            files: { [filename]: { content: data } }
-                        })
-                    });
-                } else {
-                    res = await this.gmFetch({
-                        method: 'POST',
-                        url: 'https://api.github.com/gists',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        data: JSON.stringify({
-                            description: 'Arena Manager Data Backup',
-                            public: false,
-                            files: { [filename]: { content: data } }
-                        })
-                    });
-                }
-
-                if (!res.ok) {
-                    if (res.status === 401) throw new Error(this.t('invalidToken'));
-                    if (res.status === 404) throw new Error(this.t('gistNotFound'));
-                    throw new Error(`HTTP ${res.status}`);
-                }
-
-                const result = await res.json();
-
-                if (!gistId && result.id) {
-                    gistId = result.id;
-                    this.settingsModal.querySelector('#lmm-setting-gist-id').value = gistId;
-                    this.dm.data.settings.gistId = gistId;
-                    this.dm.save();
-                    this.scanner.toast(`${this.t('uploadSuccess')} - ${this.t('gistIdSaved')}`, 'success');
-                } else {
-                    this.scanner.toast(this.t('uploadSuccess'), 'success');
-                }
-            } catch (e) {
-                console.error('[Arena Manager] Gist upload error:', e);
-                this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
-            }
-        }
-
-        async gistDownload() {
-            // Token 只从输入框获取（不持久化）
-            const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
-            // gistId 优先从输入框，其次从存储
-            let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
-            if (!gistId) gistId = this.dm.data.settings.gistId || '';
-
-            if (!token) {
-                this.scanner.toast(this.t('tokenRequired'), 'warning');
-                return;
+            let file = result.files?.[filename];
+            if (!file) {
+                file = result.files?.['lmarena-manager-data.json'];
             }
 
-            if (!gistId) {
-                this.scanner.toast(this.t('noGistId'), 'warning');
-                return;
+            if (!file || !file.content) {
+                throw new Error('File not found in Gist');
             }
 
-            // 保存 gistId
-            this.dm.data.settings.gistId = gistId;
-            this.dm.save();
+            if (this.dm.import(file.content)) {
+                // 恢复 Token 和 gistId（因为导入会覆盖，且云端数据不含Token）
+                this.dm.data.settings.gistToken = savedToken;
+                this.dm.data.settings.gistId = savedGistId;
+                this.dm.save();
 
-            this.closeSettingsModal();
-
-            this.showConfirm(this.t('syncDownload'), this.t('confirmDownload'), async () => {
-                try {
-                    const res = await this.gmFetch({
-                        method: 'GET',
-                        url: `https://api.github.com/gists/${gistId}`,
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json'
-                        }
-                    });
-
-                    if (!res.ok) {
-                        if (res.status === 401) throw new Error(this.t('invalidToken'));
-                        if (res.status === 404) throw new Error(this.t('gistNotFound'));
-                        throw new Error(`HTTP ${res.status}`);
-                    }
-
-                    const result = await res.json();
-                    const filename = 'arena-manager-data.json';
-
-                    let file = result.files?.[filename];
-                    // 兼容旧文件名
-                    if (!file) {
-                        file = result.files?.['lmarena-manager-data.json'];
-                    }
-
-                    if (!file || !file.content) {
-                        throw new Error('File not found in Gist');
-                    }
-
-                    if (this.dm.import(file.content)) {
-                        // 恢复 gistId（因为导入会覆盖）
-                        this.dm.data.settings.gistId = gistId;
-                        this.dm.save();
-
-                        this.scanner.toast(this.t('downloadSuccess'), 'success');
-                        setTimeout(() => location.reload(), 1500);
-                    } else {
-                        throw new Error('Invalid data format');
-                    }
-                } catch (e) {
-                    console.error('[Arena Manager] Gist download error:', e);
-                    this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
-                }
-            });
-        }
-
-        showConfirm(title, msg, onConfirm) {
-            this.confirmModal.querySelector('#lmm-confirm-title').textContent = title;
-            this.confirmModal.querySelector('#lmm-confirm-msg').textContent = msg;
-            this.confirmModal.querySelector('#lmm-confirm-no').textContent = this.t('cancel');
-            this.confirmModal.querySelector('#lmm-confirm-yes').textContent = this.t('confirm');
-            this.confirmModalOverlay.classList.add('open');
-            this.confirmModal.classList.add('open');
-
-            const closeConfirm = () => {
-                this.confirmModalOverlay.classList.remove('open');
-                this.confirmModal.classList.remove('open');
-            };
-
-            this.confirmModal.querySelector('#lmm-confirm-yes').onclick = () => { closeConfirm(); onConfirm(); };
-            this.confirmModal.querySelector('#lmm-confirm-no').onclick = closeConfirm;
-            this.confirmModalOverlay.onclick = closeConfirm;
-        }
-
-        showScanResult(result) {
-            const { missing, scannedCount } = result;
-            this.scanModal.querySelector('#lmm-scan-summary').innerHTML = `${this.t('scannedCount')} <b>${scannedCount}</b> ${this.t('modelsText')}，${missing.length > 0 ? `${this.t('notScanned')}：` : this.t('allScanned') + ' ✓'}`;
-
-            const list = this.scanModal.querySelector('#lmm-scan-list');
-            if (missing.length > 0) {
-                list.innerHTML = `<div class="lmm-scan-item" style="font-weight:500;background:var(--lmm-bg3)"><input type="checkbox" id="lmm-scan-all" checked><label for="lmm-scan-all">${this.t('selectAll')}</label></div>` + missing.map(name => `<div class="lmm-scan-item"><input type="checkbox" class="lmm-scan-check" value="${this.esc(name)}" checked><span>${this.esc(name)}</span></div>`).join('');
-                list.querySelector('#lmm-scan-all').onchange = (e) => {
-                    list.querySelectorAll('.lmm-scan-check').forEach(cb => cb.checked = e.target.checked);
-                };
+                this.scanner.toast(this.t('downloadSuccess'), 'success');
+                setTimeout(() => location.reload(), 1500);
             } else {
-                list.innerHTML = '';
+                throw new Error('Invalid data format');
             }
-
-            this.scanModal.querySelector('#lmm-scan-keep').textContent = this.t('keepAll');
-            this.scanModal.querySelector('#lmm-scan-delete').textContent = this.t('deleteSelected');
-            this.scanModal.querySelector('#lmm-scan-delete').style.display = missing.length > 0 ? '' : 'none';
-            this.scanModalOverlay.classList.add('open');
-            this.scanModal.classList.add('open');
-
-            const closeScan = () => {
-                this.scanModalOverlay.classList.remove('open');
-                this.scanModal.classList.remove('open');
-            };
-
-            this.scanModal.querySelector('#lmm-scan-keep').onclick = closeScan;
-            this.scanModal.querySelector('#lmm-scan-delete').onclick = () => {
-                const toDelete = [...list.querySelectorAll('.lmm-scan-check:checked')].map(cb => cb.value);
-                if (toDelete.length > 0) {
-                    this.dm.deleteModels(toDelete);
-                    this.scanner.toast(`${this.t('deleted')} ${toDelete.length}`, 'success');
-                    this.refresh();
-                    this.updateSidebar();
-                    this.updateTopbar();
-                }
-                closeScan();
-            };
-            this.scanModalOverlay.onclick = closeScan;
+        } catch (e) {
+            console.error('[Arena Manager] Gist download error:', e);
+            this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
         }
+    });
+}
 
-        $(sel) { return this.panel.querySelector(sel); }
-        $$(sel) { return this.panel.querySelectorAll(sel); }
+showConfirm(title, msg, onConfirm) {
+    this.confirmModal.querySelector('#lmm-confirm-title').textContent = title;
+    this.confirmModal.querySelector('#lmm-confirm-msg').textContent = msg;
+    this.confirmModal.querySelector('#lmm-confirm-no').textContent = this.t('cancel');
+    this.confirmModal.querySelector('#lmm-confirm-yes').textContent = this.t('confirm');
+    this.confirmModalOverlay.classList.add('open');
+    this.confirmModal.classList.add('open');
 
-        bindEvents() {
-            this.$('#lmm-close').onclick = () => this.close();
+    const closeConfirm = () => {
+        this.confirmModalOverlay.classList.remove('open');
+        this.confirmModal.classList.remove('open');
+    };
 
-            this.$('#lmm-scan-toggle').onclick = () => {
-                const btn = this.$('#lmm-scan-toggle');
-                if (this.scanner.isScanActive()) {
-                    const result = this.scanner.endScanSession();
-                    btn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
-                    btn.classList.remove('scanning', 'lmm-btn-success');
-                    this.showScanResult(result);
-                } else {
-                    this.scanner.startScanSession();
-                    btn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
-                    btn.classList.add('scanning', 'lmm-btn-success');
-                }
-            };
+    this.confirmModal.querySelector('#lmm-confirm-yes').onclick = () => { closeConfirm(); onConfirm(); };
+    this.confirmModal.querySelector('#lmm-confirm-no').onclick = closeConfirm;
+    this.confirmModalOverlay.onclick = closeConfirm;
+}
 
-            this.$('#lmm-export').onclick = () => {
-                const blob = new Blob([this.dm.export()], { type: 'application/json' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = `Arena-manager-${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
-                this.scanner.toast(this.t('exported'), 'success');
-            };
+showScanResult(result) {
+    const { missing, scannedCount } = result;
+    this.scanModal.querySelector('#lmm-scan-summary').innerHTML = `${this.t('scannedCount')} <b>${scannedCount}</b> ${this.t('modelsText')}，${missing.length > 0 ? `${this.t('notScanned')}：` : this.t('allScanned') + ' ✓'}`;
 
-            this.$('#lmm-import').onclick = () => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.json';
-                input.onchange = e => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = ev => {
-                        if (this.dm.import(ev.target.result)) {
-                            this.refresh();
-                            this.updateSidebar();
-                            this.updateTopbar();
-                            this.scanner.toast(this.t('importSuccess'), 'success');
-                        } else {
-                            this.scanner.toast(this.t('importFailed'), 'warning');
-                        }
-                    };
-                    reader.readAsText(file);
-                };
-                input.click();
-            };
+    const list = this.scanModal.querySelector('#lmm-scan-list');
+    if (missing.length > 0) {
+        list.innerHTML = `<div class="lmm-scan-item" style="font-weight:500;background:var(--lmm-bg3)"><input type="checkbox" id="lmm-scan-all" checked><label for="lmm-scan-all">${this.t('selectAll')}</label></div>` + missing.map(name => `<div class="lmm-scan-item"><input type="checkbox" class="lmm-scan-check" value="${this.esc(name)}" checked><span>${this.esc(name)}</span></div>`).join('');
+        list.querySelector('#lmm-scan-all').onchange = (e) => {
+            list.querySelectorAll('.lmm-scan-check').forEach(cb => cb.checked = e.target.checked);
+        };
+    } else {
+        list.innerHTML = '';
+    }
 
-            this.$('#lmm-clear-new').onclick = () => {
-                this.dm.clearNewFlags();
-                this.refresh();
-                this.updateFabBadge();
-                this.scanner.toast(this.t('marksCleared'), 'success');
-            };
+    this.scanModal.querySelector('#lmm-scan-keep').textContent = this.t('keepAll');
+    this.scanModal.querySelector('#lmm-scan-delete').textContent = this.t('deleteSelected');
+    this.scanModal.querySelector('#lmm-scan-delete').style.display = missing.length > 0 ? '' : 'none';
+    this.scanModalOverlay.classList.add('open');
+    this.scanModal.classList.add('open');
 
-            this.$('#lmm-groups-btn').onclick = () => this.openGroupModal();
-            this.$('#lmm-settings').onclick = () => this.openSettingsModal();
+    const closeScan = () => {
+        this.scanModalOverlay.classList.remove('open');
+        this.scanModal.classList.remove('open');
+    };
 
-            const searchInput = this.$('#lmm-search');
-            searchInput.oninput = e => { this.filter.search = e.target.value; this.refresh(); };
-            searchInput.onkeydown = e => {
-                if (e.key === 'Enter') {
-                    const firstCard = this.$('.lmm-card');
-                    if (firstCard) firstCard.click();
-                }
-            };
-
-            this.$('#lmm-org').onchange = e => { this.filter.org = e.target.value; this.refresh(); };
-            this.$('#lmm-sort').onchange = e => {
-                const [by, order] = e.target.value.split('-');
-                this.sort = { by, order: order || 'asc' };
-                this.refresh();
-            };
-
-            this.$$('.lmm-view-btn').forEach(btn => {
-                btn.onclick = () => {
-                    this.$$('.lmm-view-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    this.viewMode = btn.dataset.view;
-                    this.updateGridView();
-                };
-            });
-
-            this.$('#lmm-subbar').querySelectorAll('.lmm-subbar-item').forEach(item => {
-                item.onclick = () => {
-                    this.visibleSubMode = item.dataset.mode;
-                    this.updateSubbar();
-                    this.updateSidebar();
-                    this.refresh();
-                };
-            });
-
-            this.$('#lmm-model-sort-btn').onclick = () => {
-                this.isModelSortMode = !this.isModelSortMode;
-                this.updateSubbar();
-                this.refresh();
-            };
-
-            this.$('#lmm-model-sort-reset').onclick = () => {
-                this.dm.setModelOrder(this.visibleSubMode, []);
-                this.refresh();
-                this.scanner.applyFilters();
-                this.scanner.toast(this.t('defaultOrderRestored'), 'success');
-            };
-        }
-
-        bindShortcuts() {
-            document.addEventListener('keydown', e => {
-                if (e.ctrlKey && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
-                    e.preventDefault();
-                    this.toggle();
-                }
-                if (e.key === 'Escape') {
-                    if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
-                    else if (this.groupSelectModal.classList.contains('open')) this.closeGroupSelectModal();
-                    else if (this.groupModal.classList.contains('open')) this.closeGroupModal();
-                    else if (this.editModal.classList.contains('open')) this.closeEditModal();
-                    else if (this.confirmModal.classList.contains('open')) {
-                        this.confirmModalOverlay.classList.remove('open');
-                        this.confirmModal.classList.remove('open');
-                    }
-                    else if (this.scanModal.classList.contains('open')) {
-                        this.scanModalOverlay.classList.remove('open');
-                        this.scanModal.classList.remove('open');
-                    }
-                    else if (this.isOpen) this.close();
-                }
-                if (e.key === '/' && this.isOpen && !e.ctrlKey && !e.metaKey) {
-                    const searchInput = this.$('#lmm-search');
-                    if (document.activeElement !== searchInput) {
-                        e.preventDefault();
-                        searchInput.focus();
-                        searchInput.select();
-                    }
-                }
-            });
-        }
-
-        toggle() { this.isOpen ? this.close() : this.open(); }
-
-        open() {
-            this.isOpen = true;
-            this.panel.classList.add('open');
-            this.overlay.classList.add('open');
-            this.updateI18n();
-            this.updateTopbar();
+    this.scanModal.querySelector('#lmm-scan-keep').onclick = closeScan;
+    this.scanModal.querySelector('#lmm-scan-delete').onclick = () => {
+        const toDelete = [...list.querySelectorAll('.lmm-scan-check:checked')].map(cb => cb.value);
+        if (toDelete.length > 0) {
+            this.dm.deleteModels(toDelete);
+            this.scanner.toast(`${this.t('deleted')} ${toDelete.length}`, 'success');
             this.refresh();
             this.updateSidebar();
+            this.updateTopbar();
         }
+        closeScan();
+    };
+    this.scanModalOverlay.onclick = closeScan;
+}
 
-        close() {
-            // 如果在多选模式且有未保存的更改，还原
-            if (this.isMultiSelectMode) {
-                this.revertMultiSelectChanges();
-                this.exitMultiSelectMode();
+$(sel) { return this.panel.querySelector(sel); }
+$$(sel) { return this.panel.querySelectorAll(sel); }
+
+bindEvents() {
+    this.$('#lmm-close').onclick = () => this.close();
+
+    this.$('#lmm-scan-toggle').onclick = () => {
+        const btn = this.$('#lmm-scan-toggle');
+        if (this.scanner.isScanActive()) {
+            const result = this.scanner.endScanSession();
+            btn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
+            btn.classList.remove('scanning', 'lmm-btn-success');
+            this.showScanResult(result);
+        } else {
+            this.scanner.startScanSession();
+            btn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
+            btn.classList.add('scanning', 'lmm-btn-success');
+        }
+    };
+
+    this.$('#lmm-export').onclick = () => {
+        const blob = new Blob([this.dm.export()], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Arena-manager-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        this.scanner.toast(this.t('exported'), 'success');
+    };
+
+    this.$('#lmm-import').onclick = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = e => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                if (this.dm.import(ev.target.result)) {
+                    this.refresh();
+                    this.updateSidebar();
+                    this.updateTopbar();
+                    this.scanner.toast(this.t('importSuccess'), 'success');
+                } else {
+                    this.scanner.toast(this.t('importFailed'), 'warning');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    };
+
+    this.$('#lmm-clear-new').onclick = () => {
+        this.dm.clearNewFlags();
+        this.refresh();
+        this.updateFabBadge();
+        this.scanner.toast(this.t('marksCleared'), 'success');
+    };
+
+    this.$('#lmm-groups-btn').onclick = () => this.openGroupModal();
+    this.$('#lmm-settings').onclick = () => this.openSettingsModal();
+
+    const searchInput = this.$('#lmm-search');
+    let searchTimer = null;
+    searchInput.oninput = e => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            this.filter.search = e.target.value;
+            this.refresh();
+        }, 150);
+    };
+    searchInput.onkeydown = e => {
+        if (e.key === 'Enter') {
+            const firstCard = this.$('.lmm-card');
+            if (firstCard) firstCard.click();
+        }
+    };
+
+    this.$('#lmm-org').onchange = e => { this.filter.org = e.target.value; this.refresh(); };
+    this.$('#lmm-sort').onchange = e => {
+        const [by, order] = e.target.value.split('-');
+        this.sort = { by, order: order || 'asc' };
+        this.refresh();
+    };
+
+    this.$$('.lmm-view-btn').forEach(btn => {
+        btn.onclick = () => {
+            this.$$('.lmm-view-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.viewMode = btn.dataset.view;
+            this.updateGridView();
+        };
+    });
+
+    this.$('#lmm-subbar').querySelectorAll('.lmm-subbar-item').forEach(item => {
+        item.onclick = () => {
+            this.visibleSubMode = item.dataset.mode;
+            this.updateSubbar();
+            this.updateSidebar();
+            this.refresh();
+        };
+    });
+
+    this.$('#lmm-model-sort-btn').onclick = () => {
+        this.isModelSortMode = !this.isModelSortMode;
+        this.updateSubbar();
+        this.refresh();
+    };
+
+    this.$('#lmm-model-sort-reset').onclick = () => {
+        this.dm.setModelOrder(this.visibleSubMode, []);
+        this.refresh();
+        this.scanner.applyFilters();
+        this.scanner.toast(this.t('defaultOrderRestored'), 'success');
+    };
+}
+
+bindShortcuts() {
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
+            e.preventDefault();
+            this.toggle();
+        }
+        if (e.key === 'Escape') {
+            if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
+            else if (this.groupSelectModal.classList.contains('open')) this.closeGroupSelectModal();
+            else if (this.groupModal.classList.contains('open')) this.closeGroupModal();
+            else if (this.editModal.classList.contains('open')) this.closeEditModal();
+            else if (this.confirmModal.classList.contains('open')) {
+                this.confirmModalOverlay.classList.remove('open');
+                this.confirmModal.classList.remove('open');
             }
-            this.isOpen = false;
-            this.isSortMode = false;
+            else if (this.scanModal.classList.contains('open')) {
+                this.scanModalOverlay.classList.remove('open');
+                this.scanModal.classList.remove('open');
+            }
+            else if (this.isOpen) this.close();
+        }
+        if (e.key === '/' && this.isOpen && !e.ctrlKey && !e.metaKey) {
+            const searchInput = this.$('#lmm-search');
+            if (document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+        }
+    });
+}
+
+toggle() { this.isOpen ? this.close() : this.open(); }
+
+open() {
+    this.isOpen = true;
+    this.panel.classList.add('open');
+    this.overlay.classList.add('open');
+    this.updateI18n();
+    this.updateTopbar();
+    this.refresh();
+    this.updateSidebar();
+}
+
+close() {
+    if (this.isMultiSelectMode) {
+        this.revertMultiSelectChanges();
+        this.exitMultiSelectMode();
+    }
+    this.isOpen = false;
+    this.isSortMode = false;
+    this.isModelSortMode = false;
+    this.updateGridView();
+    this.panel.classList.remove('open');
+    this.overlay.classList.remove('open');
+}
+
+updateGridView() {
+    const grid = this.$('#lmm-grid');
+    grid.classList.remove('compact-view', 'list-view');
+    if (this.viewMode === 'compact') grid.classList.add('compact-view');
+    else if (this.viewMode === 'list' || this.isModelSortMode) grid.classList.add('list-view');
+}
+
+updateTopbar() {
+    const counts = this.getModeCounts();
+    const groups = this.dm.getGroupNames();
+    const topbar = this.$('#lmm-topbar');
+
+    const items = [
+        { key: 'all', icon: '📋', label: this.t('all'), count: counts.all },
+        { key: 'text', icon: '📝', label: 'Text', count: counts.text },
+        { key: 'search', icon: '🔍', label: 'Search', count: counts.search },
+        { key: 'image', icon: '🎨', label: 'Image', count: counts.image },
+        { key: 'code', icon: '💻', label: 'Code', count: counts.code },
+        { key: 'video', icon: '🎬', label: 'Video', count: counts.video },
+    ];
+
+    let html = items.map(it => `<div class="lmm-topbar-item ${this.currentMode === it.key ? 'active' : ''}" data-mode="${it.key}">${it.icon} ${it.label} ${it.count > 0 ? `<span class="cnt">${it.count}</span>` : ''}</div>`).join('');
+    html += `<div class="lmm-topbar-sep"></div>`;
+    html += `<div class="lmm-topbar-item ${this.currentMode === 'visible' ? 'active' : ''}" data-mode="visible">👁️ ${this.t('enabled')}</div>`;
+    html += `<div class="lmm-topbar-item ${this.currentMode === 'hidden' ? 'active' : ''}" data-mode="hidden">🙈 ${this.t('hidden')}</div>`;
+    html += `<div class="lmm-topbar-item ${this.currentMode === 'starred' ? 'active' : ''}" data-mode="starred">⭐ ${this.t('starred')} ${counts.starred > 0 ? `<span class="cnt">${counts.starred}</span>` : ''}</div>`;
+    html += `<div class="lmm-topbar-item ${this.currentMode === 'new' ? 'active' : ''}" data-mode="new">✨ ${this.t('newFound')} ${counts.new > 0 ? `<span class="cnt">${counts.new}</span>` : ''}</div>`;
+
+    if (groups.length > 0) {
+        html += `<div class="lmm-topbar-sep"></div>`;
+        groups.forEach(name => {
+            const cnt = counts[`group_${name}`] || 0;
+            html += `<div class="lmm-topbar-item ${this.currentMode === `group_${name}` ? 'active' : ''}" data-mode="group_${name}">📁 ${this.esc(name)} ${cnt > 0 ? `<span class="cnt">${cnt}</span>` : ''}</div>`;
+        });
+    }
+
+    topbar.innerHTML = html;
+    topbar.querySelectorAll('.lmm-topbar-item').forEach(item => {
+        item.onclick = () => {
+            this.currentMode = item.dataset.mode;
+            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
+            this.$('#lmm-search').value = '';
+            this.$('#lmm-org').value = 'all';
+            this.isTier2Expanded = false;
             this.isModelSortMode = false;
             this.updateGridView();
-            this.panel.classList.remove('open');
-            this.overlay.classList.remove('open');
+            this.updateTopbar();
+            this.updateSidebar();
+            this.updateSubbar();
+            this.refresh();
+        };
+    });
+}
+
+updateSubbar() {
+    const subbar = this.$('#lmm-subbar');
+    const content = this.$('#lmm-content');
+
+    if (this.currentMode === 'visible') {
+        subbar.style.display = 'flex';
+        content.classList.add('visible-mode');
+        subbar.querySelectorAll('.lmm-subbar-item').forEach(el => {
+            el.classList.toggle('active', el.dataset.mode === this.visibleSubMode);
+        });
+        const btn = this.$('#lmm-model-sort-btn');
+        const resetBtn = this.$('#lmm-model-sort-reset');
+        if (this.isModelSortMode) {
+            btn.innerHTML = `✓ ${this.t('sort')}`;
+            btn.classList.add('active');
+            resetBtn.style.display = '';
+            this.updateGridView();
+        } else {
+            btn.innerHTML = `⇅ ${this.t('sort')}`;
+            btn.classList.remove('active');
+            resetBtn.style.display = 'none';
+            this.updateGridView();
         }
+    } else {
+        subbar.style.display = 'none';
+        content.classList.remove('visible-mode');
+    }
+}
 
-        updateGridView() {
-            const grid = this.$('#lmm-grid');
-            grid.classList.remove('compact-view', 'list-view');
-            if (this.viewMode === 'compact') grid.classList.add('compact-view');
-            else if (this.viewMode === 'list' || this.isModelSortMode) grid.classList.add('list-view');
-        }
+getModelsInCurrentMode() {
+    const models = this.dm.getAllModels();
+    if (this.currentMode === 'visible') {
+        return models.filter(m => m.visible !== false && Array.isArray(m.modes) && m.modes.includes(this.visibleSubMode));
+    }
+    if (this.currentMode.startsWith('group_')) {
+        const groupName = this.currentMode.substring(6);
+        const groupModels = this.dm.getModelsInGroup(groupName);
+        return models.filter(m => groupModels.includes(m.name));
+    }
+    switch (this.currentMode) {
+        case 'all': return models;
+        case 'starred': return models.filter(m => m.starred);
+        case 'hidden': return models.filter(m => m.visible === false);
+        case 'new': return models.filter(m => m.isNew);
+        default: return models.filter(m => Array.isArray(m.modes) && m.modes.includes(this.currentMode));
+    }
+}
 
-        updateTopbar() {
-            const counts = this.getModeCounts();
-            const groups = this.dm.getGroupNames();
-            const topbar = this.$('#lmm-topbar');
+getSidebarMode() {
+    if (this.currentMode === 'visible') return this.visibleSubMode;
+    if (['text', 'search', 'image', 'code', 'video'].includes(this.currentMode)) return this.currentMode;
+    return 'text';
+}
 
-            const items = [
-                { key: 'all', icon: '📋', label: this.t('all'), count: counts.all },
-                { key: 'text', icon: '📝', label: 'Text', count: counts.text },
-                { key: 'search', icon: '🔍', label: 'Search', count: counts.search },
-                { key: 'image', icon: '🎨', label: 'Image', count: counts.image },
-                { key: 'code', icon: '💻', label: 'Code', count: counts.code },
-                { key: 'video', icon: '🎬', label: 'Video', count: counts.video },
-            ];
+collapseTier2() {
+    this.isTier2Expanded = false;
+    const folderContent = this.$('#lmm-tier2-content');
+    const folder = this.$('#lmm-tier2-folder');
+    if (folderContent) folderContent.classList.remove('open');
+    if (folder) folder.querySelector('.icon').textContent = '📁';
+}
 
-            let html = items.map(it => `<div class="lmm-topbar-item ${this.currentMode === it.key ? 'active' : ''}" data-mode="${it.key}">${it.icon} ${it.label} ${it.count > 0 ? `<span class="cnt">${it.count}</span>` : ''}</div>`).join('');
-            html += `<div class="lmm-topbar-sep"></div>`;
-            html += `<div class="lmm-topbar-item ${this.currentMode === 'visible' ? 'active' : ''}" data-mode="visible">👁️ ${this.t('enabled')}</div>`;
-            html += `<div class="lmm-topbar-item ${this.currentMode === 'hidden' ? 'active' : ''}" data-mode="hidden">🙈 ${this.t('hidden')}</div>`;
-            html += `<div class="lmm-topbar-item ${this.currentMode === 'starred' ? 'active' : ''}" data-mode="starred">⭐ ${this.t('starred')} ${counts.starred > 0 ? `<span class="cnt">${counts.starred}</span>` : ''}</div>`;
-            html += `<div class="lmm-topbar-item ${this.currentMode === 'new' ? 'active' : ''}" data-mode="new">✨ ${this.t('newFound')} ${counts.new > 0 ? `<span class="cnt">${counts.new}</span>` : ''}</div>`;
+updateSidebar() {
+    if (this.currentMode === 'visible') {
+        this.$('#lmm-content').classList.remove('visible-mode');
+    }
 
-            if (groups.length > 0) {
-                html += `<div class="lmm-topbar-sep"></div>`;
-                groups.forEach(name => {
-                    const cnt = counts[`group_${name}`] || 0;
-                    html += `<div class="lmm-topbar-item ${this.currentMode === `group_${name}` ? 'active' : ''}" data-mode="group_${name}">📁 ${this.esc(name)} ${cnt > 0 ? `<span class="cnt">${cnt}</span>` : ''}</div>`;
-                });
+    const modeModels = this.getModelsInCurrentMode();
+    const sidebarMode = this.getSidebarMode();
+    const orgOrder = this.dm.getOrgOrder(sidebarMode);
+    const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
+    const showImageTypes = sidebarMode === 'image';
+
+    const visionCount = modeModels.filter(m => m.vision === true).length;
+    const showVisionFilter = visionCount > 0 && sidebarMode !== 'image';
+
+    let html = `<div class="lmm-sidebar-header"><span class="lmm-sidebar-title">${this.t('byOrg')}</span><button class="lmm-sidebar-btn ${this.isSortMode ? 'active' : ''}" id="lmm-sort-btn">${this.isSortMode ? this.t('done') : this.t('sort')}</button>${this.isSortMode ? `<button class="lmm-sidebar-btn reset" id="lmm-sort-reset">${this.t('reset')}</button>` : ''}</div><div id="lmm-org-list"></div>`;
+
+    if (showImageTypes) {
+        html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('byType')}</span></div><div id="lmm-image-type-list"></div>`;
+    }
+
+    if (showVisionFilter) {
+        html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('features')}</span></div><div id="lmm-vision-list"></div>`;
+    }
+
+    this.$('#lmm-sidebar').innerHTML = html;
+
+    const orgs = {};
+    modeModels.forEach(m => {
+        const c = m.company || 'Other';
+        if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔' };
+        orgs[c].cnt++;
+    });
+
+    const tier1 = [], tier2 = [], other = [];
+    Object.entries(orgs).forEach(([name, data]) => {
+        const item = { name, ...data };
+        if (config.tier1.includes(name)) tier1.push(item);
+        else if (config.useFolder && config.tier2.includes(name)) tier2.push(item);
+        else if (name !== 'Other') other.push(item);
+    });
+
+    const sortByOrder = arr => arr.sort((a, b) => {
+        const ai = orgOrder.indexOf(a.name);
+        const bi = orgOrder.indexOf(b.name);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    });
+    sortByOrder(tier1);
+    sortByOrder(tier2);
+    sortByOrder(other);
+
+    const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
+    const hasOther = orgs['Other'];
+    this.renderOrgList(tier1, tier2, tier2Total, hasOther, other);
+
+    if (showImageTypes) {
+        const imageTypes = { universal: 0, t2i: 0, i2i: 0 };
+        modeModels.forEach(m => {
+            if (typeof m.vision === 'string' && imageTypes[m.vision] !== undefined) {
+                imageTypes[m.vision]++;
             }
+        });
 
-            topbar.innerHTML = html;
-            topbar.querySelectorAll('.lmm-topbar-item').forEach(item => {
+        const imgTypeLabels = {
+            universal: { icon: '🔄', label: this.t('universal') },
+            t2i: { icon: '✨', label: this.t('t2iOnly') },
+            i2i: { icon: '🖼️', label: this.t('i2iOnly') }
+        };
+
+        const imgTypeList = this.$('#lmm-image-type-list');
+        if (imgTypeList) {
+            imgTypeList.innerHTML = Object.entries(imageTypes)
+                .filter(([_, cnt]) => cnt > 0)
+                .map(([type, cnt]) => `<div class="lmm-sidebar-item ${this.filter.imageType === type ? 'active' : ''}" data-imgtype="${type}"><span class="icon">${imgTypeLabels[type].icon}</span> <span>${imgTypeLabels[type].label}</span> <span class="cnt">${cnt}</span></div>`)
+                .join('');
+
+            imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
                 item.onclick = () => {
-                    this.currentMode = item.dataset.mode;
-                    this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all', group: 'all' };
-                    this.$('#lmm-search').value = '';
-                    this.$('#lmm-org').value = 'all';
-                    this.isTier2Expanded = false;
-                    this.isModelSortMode = false;
-                    this.updateGridView();
-                    this.updateTopbar();
-                    this.updateSidebar();
-                    this.updateSubbar();
+                    imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    this.filter.imageType = item.dataset.imgtype;
+                    this.collapseTier2();
                     this.refresh();
                 };
             });
         }
+    }
 
-        updateSubbar() {
-            const subbar = this.$('#lmm-subbar');
-            const content = this.$('#lmm-content');
-
-            if (this.currentMode === 'visible') {
-                subbar.style.display = 'flex';
-                content.classList.add('visible-mode');
-                subbar.querySelectorAll('.lmm-subbar-item').forEach(el => {
-                    el.classList.toggle('active', el.dataset.mode === this.visibleSubMode);
-                });
-                const btn = this.$('#lmm-model-sort-btn');
-                const resetBtn = this.$('#lmm-model-sort-reset');
-                if (this.isModelSortMode) {
-                    btn.innerHTML = `✓ ${this.t('sort')}`;
-                    btn.classList.add('active');
-                    resetBtn.style.display = '';
-                    this.updateGridView();
-                } else {
-                    btn.innerHTML = `⇅ ${this.t('sort')}`;
-                    btn.classList.remove('active');
-                    resetBtn.style.display = 'none';
-                    this.updateGridView();
-                }
-            } else {
-                subbar.style.display = 'none';
-                content.classList.remove('visible-mode');
-            }
-        }
-
-        getModelsInCurrentMode() {
-            const models = this.dm.getAllModels();
-            if (this.currentMode === 'visible') {
-                return models.filter(m => m.visible !== false && Array.isArray(m.modes) && m.modes.includes(this.visibleSubMode));
-            }
-            if (this.currentMode.startsWith('group_')) {
-                const groupName = this.currentMode.substring(6);
-                const groupModels = this.dm.getModelsInGroup(groupName);
-                return models.filter(m => groupModels.includes(m.name));
-            }
-            switch (this.currentMode) {
-                case 'all': return models;
-                case 'starred': return models.filter(m => m.starred);
-                case 'hidden': return models.filter(m => m.visible === false);
-                case 'new': return models.filter(m => m.isNew);
-                default: return models.filter(m => Array.isArray(m.modes) && m.modes.includes(this.currentMode));
-            }
-        }
-
-        getSidebarMode() {
-            if (this.currentMode === 'visible') return this.visibleSubMode;
-            if (['text', 'search', 'image', 'code', 'video'].includes(this.currentMode)) return this.currentMode;
-            return 'text';
-        }
-
-        collapseTier2() {
-            this.isTier2Expanded = false;
-            const folderContent = this.$('#lmm-tier2-content');
-            const folder = this.$('#lmm-tier2-folder');
-            if (folderContent) folderContent.classList.remove('open');
-            if (folder) folder.querySelector('.icon').textContent = '📁';
-        }
-
-        updateSidebar() {
-            if (this.currentMode === 'visible') {
-                this.$('#lmm-content').classList.remove('visible-mode');
-            }
-
-            const modeModels = this.getModelsInCurrentMode();
-            const sidebarMode = this.getSidebarMode();
-            const orgOrder = this.dm.getOrgOrder(sidebarMode);
-            const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
-            const showImageTypes = sidebarMode === 'image';
-
-            const visionCount = modeModels.filter(m => m.vision === true).length;
-            const showVisionFilter = visionCount > 0 && sidebarMode !== 'image';
-
-            let html = `<div class="lmm-sidebar-header"><span class="lmm-sidebar-title">${this.t('byOrg')}</span><button class="lmm-sidebar-btn ${this.isSortMode ? 'active' : ''}" id="lmm-sort-btn">${this.isSortMode ? this.t('done') : this.t('sort')}</button>${this.isSortMode ? `<button class="lmm-sidebar-btn reset" id="lmm-sort-reset">${this.t('reset')}</button>` : ''}</div><div id="lmm-org-list"></div>`;
-
-            if (showImageTypes) {
-                html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('byType')}</span></div><div id="lmm-image-type-list"></div>`;
-            }
-
-            if (showVisionFilter) {
-                html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('features')}</span></div><div id="lmm-vision-list"></div>`;
-            }
-
-            this.$('#lmm-sidebar').innerHTML = html;
-
-            const orgs = {};
-            modeModels.forEach(m => {
-                const c = m.company || 'Other';
-                if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔' };
-                orgs[c].cnt++;
-            });
-
-            const tier1 = [], tier2 = [], other = [];
-            Object.entries(orgs).forEach(([name, data]) => {
-                const item = { name, ...data };
-                if (config.tier1.includes(name)) tier1.push(item);
-                else if (config.useFolder && config.tier2.includes(name)) tier2.push(item);
-                else if (name !== 'Other') other.push(item);
-            });
-
-            const sortByOrder = arr => arr.sort((a, b) => {
-                const ai = orgOrder.indexOf(a.name);
-                const bi = orgOrder.indexOf(b.name);
-                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-            });
-            sortByOrder(tier1);
-            sortByOrder(tier2);
-            sortByOrder(other);
-
-            const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
-            const hasOther = orgs['Other'];
-            this.renderOrgList(tier1, tier2, tier2Total, hasOther, other);
-
-            if (showImageTypes) {
-                const imageTypes = { universal: 0, t2i: 0, i2i: 0 };
-                modeModels.forEach(m => {
-                    if (typeof m.vision === 'string' && imageTypes[m.vision] !== undefined) {
-                        imageTypes[m.vision]++;
-                    }
-                });
-
-                const imgTypeLabels = {
-                    universal: { icon: '🔄', label: this.t('universal') },
-                    t2i: { icon: '✨', label: this.t('t2iOnly') },
-                    i2i: { icon: '🖼️', label: this.t('i2iOnly') }
-                };
-
-                const imgTypeList = this.$('#lmm-image-type-list');
-                if (imgTypeList) {
-                    imgTypeList.innerHTML = Object.entries(imageTypes)
-                        .filter(([_, cnt]) => cnt > 0)
-                        .map(([type, cnt]) => `<div class="lmm-sidebar-item ${this.filter.imageType === type ? 'active' : ''}" data-imgtype="${type}"><span class="icon">${imgTypeLabels[type].icon}</span> <span>${imgTypeLabels[type].label}</span> <span class="cnt">${cnt}</span></div>`)
-                        .join('');
-
-                    imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
-                        item.onclick = () => {
-                            imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
-                            item.classList.add('active');
-                            this.filter.imageType = item.dataset.imgtype;
-                            this.collapseTier2();
-                            this.refresh();
-                        };
-                    });
-                }
-            }
-
-            if (showVisionFilter) {
-                const visionList = this.$('#lmm-vision-list');
-                if (visionList) {
-                    visionList.innerHTML = `<div class="lmm-sidebar-item ${this.filter.hasVision === 'yes' ? 'active' : ''}" data-vision="yes"><span class="icon">👓</span> <span>${this.t('vision')}</span> <span class="cnt">${visionCount}</span></div>`;
-                    visionList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
-                        item.onclick = () => {
-                            if (item.classList.contains('active')) {
-                                item.classList.remove('active');
-                                this.filter.hasVision = 'all';
-                            } else {
-                                item.classList.add('active');
-                                this.filter.hasVision = 'yes';
-                            }
-                            this.collapseTier2();
-                            this.refresh();
-                        };
-                    });
-                }
-            }
-
-            this.$('#lmm-sort-btn').onclick = () => this.toggleSortMode();
-            if (this.isSortMode) {
-                this.$('#lmm-sort-reset').onclick = () => {
-                    const sidebarMode = this.getSidebarMode();
-                    this.dm.setOrgOrder(sidebarMode, getDefaultOrgOrder(sidebarMode));
-                    this.updateSidebar();
-                    this.scanner.toast(this.t('orgOrderRestored'), 'success');
-                };
-            }
-        }
-
-        renderOrgList(tier1, tier2, tier2Total, hasOther, other) {
-            const list = this.$('#lmm-org-list');
-            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
-
-            let html = tier1.map(c => renderItem(c, false)).join('');
-            if (tier2.length > 0) {
-                html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
-            }
-            other.forEach(c => html += renderItem(c, false));
-            if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
-            list.innerHTML = html;
-
-            const folder = this.$('#lmm-tier2-folder');
-            if (folder) {
-                folder.onclick = () => {
-                    this.isTier2Expanded = !this.isTier2Expanded;
-                    this.$('#lmm-tier2-content').classList.toggle('open', this.isTier2Expanded);
-                    folder.querySelector('.icon').textContent = this.isTier2Expanded ? '📂' : '📁';
-                };
-            }
-
-            list.querySelectorAll('.lmm-sidebar-item').forEach(item => {
-                if (this.isSortMode) {
-                    this.bindDragEvents(item);
-                    item.onclick = (e) => e.preventDefault();
-                } else {
-                    item.onclick = (e) => {
-                        if (e.target.closest('.lmm-drag-handle')) return;
-                        list.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
+    if (showVisionFilter) {
+        const visionList = this.$('#lmm-vision-list');
+        if (visionList) {
+            visionList.innerHTML = `<div class="lmm-sidebar-item ${this.filter.hasVision === 'yes' ? 'active' : ''}" data-vision="yes"><span class="icon">👓</span> <span>${this.t('vision')}</span> <span class="cnt">${visionCount}</span></div>`;
+            visionList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
+                item.onclick = () => {
+                    if (item.classList.contains('active')) {
+                        item.classList.remove('active');
+                        this.filter.hasVision = 'all';
+                    } else {
                         item.classList.add('active');
-                        this.filter.org = item.dataset.org;
-                        if (item.dataset.inFolder !== 'true') {
-                            this.collapseTier2();
-                        }
-                        this.refresh();
-                    };
-                }
+                        this.filter.hasVision = 'yes';
+                    }
+                    this.collapseTier2();
+                    this.refresh();
+                };
             });
         }
+    }
 
-        toggleSortMode() {
-            this.isSortMode = !this.isSortMode;
+    this.$('#lmm-sort-btn').onclick = () => this.toggleSortMode();
+    if (this.isSortMode) {
+        this.$('#lmm-sort-reset').onclick = () => {
             const sidebarMode = this.getSidebarMode();
-            if (!this.isSortMode) {
-                const items = this.$('#lmm-org-list').querySelectorAll('.lmm-sidebar-item[data-org]');
-                const newOrder = [...items].map(i => i.dataset.org).filter(Boolean);
-                this.dm.setOrgOrder(sidebarMode, newOrder);
-            } else {
-                if (this.$('#lmm-tier2-folder')) this.isTier2Expanded = true;
-            }
+            this.dm.setOrgOrder(sidebarMode, getDefaultOrgOrder(sidebarMode));
             this.updateSidebar();
-        }
+            this.scanner.toast(this.t('orgOrderRestored'), 'success');
+        };
+    }
+}
 
-        bindDragEvents(item) {
-            item.ondragstart = (e) => {
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', item.dataset.org);
-                item.classList.add('dragging');
-            };
-            item.ondragend = () => item.classList.remove('dragging');
-            item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-            item.ondrop = (e) => {
-                e.preventDefault();
-                const from = e.dataTransfer.getData('text/plain');
-                const to = item.dataset.org;
-                if (from && to && from !== to) {
-                    const sidebarMode = this.getSidebarMode();
-                    const order = this.dm.getOrgOrder(sidebarMode);
-                    const fromIdx = order.indexOf(from);
-                    if (fromIdx !== -1) {
-                        order.splice(fromIdx, 1);
-                        const toIdx = order.indexOf(to);
-                        order.splice(toIdx === -1 ? order.length : toIdx, 0, from);
-                        this.dm.setOrgOrder(sidebarMode, order);
-                        this.updateSidebar();
-                    }
+renderOrgList(tier1, tier2, tier2Total, hasOther, other) {
+    const list = this.$('#lmm-org-list');
+    const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
+
+    let html = tier1.map(c => renderItem(c, false)).join('');
+    if (tier2.length > 0) {
+        html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
+    }
+    other.forEach(c => html += renderItem(c, false));
+    if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
+    list.innerHTML = html;
+
+    const folder = this.$('#lmm-tier2-folder');
+    if (folder) {
+        folder.onclick = () => {
+            this.isTier2Expanded = !this.isTier2Expanded;
+            this.$('#lmm-tier2-content').classList.toggle('open', this.isTier2Expanded);
+            folder.querySelector('.icon').textContent = this.isTier2Expanded ? '📂' : '📁';
+        };
+    }
+
+    list.querySelectorAll('.lmm-sidebar-item').forEach(item => {
+        if (this.isSortMode) {
+            this.bindDragEvents(item);
+            item.onclick = (e) => e.preventDefault();
+        } else {
+            item.onclick = (e) => {
+                if (e.target.closest('.lmm-drag-handle')) return;
+                list.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                this.filter.org = item.dataset.org;
+                if (item.dataset.inFolder !== 'true') {
+                    this.collapseTier2();
                 }
+                this.refresh();
             };
         }
+    });
+}
 
-        bindModelDragEvents(card) {
-            card.setAttribute('draggable', 'true');
-            card.ondragstart = (e) => {
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', card.dataset.name);
-                card.classList.add('dragging');
-            };
-            card.ondragend = () => card.classList.remove('dragging');
-            card.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-            card.ondrop = (e) => {
-                e.preventDefault();
-                const from = e.dataTransfer.getData('text/plain');
-                const to = card.dataset.name;
-                if (from && to && from !== to) {
-                    const grid = this.$('#lmm-grid');
-                    const cards = Array.from(grid.children);
-                    const fromCard = cards.find(c => c.dataset.name === from);
-                    const toCard = cards.find(c => c.dataset.name === to);
-                    if (fromCard && toCard) {
-                        const fromIdx = cards.indexOf(fromCard);
-                        const toIdx = cards.indexOf(toCard);
-                        if (fromIdx < toIdx) grid.insertBefore(fromCard, toCard.nextSibling);
-                        else grid.insertBefore(fromCard, toCard);
-                        const names = Array.from(grid.children).map(el => el.dataset.name).filter(Boolean);
-                        this.dm.setModelOrder(this.visibleSubMode, names);
-                        this.scanner.applyFilters();
-                    }
-                }
-            };
-        }
+toggleSortMode() {
+    this.isSortMode = !this.isSortMode;
+    const sidebarMode = this.getSidebarMode();
+    if (!this.isSortMode) {
+        const items = this.$('#lmm-org-list').querySelectorAll('.lmm-sidebar-item[data-org]');
+        const newOrder = [...items].map(i => i.dataset.org).filter(Boolean);
+        this.dm.setOrgOrder(sidebarMode, newOrder);
+    } else {
+        if (this.$('#lmm-tier2-folder')) this.isTier2Expanded = true;
+    }
+    this.updateSidebar();
+}
 
-        updateOrgFilter() {
-            const modeModels = this.getModelsInCurrentMode();
+bindDragEvents(item) {
+    item.ondragstart = (e) => {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', item.dataset.org);
+        item.classList.add('dragging');
+    };
+    item.ondragend = () => item.classList.remove('dragging');
+    item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+    item.ondrop = (e) => {
+        e.preventDefault();
+        const from = e.dataTransfer.getData('text/plain');
+        const to = item.dataset.org;
+        if (from && to && from !== to) {
             const sidebarMode = this.getSidebarMode();
-            const orgOrder = this.dm.getOrgOrder(sidebarMode);
-            const orgs = [...new Set(modeModels.map(m => m.company).filter(Boolean))];
-            orgs.sort((a, b) => {
-                if (a === 'Other') return 1;
-                if (b === 'Other') return -1;
-                const ai = orgOrder.indexOf(a);
-                const bi = orgOrder.indexOf(b);
-                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-            });
-            const sel = this.$('#lmm-org');
-            const val = sel.value;
-            sel.innerHTML = `<option value="all">📂 ${this.t('allOrgs')}</option>` + orgs.map(c => `<option value="${this.esc(c)}">${this.esc(c)}</option>`).join('');
-            sel.value = orgs.includes(val) ? val : 'all';
+            const order = this.dm.getOrgOrder(sidebarMode);
+            const fromIdx = order.indexOf(from);
+            if (fromIdx !== -1) {
+                order.splice(fromIdx, 1);
+                const toIdx = order.indexOf(to);
+                order.splice(toIdx === -1 ? order.length : toIdx, 0, from);
+                this.dm.setOrgOrder(sidebarMode, order);
+                this.updateSidebar();
+            }
         }
+    };
+}
 
-        matchesSearch(model, searchStr) {
-            if (!searchStr) return true;
-            const s = searchStr.trim();
-            if (!s) return true;
-
-            if (s.startsWith('/') && s.lastIndexOf('/') > 0) {
-                const lastSlash = s.lastIndexOf('/');
-                const pattern = s.substring(1, lastSlash);
-                const flags = s.substring(lastSlash + 1);
-                try {
-                    const regex = new RegExp(pattern, flags || 'i');
-                    return regex.test(model.name) || regex.test(model.company || '');
-                } catch (e) { /* fallback */ }
+bindModelDragEvents(card) {
+    card.setAttribute('draggable', 'true');
+    card.ondragstart = (e) => {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', card.dataset.name);
+        card.classList.add('dragging');
+    };
+    card.ondragend = () => card.classList.remove('dragging');
+    card.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+    card.ondrop = (e) => {
+        e.preventDefault();
+        const from = e.dataTransfer.getData('text/plain');
+        const to = card.dataset.name;
+        if (from && to && from !== to) {
+            const grid = this.$('#lmm-grid');
+            const cards = Array.from(grid.children);
+            const fromCard = cards.find(c => c.dataset.name === from);
+            const toCard = cards.find(c => c.dataset.name === to);
+            if (fromCard && toCard) {
+                const fromIdx = cards.indexOf(fromCard);
+                const toIdx = cards.indexOf(toCard);
+                if (fromIdx < toIdx) grid.insertBefore(fromCard, toCard.nextSibling);
+                else grid.insertBefore(fromCard, toCard);
+                const names = Array.from(grid.children).map(el => el.dataset.name).filter(Boolean);
+                this.dm.setModelOrder(this.visibleSubMode, names);
+                this.scanner.applyFilters();
+                this.triggerSyncOnChange();
             }
-
-            const keywords = s.toLowerCase().split(/\s+/).filter(k => k.length > 0);
-            const target = `${model.name} ${model.company || ''}`.toLowerCase();
-            return keywords.every(kw => target.includes(kw));
         }
+    };
+}
 
-        getFiltered() {
-            let models = this.getModelsInCurrentMode();
+updateOrgFilter() {
+    const modeModels = this.getModelsInCurrentMode();
+    const sidebarMode = this.getSidebarMode();
+    const orgOrder = this.dm.getOrgOrder(sidebarMode);
+    const orgs = [...new Set(modeModels.map(m => m.company).filter(Boolean))];
+    orgs.sort((a, b) => {
+        if (a === 'Other') return 1;
+        if (b === 'Other') return -1;
+        const ai = orgOrder.indexOf(a);
+        const bi = orgOrder.indexOf(b);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    });
+    const sel = this.$('#lmm-org');
+    const val = sel.value;
+    sel.innerHTML = `<option value="all">📂 ${this.t('allOrgs')}</option>` + orgs.map(c => `<option value="${this.esc(c)}">${this.esc(c)}</option>`).join('');
+    sel.value = orgs.includes(val) ? val : 'all';
+}
 
-            if (this.filter.search) {
-                models = models.filter(m => this.matchesSearch(m, this.filter.search));
-            }
-            if (this.filter.org !== 'all') models = models.filter(m => m.company === this.filter.org);
-            if (this.filter.imageType !== 'all') models = models.filter(m => m.vision === this.filter.imageType);
-            if (this.filter.hasVision === 'yes') models = models.filter(m => m.vision === true);
+matchesSearch(model, searchStr) {
+    if (!searchStr) return true;
+    const s = searchStr.trim();
+    if (!s) return true;
 
-            const sidebarMode = this.getSidebarMode();
-            const orgOrder = this.dm.getOrgOrder(sidebarMode);
+    if (s.startsWith('/') && s.lastIndexOf('/') > 0) {
+        const lastSlash = s.lastIndexOf('/');
+        const pattern = s.substring(1, lastSlash);
+        const flags = s.substring(lastSlash + 1);
+        try {
+            const regex = new RegExp(pattern, flags || 'i');
+            return regex.test(model.name) || regex.test(model.company || '') || regex.test(model.note || '');
+        } catch (e) { /* fallback */ }
+    }
 
-            if (this.currentMode === 'visible') {
-                const customOrder = this.dm.getModelOrder(this.visibleSubMode);
-                if (customOrder.length > 0) {
-                    models.sort((a, b) => {
-                        let ai = customOrder.indexOf(a.name);
-                        let bi = customOrder.indexOf(b.name);
-                        if (ai === -1) ai = 9999;
-                        if (bi === -1) bi = 9999;
-                        if (ai !== bi) return ai - bi;
-                        if (sidebarMode === 'image') {
-                            const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                            const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                            if (ta !== tb) return ta - tb;
-                        }
-                        const cai = orgOrder.indexOf(a.company);
-                        const cbi = orgOrder.indexOf(b.company);
-                        return (cai === -1 ? 999 : cai) - (cbi === -1 ? 999 : cbi);
-                    });
-                    return models;
-                }
-                models.sort((a, b) => {
-                    if (sidebarMode === 'image') {
-                        const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                        const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                        if (ta !== tb) return ta - tb;
-                    }
-                    const ai = orgOrder.indexOf(a.company);
-                    const bi = orgOrder.indexOf(b.company);
-                    const c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-                    return c !== 0 ? c : a.name.localeCompare(b.name);
-                });
-                return models;
-            }
+    const keywords = s.toLowerCase().split(/\s+/).filter(k => k.length > 0);
+    const target = `${model.name} ${model.company || ''} ${model.note || ''}`.toLowerCase();
+    return keywords.every(kw => target.includes(kw));
+}
 
+getFiltered() {
+    let models = this.getModelsInCurrentMode();
+
+    if (this.filter.search) {
+        models = models.filter(m => this.matchesSearch(m, this.filter.search));
+    }
+    if (this.filter.org !== 'all') models = models.filter(m => m.company === this.filter.org);
+    if (this.filter.imageType !== 'all') models = models.filter(m => m.vision === this.filter.imageType);
+    if (this.filter.hasVision === 'yes') models = models.filter(m => m.vision === true);
+
+    const sidebarMode = this.getSidebarMode();
+    const orgOrder = this.dm.getOrgOrder(sidebarMode);
+
+    if (this.currentMode === 'visible') {
+        const customOrder = this.dm.getModelOrder(this.visibleSubMode);
+        if (customOrder.length > 0) {
             models.sort((a, b) => {
-                if (this.sort.by === 'starred') {
-                    if (a.starred && !b.starred) return -1;
-                    if (!a.starred && b.starred) return 1;
-                    return a.name.localeCompare(b.name);
+                let ai = customOrder.indexOf(a.name);
+                let bi = customOrder.indexOf(b.name);
+                if (ai === -1) ai = 9999;
+                if (bi === -1) bi = 9999;
+                if (ai !== bi) return ai - bi;
+                if (sidebarMode === 'image') {
+                    const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                    const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                    if (ta !== tb) return ta - tb;
                 }
-                let c = 0;
-                if (this.sort.by === 'name') c = a.name.localeCompare(b.name);
-                else if (this.sort.by === 'org') {
-                    if (sidebarMode === 'image') {
-                        const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                        const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                        if (ta !== tb) return ta - tb;
-                    }
-                    const ai = orgOrder.indexOf(a.company);
-                    const bi = orgOrder.indexOf(b.company);
-                    c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-                }
-                else if (this.sort.by === 'date') c = (b.addedAt || 0) - (a.addedAt || 0);
-                return this.sort.order === 'desc' ? -c : c;
+                const cai = orgOrder.indexOf(a.company);
+                const cbi = orgOrder.indexOf(b.company);
+                return (cai === -1 ? 999 : cai) - (cbi === -1 ? 999 : cbi);
             });
             return models;
         }
-
-        // 多选模式方法
-        enterMultiSelectMode() {
-            this.isMultiSelectMode = true;
-            this.selectedModels.clear();
-            this.multiSelectBackup.clear();
-            // 备份当前所有模型的可见性
-            this.getFiltered().forEach(m => {
-                this.multiSelectBackup.set(m.name, this.dm.isVisible(m.name));
-            });
-            this.refresh();
-        }
-
-        exitMultiSelectMode() {
-            this.isMultiSelectMode = false;
-            this.selectedModels.clear();
-            this.multiSelectBackup.clear();
-            this.refresh();
-        }
-
-        revertMultiSelectChanges() {
-            this.multiSelectBackup.forEach((visible, name) => {
-                this.dm.setVisibility(name, visible);
-            });
-            this.scanner.applyFilters();
-        }
-
-        multiSelectShow() {
-            this.selectedModels.forEach(name => {
-                this.dm.setVisibility(name, true);
-            });
-            this.refresh();
-            this.scanner.applyFilters();
-        }
-
-        multiSelectHide() {
-            this.selectedModels.forEach(name => {
-                this.dm.setVisibility(name, false);
-            });
-            this.refresh();
-            this.scanner.applyFilters();
-        }
-
-        multiSelectAddToGroup() {
-            const groups = this.dm.getGroupNames();
-            if (groups.length === 0) {
-                this.scanner.toast(this.t('noGroupHint'), 'warning');
-                return;
+        models.sort((a, b) => {
+            if (sidebarMode === 'image') {
+                const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                if (ta !== tb) return ta - tb;
             }
-            this.openGroupSelectModal();
+            const ai = orgOrder.indexOf(a.company);
+            const bi = orgOrder.indexOf(b.company);
+            const c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+            return c !== 0 ? c : a.name.localeCompare(b.name);
+        });
+        return models;
+    }
+
+    models.sort((a, b) => {
+        if (this.sort.by === 'starred') {
+            if (a.starred && !b.starred) return -1;
+            if (!a.starred && b.starred) return 1;
+            return a.name.localeCompare(b.name);
         }
+        let c = 0;
+        if (this.sort.by === 'name') c = a.name.localeCompare(b.name);
+        else if (this.sort.by === 'org') {
+            if (sidebarMode === 'image') {
+                const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                if (ta !== tb) return ta - tb;
+            }
+            const ai = orgOrder.indexOf(a.company);
+            const bi = orgOrder.indexOf(b.company);
+            c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+        }
+        else if (this.sort.by === 'date') c = (b.addedAt || 0) - (a.addedAt || 0);
+        return this.sort.order === 'desc' ? -c : c;
+    });
+    return models;
+}
 
-        openGroupSelectModal() {
-            const list = this.groupSelectModal.querySelector('#lmm-group-select-list');
-            const groups = this.dm.getGroupNames();
+// 多选模式方法
+enterMultiSelectMode() {
+    this.isMultiSelectMode = true;
+    this.selectedModels.clear();
+    this.multiSelectBackup.clear();
+    this.getFiltered().forEach(m => {
+        this.multiSelectBackup.set(m.name, this.dm.isVisible(m.name));
+    });
+    this.refresh();
+}
 
-            list.innerHTML = groups.map(name => `
+exitMultiSelectMode() {
+    this.isMultiSelectMode = false;
+    this.selectedModels.clear();
+    this.multiSelectBackup.clear();
+    this.refresh();
+}
+
+revertMultiSelectChanges() {
+    this.multiSelectBackup.forEach((visible, name) => {
+        this.dm.setVisibility(name, visible);
+    });
+    this.scanner.applyFilters();
+}
+
+multiSelectShow() {
+    this.selectedModels.forEach(name => {
+        this.dm.setVisibility(name, true);
+    });
+    this.refresh();
+    this.scanner.applyFilters();
+    this.triggerSyncOnChange();
+}
+
+multiSelectHide() {
+    this.selectedModels.forEach(name => {
+        this.dm.setVisibility(name, false);
+    });
+    this.refresh();
+    this.scanner.applyFilters();
+    this.triggerSyncOnChange();
+}
+
+multiSelectAddToGroup() {
+    const groups = this.dm.getGroupNames();
+    if (groups.length === 0) {
+        this.scanner.toast(this.t('noGroupHint'), 'warning');
+        return;
+    }
+    this.openGroupSelectModal();
+}
+
+openGroupSelectModal() {
+    const list = this.groupSelectModal.querySelector('#lmm-group-select-list');
+    const groups = this.dm.getGroupNames();
+
+    list.innerHTML = groups.map(name => `
                 <div class="lmm-group-item" data-group="${this.esc(name)}">
                     <span class="name">📁 ${this.esc(name)}</span>
                 </div>
             `).join('');
 
-            list.querySelectorAll('.lmm-group-item').forEach(item => {
-                item.onclick = () => {
-                    const groupName = item.dataset.group;
-                    this.selectedModels.forEach(modelName => {
-                        this.dm.addToGroup(groupName, modelName);
-                    });
-                    this.closeGroupSelectModal();
-                    this.scanner.toast(this.t('addedToGroup'), 'success');
-                    this.updateTopbar();
-                    this.refresh();
-                };
+    list.querySelectorAll('.lmm-group-item').forEach(item => {
+        item.onclick = () => {
+            const groupName = item.dataset.group;
+            this.selectedModels.forEach(modelName => {
+                this.dm.addToGroup(groupName, modelName);
             });
-
-            this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
-            this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
-            this.groupSelectModalOverlay.classList.add('open');
-            this.groupSelectModal.classList.add('open');
-        }
-
-        closeGroupSelectModal() {
-            this.groupSelectModalOverlay.classList.remove('open');
-            this.groupSelectModal.classList.remove('open');
-        }
-
-        multiSelectAll() {
-            const models = this.getFiltered();
-            models.forEach(m => this.selectedModels.add(m.name));
+            this.closeGroupSelectModal();
+            this.scanner.toast(this.t('addedToGroup'), 'success');
+            this.updateTopbar();
             this.refresh();
-        }
+            this.triggerSyncOnChange();
+        };
+    });
 
-        multiDeselectAll() {
-            this.selectedModels.clear();
-            this.refresh();
-        }
+    this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
+    this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
+    this.groupSelectModalOverlay.classList.add('open');
+    this.groupSelectModal.classList.add('open');
+}
 
-        multiInvert() {
-            const models = this.getFiltered();
-            models.forEach(m => {
-                if (this.selectedModels.has(m.name)) {
-                    this.selectedModels.delete(m.name);
-                } else {
-                    this.selectedModels.add(m.name);
-                }
-            });
-            this.refresh();
-        }
+closeGroupSelectModal() {
+    this.groupSelectModalOverlay.classList.remove('open');
+    this.groupSelectModal.classList.remove('open');
+}
 
-        renderBatchButtons() {
-            const batch = this.$('#lmm-batch');
-            if (this.isMultiSelectMode) {
-                batch.innerHTML = `
+multiSelectAll() {
+    const models = this.getFiltered();
+    models.forEach(m => this.selectedModels.add(m.name));
+    this.refresh();
+}
+
+multiDeselectAll() {
+    this.selectedModels.clear();
+    this.refresh();
+}
+
+multiInvert() {
+    const models = this.getFiltered();
+    models.forEach(m => {
+        if (this.selectedModels.has(m.name)) {
+            this.selectedModels.delete(m.name);
+        } else {
+            this.selectedModels.add(m.name);
+        }
+    });
+    this.refresh();
+}
+
+renderBatchButtons() {
+    const batch = this.$('#lmm-batch');
+    if (this.isMultiSelectMode) {
+        batch.innerHTML = `
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-show">${this.t('show')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-hide">${this.t('hide')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-add-group">${this.t('addToGroup')}</button>
@@ -3336,85 +3806,87 @@
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-revert">${this.t('revert')}</button>
                     <button class="lmm-btn lmm-btn-sm lmm-btn-primary" id="lmm-multi-exit">${this.t('exitMulti')}</button>
                 `;
-                batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
-                batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
-                batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
-                batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
-                    if (this.selectedModels.size > 0) this.multiDeselectAll();
-                    else this.multiSelectAll();
-                };
-                batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
-                batch.querySelector('#lmm-multi-revert').onclick = () => {
-                    this.revertMultiSelectChanges();
-                    this.refresh();
-                };
-                batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
-            } else {
-                batch.innerHTML = `
+        batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
+        batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
+        batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
+        batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
+            if (this.selectedModels.size > 0) this.multiDeselectAll();
+            else this.multiSelectAll();
+        };
+        batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
+        batch.querySelector('#lmm-multi-revert').onclick = () => {
+            this.revertMultiSelectChanges();
+            this.refresh();
+        };
+        batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
+    } else {
+        batch.innerHTML = `
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
                     <button class="lmm-btn lmm-btn-primary" id="lmm-apply">✓ ${this.t('apply')}</button>
                 `;
-                batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
-                batch.querySelector('#lmm-apply').onclick = () => {
-                    this.scanner.applyFilters();
-                    this.scanner.toast(this.t('applied'), 'success');
-                };
-            }
-        }
+        batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
+        batch.querySelector('#lmm-apply').onclick = () => {
+            this.scanner.applyFilters();
+            this.scanner.toast(this.t('applied'), 'success');
+        };
+    }
+}
 
-        esc(s) {
-            if (!s) return '';
-            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-        }
+esc(s) {
+    if (!s) return '';
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
 
-        getModeIcon(modes) {
-            if (!Array.isArray(modes) || modes.length === 0) return '❓';
-            const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-            if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
-            return icons[modes[0]] || '❓';
-        }
+getModeIcon(modes) {
+    if (!Array.isArray(modes) || modes.length === 0) return '❓';
+    const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+    if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
+    return icons[modes[0]] || '❓';
+}
 
-        refresh() {
-            const grid = this.$('#lmm-grid');
-            const models = this.getFiltered();
-            const sidebarMode = this.getSidebarMode();
+refresh() {
+    const grid = this.$('#lmm-grid');
+    const models = this.getFiltered();
+    const sidebarMode = this.getSidebarMode();
 
-            this.updateGridView();
-            this.renderBatchButtons();
+    this.updateGridView();
+    this.renderBatchButtons();
 
-            if (models.length === 0) {
-                // 根据是否为自建分组决定提示内容
-                const isCustomGroup = this.currentMode.startsWith('group_');
-                const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
-                grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
-            } else {
-                grid.innerHTML = models.map(m => {
-                    const vis = m.visible !== false;
-                    const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
-                    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+    if (models.length === 0) {
+        const isCustomGroup = this.currentMode.startsWith('group_');
+        const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
+        grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
+    } else {
+        grid.innerHTML = models.map(m => {
+            const vis = m.visible !== false;
+            const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
+            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
 
-                    const imgTypeLabels = {
-                        universal: { icon: '🔄' },
-                        t2i: { icon: '✨' },
-                        i2i: { icon: '🖼️' }
-                    };
-                    const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
-                    ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
-                    const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
-                    const modelGroups = this.dm.getModelGroups(m.name);
-                    const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
+            const imgTypeLabels = {
+                universal: { icon: '🔄' },
+                t2i: { icon: '✨' },
+                i2i: { icon: '🖼️' }
+            };
+            const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
+            ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
+            const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
+            const modelGroups = this.dm.getModelGroups(m.name);
+            const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
 
-                    const isSelected = this.selectedModels.has(m.name);
-                    const showCheck = this.isMultiSelectMode;
-                    const cardClasses = [
-                        'lmm-card',
-                        vis ? 'visible' : 'hidden',
-                        m.isNew ? 'new' : '',
-                        m.starred ? 'starred' : '',
-                        isSelected ? 'selected' : ''
-                    ].filter(Boolean).join(' ');
+            const isSelected = this.selectedModels.has(m.name);
+            const showCheck = this.isMultiSelectMode;
+            const cardClasses = [
+                'lmm-card',
+                vis ? 'visible' : 'hidden',
+                m.isNew ? 'new' : '',
+                m.starred ? 'starred' : '',
+                isSelected ? 'selected' : ''
+            ].filter(Boolean).join(' ');
 
-                    return `
+            // 备注显示（仅 grid 和 list 视图）
+            const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
+
+            return `
                         <div class="${cardClasses}" data-name="${this.esc(m.name)}">
                             ${dragHandle}
                             ${showCheck ? `<div class="lmm-check ${isSelected ? 'on' : ''}">${isSelected ? '✓' : ''}</div>` : ''}
@@ -3431,268 +3903,453 @@
                                     ${groupTags}
                                     ${m.isNew ? `<span class="lmm-tag new">${this.t('newFound')}</span>` : ''}
                                 </div>
+                                ${noteHtml}
                             </div>
                             ${!this.isMultiSelectMode ? `
                             <div class="lmm-card-actions">
                                 <button class="lmm-card-btn lmm-star-btn ${m.starred ? 'starred' : ''}" title="${this.t('starred')}">${m.starred ? '⭐' : '☆'}</button>
-                                <button class="lmm-card-btn lmm-edit-btn" title="${this.t('editModel')}">✏️</button>
+                                <button class="lmm-card-btn lmm-edit-btn" title="${this.t('modelDetails')}">📋</button>
                             </div>
                             ` : ''}
                         </div>
                     `;
-                }).join('');
+        }).join('');
 
-                grid.querySelectorAll('.lmm-card').forEach(card => {
-                    const name = card.dataset.name;
+        grid.querySelectorAll('.lmm-card').forEach(card => {
+            const name = card.dataset.name;
 
-                    if (this.isModelSortMode) {
-                        this.bindModelDragEvents(card);
-                    } else if (this.isMultiSelectMode) {
-                        card.onclick = () => {
-                            if (this.selectedModels.has(name)) {
-                                this.selectedModels.delete(name);
-                            } else {
-                                this.selectedModels.add(name);
-                            }
-                            this.refresh();
-                        };
+            if (this.isModelSortMode) {
+                this.bindModelDragEvents(card);
+            } else if (this.isMultiSelectMode) {
+                card.onclick = () => {
+                    if (this.selectedModels.has(name)) {
+                        this.selectedModels.delete(name);
                     } else {
-                        card.onclick = (e) => {
-                            if (e.target.closest('.lmm-card-actions')) return;
-                            const newVis = !this.dm.isVisible(name);
-                            this.dm.setVisibility(name, newVis);
-                            this.refresh();
-                            this.updateStats();
-                            this.updateFabBadge();
-                        };
-                        card.ondblclick = () => this.openEditModal(name);
-
-                        const starBtn = card.querySelector('.lmm-star-btn');
-                        if (starBtn) {
-                            starBtn.onclick = (e) => {
-                                e.stopPropagation();
-                                const starred = this.dm.toggleStar(name);
-                                this.refresh();
-                                this.updateTopbar();
-                            };
-                        }
-
-                        const editBtn = card.querySelector('.lmm-edit-btn');
-                        if (editBtn) {
-                            editBtn.onclick = (e) => {
-                                e.stopPropagation();
-                                this.openEditModal(name);
-                            };
-                        }
+                        this.selectedModels.add(name);
                     }
-                });
-            }
-
-            this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
-            this.updateStats();
-            this.updateOrgFilter();
-        }
-
-        updateStats() {
-            const modeModels = this.getModelsInCurrentMode();
-            const v = modeModels.filter(m => m.visible !== false).length;
-            this.$('#lmm-v').textContent = v;
-            this.$('#lmm-h').textContent = modeModels.length - v;
-            this.$('#lmm-t').textContent = modeModels.length;
-        }
-
-        openEditModal(name) {
-            const m = this.dm.getModel(name);
-            if (!m) return;
-            this.editingModel = name;
-
-            this.editModal.querySelector('[data-i18n="editModel"]').textContent = this.t('editModel');
-            this.editModal.querySelector('[data-i18n="modelName"]').textContent = this.t('modelName');
-            this.editModal.querySelector('[data-i18n="org"]').textContent = this.t('org');
-            this.editModal.querySelector('[data-i18n="belongGroups"]').textContent = this.t('belongGroups');
-            this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
-            this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
-            this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
-
-            this.editModal.querySelector('#lmm-edit-name').value = name;
-            this.editModal.querySelector('#lmm-edit-org').value = m.company === 'Other' ? '' : m.company;
-            this.editModal.querySelector('#lmm-edit-org').placeholder = this.t('orgPlaceholder');
-
-            const groupsContainer = this.editModal.querySelector('#lmm-edit-groups');
-            const allGroups = this.dm.getGroupNames();
-            const modelGroups = this.dm.getModelGroups(name);
-
-            if (allGroups.length > 0) {
-                groupsContainer.innerHTML = allGroups.map(g =>
-                                                          `<div class="lmm-checkbox-item ${modelGroups.includes(g) ? 'checked' : ''}" data-group="${this.esc(g)}">📁 ${this.esc(g)}</div>`
-                ).join('');
-                groupsContainer.querySelectorAll('.lmm-checkbox-item').forEach(item => {
-                    item.onclick = () => item.classList.toggle('checked');
-                });
+                    this.refresh();
+                };
             } else {
-                groupsContainer.innerHTML = `<span style="color:var(--lmm-text2);font-size:11px">${this.t('noGroupHint')}</span>`;
-            }
+                card.onclick = (e) => {
+                    if (e.target.closest('.lmm-card-actions')) return;
+                    const newVis = !this.dm.isVisible(name);
+                    this.dm.setVisibility(name, newVis);
+                    this.refresh();
+                    this.updateStats();
+                    this.updateFabBadge();
+                    this.triggerSyncOnChange();
+                };
+                card.ondblclick = () => this.openEditModal(name);
 
-            this.editModalOverlay.classList.add('open');
-            this.editModal.classList.add('open');
-        }
-
-        closeEditModal() {
-            this.editModalOverlay.classList.remove('open');
-            this.editModal.classList.remove('open');
-            this.editingModel = null;
-        }
-
-        saveEdit() {
-            if (!this.editingModel) return;
-            const company = this.editModal.querySelector('#lmm-edit-org').value.trim();
-
-            const allGroups = this.dm.getGroupNames();
-            const selectedGroups = [];
-            this.editModal.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
-                selectedGroups.push(item.dataset.group);
-            });
-
-            allGroups.forEach(g => {
-                if (selectedGroups.includes(g)) {
-                    this.dm.addToGroup(g, this.editingModel);
-                } else {
-                    this.dm.removeFromGroup(g, this.editingModel);
+                const starBtn = card.querySelector('.lmm-star-btn');
+                if (starBtn) {
+                    starBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.dm.toggleStar(name);
+                        this.refresh();
+                        this.updateTopbar();
+                        this.triggerSyncOnChange();
+                    };
                 }
-            });
 
-            this.dm.updateModel(this.editingModel, { company: company || 'Other', companyManual: true });
-            this.closeEditModal();
-            this.refresh();
-            this.updateSidebar();
-            this.updateTopbar();
-            this.scanner.toast(this.t('saved'), 'success');
-        }
-
-        resetEdit() {
-            if (!this.editingModel) return;
-            this.dm.reanalyze(this.editingModel);
-            this.closeEditModal();
-            this.refresh();
-            this.updateSidebar();
-            this.updateTopbar();
-            this.scanner.toast(this.t('restored'), 'success');
-        }
-
-        openGroupModal() {
-            this.renderGroupList();
-            this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
-            this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
-            this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
-            this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
-            this.groupModalOverlay.classList.add('open');
-            this.groupModal.classList.add('open');
-        }
-
-        closeGroupModal() {
-            this.groupModalOverlay.classList.remove('open');
-            this.groupModal.classList.remove('open');
-        }
-
-        createGroup() {
-            const input = this.groupModal.querySelector('#lmm-group-new-name');
-            const name = input.value.trim();
-            if (!name) {
-                this.scanner.toast(this.t('enterGroupName'), 'warning');
-                return;
+                const editBtn = card.querySelector('.lmm-edit-btn');
+                if (editBtn) {
+                    editBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.openEditModal(name);
+                    };
+                }
             }
-            if (this.dm.createGroup(name)) {
-                input.value = '';
-                this.renderGroupList();
-                this.updateTopbar();
-                this.scanner.toast(this.t('groupCreated'), 'success');
+        });
+    }
+
+    this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
+    this.updateStats();
+    this.updateOrgFilter();
+}
+
+updateStats() {
+    const modeModels = this.getModelsInCurrentMode();
+    const v = modeModels.filter(m => m.visible !== false).length;
+    this.$('#lmm-v').textContent = v;
+    this.$('#lmm-h').textContent = modeModels.length - v;
+    this.$('#lmm-t').textContent = modeModels.length;
+}
+
+// 计算模型在当前模式下的排序位置
+getModelRank(name) {
+    if (this.currentMode !== 'visible') return null;
+    const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
+    const customOrder = this.dm.getModelOrder(this.visibleSubMode);
+
+    if (customOrder.length > 0) {
+        const sorted = [...models].sort((a, b) => {
+            let ai = customOrder.indexOf(a.name);
+            let bi = customOrder.indexOf(b.name);
+            if (ai === -1) ai = 9999;
+            if (bi === -1) bi = 9999;
+            return ai - bi;
+        });
+        const idx = sorted.findIndex(m => m.name === name);
+        return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+    }
+
+    const sidebarMode = this.getSidebarMode();
+    const orgOrder = this.dm.getOrgOrder(sidebarMode);
+    const sorted = [...models].sort((a, b) => {
+        const ai = orgOrder.indexOf(a.company);
+        const bi = orgOrder.indexOf(b.company);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+    });
+    const idx = sorted.findIndex(m => m.name === name);
+    return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+}
+
+openEditModal(name) {
+    const m = this.dm.getModel(name);
+    if (!m) return;
+    this.editingModel = name;
+
+    const body = this.editModal.querySelector('#lmm-edit-body');
+    const allGroups = this.dm.getGroupNames();
+    const modelGroups = this.dm.getModelGroups(name);
+    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+    const isVisible = m.visible !== false;
+
+    // 计算排序位置
+    let rankInfo = '';
+    if (isVisible) {
+        modes.forEach(mode => {
+            const visibleModels = this.dm.getAllModels().filter(
+                md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
+            );
+            const customOrder = this.dm.getModelOrder(mode);
+            const orgOrder = this.dm.getOrgOrder(mode);
+
+            let sorted;
+            if (customOrder.length > 0) {
+                sorted = [...visibleModels].sort((a, b) => {
+                    let ai = customOrder.indexOf(a.name);
+                    let bi = customOrder.indexOf(b.name);
+                    if (ai === -1) ai = 9999;
+                    if (bi === -1) bi = 9999;
+                    return ai - bi;
+                });
             } else {
-                this.scanner.toast(this.t('groupExists'), 'warning');
+                sorted = [...visibleModels].sort((a, b) => {
+                    const ai = orgOrder.indexOf(a.company);
+                    const bi = orgOrder.indexOf(b.company);
+                    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+                });
             }
+
+            const idx = sorted.findIndex(md => md.name === name);
+            if (idx !== -1) {
+                const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+                rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
+            }
+        });
+    }
+
+    // Vision 显示
+    let visionDisplay = '';
+    if (typeof m.vision === 'string') {
+        const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
+        visionDisplay = visionLabels[m.vision] || m.vision;
+    } else {
+        visionDisplay = m.vision ? this.t('on') : this.t('off');
+    }
+
+    body.innerHTML = `
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('modelName')}</span>
+                    <span class="lmm-detail-value"><strong>${this.esc(name)}</strong></span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('visibleStatus')}</span>
+                    <span class="lmm-detail-value">
+                        <span style="color:${isVisible ? 'var(--lmm-success)' : 'var(--lmm-text2)'}">${isVisible ? '✓ ' + this.t('visibleYes') : '✗ ' + this.t('visibleNo')}</span>
+                        ${isVisible && rankInfo ? `<span style="margin-left:12px;font-size:11px;color:var(--lmm-text2)">${rankInfo}</span>` : ''}
+                    </span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('org')}</span>
+                    <span class="lmm-detail-value lmm-form-row">
+                        <input type="text" class="lmm-form-input" id="lmm-edit-org" value="${this.esc(m.company === 'Other' ? '' : m.company)}" placeholder="${this.t('orgPlaceholder')}">
+                        ${m.companyManual ? `<button class="lmm-btn lmm-btn-sm" id="lmm-reset-org">${this.t('resetOrg')}</button>` : ''}
+                    </span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('iconEdit')}</span>
+                    <span class="lmm-detail-value">
+                        <input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">
+                    </span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('modes')}</span>
+                    <span class="lmm-detail-value">
+                        ${modes.map(mode => {
+        const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+        return `<span class="lmm-tag mode">${icons[mode] || ''} ${mode}</span>`;
+    }).join(' ')}
+                    </span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('starred')}</span>
+                    <span class="lmm-detail-value">
+                        <div class="lmm-switch ${m.starred ? 'on' : ''}" id="lmm-edit-starred"></div>
+                    </span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('vision')}</span>
+                    <span class="lmm-detail-value">${visionDisplay}</span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('belongGroups')}</span>
+                    <span class="lmm-detail-value">
+                        ${allGroups.length > 0 ? `
+                            <div class="lmm-checkbox-group" id="lmm-edit-groups">
+                                ${allGroups.map(g => `<div class="lmm-checkbox-item ${modelGroups.includes(g) ? 'checked' : ''}" data-group="${this.esc(g)}">📁 ${this.esc(g)}</div>`).join('')}
+                            </div>
+                        ` : `<span style="color:var(--lmm-text2);font-size:11px">${this.t('noGroupHint')}</span>`}
+                    </span>
+                </div>
+                <div class="lmm-detail-row" style="flex-direction:column;align-items:stretch">
+                    <span class="lmm-detail-label" style="margin-bottom:4px">${this.t('note')}</span>
+                    <textarea class="lmm-form-input" id="lmm-edit-note" rows="2" placeholder="${this.t('notePlaceholder')}" style="resize:vertical">${this.esc(m.note || '')}</textarea>
+                </div>
+            `;
+
+    // 绑定事件
+    const starredSwitch = body.querySelector('#lmm-edit-starred');
+    if (starredSwitch) {
+        starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
+    }
+
+    const resetOrgBtn = body.querySelector('#lmm-reset-org');
+    if (resetOrgBtn) {
+        resetOrgBtn.onclick = () => {
+            // 重新分析组织
+            for (const rule of COMPANY_RULES) {
+                if (rule.patterns.some(p => p.test(name))) {
+                    body.querySelector('#lmm-edit-org').value = rule.company;
+                    break;
+                }
+            }
+        };
+    }
+
+    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
+        item.onclick = () => item.classList.toggle('checked');
+    });
+
+    // 更新模态框标题和按钮
+    this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
+    this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
+    this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
+    this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
+
+    this.editModalOverlay.classList.add('open');
+    this.editModal.classList.add('open');
+}
+
+closeEditModal() {
+    this.editModalOverlay.classList.remove('open');
+    this.editModal.classList.remove('open');
+    this.editingModel = null;
+}
+
+saveEdit() {
+    if (!this.editingModel) return;
+
+    const body = this.editModal.querySelector('#lmm-edit-body');
+    const company = body.querySelector('#lmm-edit-org').value.trim();
+    const icon = body.querySelector('#lmm-edit-icon').value.trim();
+    const note = body.querySelector('#lmm-edit-note').value.trim();
+    const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
+
+    const allGroups = this.dm.getGroupNames();
+    const selectedGroups = [];
+    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
+        selectedGroups.push(item.dataset.group);
+    });
+
+    allGroups.forEach(g => {
+        if (selectedGroups.includes(g)) {
+            this.dm.addToGroup(g, this.editingModel);
+        } else {
+            this.dm.removeFromGroup(g, this.editingModel);
         }
+    });
 
-        renderGroupList() {
-            const list = this.groupModal.querySelector('#lmm-group-list');
-            const groups = this.dm.getGroups();
-            const names = Object.keys(groups);
+    this.dm.updateModel(this.editingModel, {
+        company: company || 'Other',
+        companyManual: company !== '',
+        icon: icon || this.dm.getModel(this.editingModel).icon,
+        note: note,
+        starred: starred
+    });
 
-            if (names.length === 0) {
-                list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
-                return;
-            }
+    this.closeEditModal();
+    this.refresh();
+    this.updateSidebar();
+    this.updateTopbar();
+    this.scanner.toast(this.t('saved'), 'success');
+    this.triggerSyncOnChange();
+}
 
-            list.innerHTML = names.map(name => `
+resetEdit() {
+    if (!this.editingModel) return;
+    this.dm.reanalyze(this.editingModel);
+    this.closeEditModal();
+    this.refresh();
+    this.updateSidebar();
+    this.updateTopbar();
+    this.scanner.toast(this.t('restored'), 'success');
+    this.triggerSyncOnChange();
+}
+
+openGroupModal() {
+    this.renderGroupList();
+    this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
+    this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
+    this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
+    this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
+    this.groupModalOverlay.classList.add('open');
+    this.groupModal.classList.add('open');
+}
+
+closeGroupModal() {
+    this.groupModalOverlay.classList.remove('open');
+    this.groupModal.classList.remove('open');
+}
+
+createGroup() {
+    const input = this.groupModal.querySelector('#lmm-group-new-name');
+    const name = input.value.trim();
+    if (!name) {
+        this.scanner.toast(this.t('enterGroupName'), 'warning');
+        return;
+    }
+    if (this.dm.createGroup(name)) {
+        input.value = '';
+        this.renderGroupList();
+        this.updateTopbar();
+        this.scanner.toast(this.t('groupCreated'), 'success');
+        this.triggerSyncOnChange();
+    } else {
+        this.scanner.toast(this.t('groupExists'), 'warning');
+    }
+}
+
+renderGroupList() {
+    const list = this.groupModal.querySelector('#lmm-group-list');
+    const groups = this.dm.getGroups();
+    const names = Object.keys(groups);
+
+    if (names.length === 0) {
+        list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
+        return;
+    }
+
+    list.innerHTML = names.map(name => `
                 <div class="lmm-group-item" data-group="${this.esc(name)}">
                     <span class="name">📁 ${this.esc(name)}</span>
                     <span style="color:var(--lmm-text2);font-size:10px">${groups[name].length} ${this.t('models')}</span>
                     <div class="actions">
+                        <button class="lmm-btn lmm-btn-sm lmm-export-group-btn" title="${this.t('exportGroup')}">📤</button>
                         <button class="lmm-btn lmm-rename-btn">${this.t('rename')}</button>
                         <button class="lmm-btn lmm-btn-danger lmm-delete-btn">${this.t('delete')}</button>
                     </div>
                 </div>
             `).join('');
 
-            list.querySelectorAll('.lmm-group-item').forEach(item => {
-                const name = item.dataset.group;
-                item.querySelector('.lmm-rename-btn').onclick = () => {
-                    const newName = prompt(this.t('inputNewName'), name);
-                    if (newName && newName.trim() && newName !== name) {
-                        if (this.dm.renameGroup(name, newName.trim())) {
-                            this.renderGroupList();
-                            this.updateTopbar();
-                            this.scanner.toast(this.t('renamed'), 'success');
-                        } else {
-                            this.scanner.toast(this.t('nameExists'), 'warning');
-                        }
-                    }
-                };
-                item.querySelector('.lmm-delete-btn').onclick = () => {
-                    if (confirm(this.t('confirmDelete').替换('{0}', name))) {
-                        this.dm.deleteGroup(name);
-                        this.renderGroupList();
-                        this.updateTopbar();
-                        this.scanner.toast(this.t('deleted'), 'success');
-                    }
-                };
-            });
-        }
+    list.querySelectorAll('.lmm-group-item').forEach(item => {
+        const name = item.dataset.group;
 
-        openSettingsModal() {
-            const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
-            langSelect.value = this.dm.getLanguage();
+        item.querySelector('.lmm-export-group-btn').onclick = () => {
+            const data = this.dm.export(name);
+            const blob = new Blob([data], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            this.scanner.toast(this.t('groupExported'), 'success');
+        };
 
-            const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
-            alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
+        item.querySelector('.lmm-rename-btn').onclick = () => {
+            const newName = prompt(this.t('inputNewName'), name);
+            if (newName && newName.trim() && newName !== name) {
+                if (this.dm.renameGroup(name, newName.trim())) {
+                    this.renderGroupList();
+                    this.updateTopbar();
+                    this.scanner.toast(this.t('renamed'), 'success');
+                    this.triggerSyncOnChange();
+                } else {
+                    this.scanner.toast(this.t('nameExists'), 'warning');
+                }
+            }
+        };
+        item.querySelector('.lmm-delete-btn').onclick = () => {
+            if (confirm(this.t('confirmDelete').replace('{0}', name))) {
+                this.dm.deleteGroup(name);
+                this.renderGroupList();
+                this.updateTopbar();
+                this.scanner.toast(this.t('deleted'), 'success');
+                this.triggerSyncOnChange();
+            }
+        };
+    });
+}
 
-            // 恢复 Token 和 gistId
-            this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
-            this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
+openSettingsModal() {
+    const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
+    langSelect.value = this.dm.getLanguage();
 
-            this.updateSettingsModalI18n();
-            this.settingsModalOverlay.classList.add('open');
-            this.settingsModal.classList.add('open');
-        }
+    const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
+    alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
 
-        closeSettingsModal() {
-            this.settingsModalOverlay.classList.remove('open');
-            this.settingsModal.classList.remove('open');
-        }
-    }
+    const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
+    lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
 
-    // ==================== 初始化 ====================
-    function init() {
-        console.log(`[LMM] Arena Manager v${VERSION} 启动`);
-        const dm = new DataManager();
-        const scanner = new Scanner(dm);
-        const ui = new UI(dm, scanner);
-        ui.init();
-        scanner.startObserving();
-        setTimeout(() => scanner.scan(), 2000);
-    }
+    const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
+    autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
+    this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    const syncMode = this.dm.data.settings.autoSyncMode || 'change';
+    this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
+        radio.checked = radio.value === syncMode;
+    });
+    this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
+
+    this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
+    this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
+
+    this.updateSettingsModalI18n();
+    this.settingsModalOverlay.classList.add('open');
+    this.settingsModal.classList.add('open');
+}
+
+closeSettingsModal() {
+    this.settingsModalOverlay.classList.remove('open');
+    this.settingsModal.classList.remove('open');
+}
+}
+
+// ==================== 初始化 ====================
+function init() {
+    console.log(`[Arena Manager] v${VERSION} 启动`);
+    const dm = new DataManager();
+    const scanner = new Scanner(dm);
+    const ui = new UI(dm, scanner);
+    ui.init();
+    scanner.startObserving();
+    setTimeout(() => scanner.scan(), 2000);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
 })();
