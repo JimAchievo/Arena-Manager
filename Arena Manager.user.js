@@ -1406,7 +1406,7 @@
 
     const MODE_ORG_CONFIG = {
         text: {
-            tier1: ['Google', 'Anthropic', 'xAI', 'OpenAI', 'Baidu', 'Z.ai', 'Alibaba', 'Moonshot', 'DeepSeek', 'Mistral', 'MiniMax'],
+            tier1: ['Google', 'Anthropic', 'xAI', 'OpenAI', 'Baidu', 'Z.ai', 'Alibaba', 'Moonshot', 'DeepSeek', 'Mistral', 'MiniMax', 'Bytedance'],
             tier2: ['Meituan', 'Amazon', 'Xiaomi', 'Tencent', 'Microsoft AI', 'Prime Intellect', 'Cohere', 'Nvidia', 'Ant Group', 'StepFun', 'Meta', 'Allen AI', 'Inception AI', 'IBM', '01 AI', 'NexusFlow'],
             useFolder: true
         },
@@ -1464,7 +1464,7 @@
         { patterns: [/^mercury/i], company: 'Inception AI', icon: '☿️' },
         { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity', icon: '❓' },
         { patterns: [/^diffbot/i], company: 'Diffbot', icon: '🤖' },
-        { patterns: [/^seedream/i, /^seededit/i], company: 'Bytedance', icon: '🎵' },
+        { patterns: [/^seed/i], company: 'Bytedance', icon: '🎵' },
         { patterns: [/^flux/i], company: 'Black Forest Labs', icon: '🌊' },
         { patterns: [/^mai-/i, /^microsoft/i], company: 'Microsoft AI', icon: '🪟' },
         { patterns: [/^vidu/i], company: 'Shengshu', icon: '🎬' },
