@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.7.0
+// @version      4.7.1
 // @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
 // @author       Arena Manager Team
 // @match        https://arena.ai/*
@@ -20,7 +20,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '4.7.0';
+    const VERSION = '4.7.1';
 
     // ==================== 1. 国际化系统 ====================
     const I18N = {
@@ -66,6 +66,7 @@
                 byType: '按类型',
                 features: '特性',
                 vision: '视觉',
+                pdfUpload: 'PDF 上传',
                 universal: '综合',
                 t2iOnly: '仅文生图',
                 i2iOnly: '仅图生图',
@@ -218,6 +219,7 @@
                 byType: 'By Type',
                 features: 'Features',
                 vision: 'Vision',
+                pdfUpload: 'PDF Upload',
                 universal: 'Universal',
                 t2iOnly: 'Text-to-Image',
                 i2iOnly: 'Image-to-Image',
@@ -370,6 +372,7 @@
                 byType: '按類型',
                 features: '特性',
                 vision: '視覺',
+                pdfUpload: 'PDF 上傳',
                 universal: '綜合',
                 t2iOnly: '僅文生圖',
                 i2iOnly: '僅圖生圖',
@@ -522,6 +525,7 @@
                 byType: 'タイプ別',
                 features: '機能',
                 vision: 'ビジョン',
+                pdfUpload: 'PDFアップロード',
                 universal: '汎用',
                 t2iOnly: 'テキストから画像',
                 i2iOnly: '画像から画像',
@@ -674,6 +678,7 @@
                 byType: '유형별',
                 features: '기능',
                 vision: '비전',
+                pdfUpload: 'PDF 업로드',
                 universal: '통합',
                 t2iOnly: '텍스트→이미지',
                 i2iOnly: '이미지→이미지',
@@ -826,6 +831,7 @@
                 byType: 'Por Tipo',
                 features: 'Características',
                 vision: 'Visión',
+                pdfUpload: 'Carga de PDF',
                 universal: 'Universal',
                 t2iOnly: 'Texto a Imagen',
                 i2iOnly: 'Imagen a Imagen',
@@ -978,6 +984,7 @@
                 byType: 'Par Type',
                 features: 'Fonctionnalités',
                 vision: 'Vision',
+                pdfUpload: 'Téléversement PDF',
                 universal: 'Universel',
                 t2iOnly: 'Texte vers Image',
                 i2iOnly: 'Image vers Image',
@@ -1130,6 +1137,7 @@
                 byType: 'Nach Typ',
                 features: 'Funktionen',
                 vision: 'Vision',
+                pdfUpload: 'PDF-Upload',
                 universal: 'Universal',
                 t2iOnly: 'Text zu Bild',
                 i2iOnly: 'Bild zu Bild',
@@ -1282,6 +1290,7 @@
                 byType: 'По типу',
                 features: 'Функции',
                 vision: 'Зрение',
+                pdfUpload: 'Загрузка PDF',
                 universal: 'Универсальный',
                 t2iOnly: 'Текст в изображение',
                 i2iOnly: 'Изображение в изображение',
@@ -1712,7 +1721,7 @@
             return this.data.groups[groupName] || [];
         }
 
-        analyze(name, iconCompany, strictMode, imageFlags = {}) {
+        analyze(name, iconCompany, strictMode, featureFlags = {}) {
             let company = 'Other', icon = '❔';
             for (const rule of COMPANY_RULES) {
                 if (rule.patterns.some(p => p.test(name))) {
@@ -1745,18 +1754,19 @@
 
             let vision = false;
             if (strictMode === 'image') {
-                const hasVision = imageFlags.vision || false;
-                const hasRIU = imageFlags.riu || false;
+                const hasVision = featureFlags.vision || false;
+                const hasRIU = featureFlags.riu || false;
                 if (hasVision && hasRIU) vision = 'i2i';
                 else if (hasVision && !hasRIU) vision = 'universal';
                 else vision = 't2i';
             } else {
-                vision = imageFlags.vision || false;
+                vision = featureFlags.vision || false;
             }
 
             return {
                 visible: this.data.settings.defaultVisible, company, icon, companyManual: false,
-                modes: [strictMode], starred: false, isNew: true, vision, note: ''
+                modes: [strictMode], starred: false, isNew: true, vision, note: '',
+                fileUpload: featureFlags.fileUpload || false
             };
         }
 
@@ -1771,6 +1781,7 @@
             fresh.modes = model.modes;
             fresh.vision = model.vision;
             fresh.note = model.note || '';
+            fresh.fileUpload = model.fileUpload || false;
             this.data.models[name] = fresh;
             this.save();
         }
@@ -1830,27 +1841,32 @@
             let hasVision = false;
             let hasRIU = false;
             let hasGeneration = false;
+            let hasFileUpload = false;
 
             svgPaths.forEach(path => {
                 const d = path.getAttribute('d') || '';
-                if (d.startsWith('M2 14C2 16.2') || d.includes('M2 14C2 16.2')) {
+                if (d.includes('M2 14C2 16.2')) {
                     hasVision = true;
                 }
                 if (d.includes('M13 21H3.6') || d.includes('19 19V16')) {
                     hasRIU = true;
                 }
-                if (d.startsWith('M21 3.6V20.4') || d.includes('M21 3.6V20.4')) {
+                if (d.includes('M21 3.6V20.4')) {
                     hasGeneration = true;
+                }
+                if (d.includes('M15 2H6')) {
+                    hasFileUpload = true;
                 }
             });
 
-            const imageFlags = {
+            const featureFlags = {
                 vision: hasVision,
                 riu: hasRIU,
-                generation: hasGeneration
+                generation: hasGeneration,
+                fileUpload: hasFileUpload
             };
 
-            return { name, iconCompany, imageFlags };
+            return { name, iconCompany, featureFlags };
         }
 
         scan() {
@@ -1872,20 +1888,23 @@
 
                     let model = this.dm.getModel(info.name);
                     if (!model) {
-                        const data = this.dm.analyze(info.name, info.iconCompany, currentMode, info.imageFlags);
+                        const data = this.dm.analyze(info.name, info.iconCompany, currentMode, info.featureFlags);
                         this.dm.setModel(info.name, data);
                         newModels.push(info.name);
                     } else {
                         this.dm.addModeToModel(info.name, currentMode);
                         if (currentMode === 'image' && typeof model.vision === 'boolean') {
-                            const hasVision = info.imageFlags.vision;
-                            const hasRIU = info.imageFlags.riu;
+                            const hasVision = info.featureFlags.vision;
+                            const hasRIU = info.featureFlags.riu;
                             let vision = 't2i';
                             if (hasVision && hasRIU) vision = 'i2i';
                             else if (hasVision && !hasRIU) vision = 'universal';
                             this.dm.updateModel(info.name, { vision });
-                        } else if (currentMode !== 'image' && info.imageFlags.vision && model.vision === false) {
+                        } else if (currentMode !== 'image' && info.featureFlags.vision && model.vision === false) {
                             this.dm.updateModel(info.name, { vision: true });
+                        }
+                        if (info.featureFlags.fileUpload && !model.fileUpload) {
+                            this.dm.updateModel(info.name, { fileUpload: true });
                         }
                     }
                 });
@@ -2014,7 +2033,7 @@
             this.currentMode = 'all';
             this.visibleSubMode = 'text';
             this.viewMode = 'grid';
-            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
+            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all', hasFileUpload: 'all' };
             this.sort = { by: 'org', order: 'asc' };
             this.isMultiSelectMode = false;
             this.selectedModels = new Set();
@@ -2410,30 +2429,30 @@
                 await this.gmFetch({
                     method: 'PATCH',
                     url: `https://api.github.com/gists/${gistId}`,
-headers: {
-    'Authorization': `token ${token}`,
-        'Content-Type': 'application/json',
-            'Accept': 'application/vnd.github.v3+json'
-},
-    data: JSON.stringify({
-        files: { 'arena-manager-data.json': { content: data } }
-    })
-});
-} catch (e) {
-    console.error('[Arena Manager] Auto sync failed:', e);
-}
-}
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    data: JSON.stringify({
+                        files: { 'arena-manager-data.json': { content: data } }
+                    })
+                });
+            } catch (e) {
+                console.error('[Arena Manager] Auto sync failed:', e);
+            }
+        }
 
-createPanel() {
-    const overlay = document.createElement('div');
-    overlay.className = 'lmm-overlay';
-    overlay.onclick = () => this.close();
-    document.body.appendChild(overlay);
-    this.overlay = overlay;
+        createPanel() {
+            const overlay = document.createElement('div');
+            overlay.className = 'lmm-overlay';
+            overlay.onclick = () => this.close();
+            document.body.appendChild(overlay);
+            this.overlay = overlay;
 
-    const panel = document.createElement('div');
-    panel.className = 'lmm-panel';
-    panel.innerHTML = `
+            const panel = document.createElement('div');
+            panel.className = 'lmm-panel';
+            panel.innerHTML = `
                 <div class="lmm-header">
                     <div class="lmm-title"><span>🎛️</span> Arena Manager <span style="font-size:10px;color:var(--lmm-text2)">v${VERSION}</span></div>
                     <div class="lmm-header-btns">
@@ -2470,8 +2489,7 @@ createPanel() {
                         <option value="starred-desc" data-i18n="starredFirst" data-icon="⭐"></option>
                         <option value="name-asc" data-i18n="nameAZ" data-icon="🔤"></option>
                         <option value="name-desc" data-i18n="nameZA" data-icon="🔤"></option>
-                        <option value="date-desc" data-i18n="latestAdded" data-icon="🕐"></option>
-                    </select>
+                     </select>
                     <div class="lmm-view-toggle">
                         <button class="lmm-view-btn active" data-view="grid" title="Grid">⊞</button>
                         <button class="lmm-view-btn" data-view="compact" title="Compact">⊟</button>
@@ -2497,51 +2515,51 @@ createPanel() {
                     <span>Ctrl+Shift+M | / = Search</span>
                 </div>
             `;
-    document.body.appendChild(panel);
-    this.panel = panel;
-    this.bindEvents();
-    this.updateI18n();
-}
-
-updateI18n() {
-    this.panel.querySelectorAll('[data-i18n]').forEach(el => {
-        el.textContent = this.t(el.dataset.i18n);
-    });
-    this.panel.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        el.placeholder = this.t(el.dataset.i18nPlaceholder);
-    });
-    // 更新排序下拉框（使用正确图标）
-    const sortSelect = this.$('#lmm-sort');
-    if (sortSelect) {
-        sortSelect.querySelectorAll('option').forEach(opt => {
-            if (opt.dataset.i18n) {
-                const icon = opt.dataset.icon || '';
-                opt.textContent = icon + ' ' + this.t(opt.dataset.i18n);
-            }
-        });
-    }
-    // 更新扫描按钮
-    const scanBtn = this.$('#lmm-scan-toggle');
-    if (scanBtn) {
-        if (this.scanner.isScanActive()) {
-            scanBtn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
-        } else {
-            scanBtn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
+            document.body.appendChild(panel);
+            this.panel = panel;
+            this.bindEvents();
+            this.updateI18n();
         }
-    }
-}
 
-createEditModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'lmm-modal-overlay';
-    modalOverlay.onclick = () => this.closeEditModal();
-    document.body.appendChild(modalOverlay);
-    this.editModalOverlay = modalOverlay;
+        updateI18n() {
+            this.panel.querySelectorAll('[data-i18n]').forEach(el => {
+                el.textContent = this.t(el.dataset.i18n);
+            });
+            this.panel.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                el.placeholder = this.t(el.dataset.i18nPlaceholder);
+            });
+            // 更新排序下拉框（使用正确图标）
+            const sortSelect = this.$('#lmm-sort');
+            if (sortSelect) {
+                sortSelect.querySelectorAll('option').forEach(opt => {
+                    if (opt.dataset.i18n) {
+                        const icon = opt.dataset.icon || '';
+                        opt.textContent = icon + ' ' + this.t(opt.dataset.i18n);
+                    }
+                });
+            }
+            // 更新扫描按钮
+            const scanBtn = this.$('#lmm-scan-toggle');
+            if (scanBtn) {
+                if (this.scanner.isScanActive()) {
+                    scanBtn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
+                } else {
+                    scanBtn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
+                }
+            }
+        }
 
-    const modal = document.createElement('div');
-    modal.className = 'lmm-modal';
-    modal.style.minWidth = '400px';
-    modal.innerHTML = `
+        createEditModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            modalOverlay.onclick = () => this.closeEditModal();
+            document.body.appendChild(modalOverlay);
+            this.editModalOverlay = modalOverlay;
+
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.style.minWidth = '400px';
+            modal.innerHTML = `
                 <div class="lmm-modal-title">📋 <span data-i18n="modelDetails"></span></div>
                 <div class="lmm-modal-body" id="lmm-edit-body"></div>
                 <div class="lmm-modal-footer">
@@ -2550,23 +2568,23 @@ createEditModal() {
                     <button class="lmm-btn lmm-btn-primary" id="lmm-edit-save" data-i18n="save"></button>
                 </div>
             `;
-    document.body.appendChild(modal);
-    this.editModal = modal;
+            document.body.appendChild(modal);
+            this.editModal = modal;
 
-    modal.querySelector('#lmm-edit-cancel').onclick = () => this.closeEditModal();
-    modal.querySelector('#lmm-edit-save').onclick = () => this.saveEdit();
-    modal.querySelector('#lmm-edit-reset').onclick = () => this.resetEdit();
-}
+            modal.querySelector('#lmm-edit-cancel').onclick = () => this.closeEditModal();
+            modal.querySelector('#lmm-edit-save').onclick = () => this.saveEdit();
+            modal.querySelector('#lmm-edit-reset').onclick = () => this.resetEdit();
+        }
 
-createConfirmModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'lmm-modal-overlay';
-    document.body.appendChild(modalOverlay);
-    this.confirmModalOverlay = modalOverlay;
+        createConfirmModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            document.body.appendChild(modalOverlay);
+            this.confirmModalOverlay = modalOverlay;
 
-    const modal = document.createElement('div');
-    modal.className = 'lmm-modal';
-    modal.innerHTML = `
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.innerHTML = `
                 <div class="lmm-modal-title" id="lmm-confirm-title"></div>
                 <div class="lmm-modal-body"><p id="lmm-confirm-msg"></p></div>
                 <div class="lmm-modal-footer">
@@ -2574,20 +2592,20 @@ createConfirmModal() {
                     <button class="lmm-btn lmm-btn-danger" id="lmm-confirm-yes" data-i18n="confirm"></button>
                 </div>
             `;
-    document.body.appendChild(modal);
-    this.confirmModal = modal;
-}
+            document.body.appendChild(modal);
+            this.confirmModal = modal;
+        }
 
-createScanResultModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'lmm-modal-overlay';
-    document.body.appendChild(modalOverlay);
-    this.scanModalOverlay = modalOverlay;
+        createScanResultModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            document.body.appendChild(modalOverlay);
+            this.scanModalOverlay = modalOverlay;
 
-    const modal = document.createElement('div');
-    modal.className = 'lmm-modal';
-    modal.style.minWidth = '400px';
-    modal.innerHTML = `
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.style.minWidth = '400px';
+            modal.innerHTML = `
                 <div class="lmm-modal-title">🔍 <span data-i18n="scanResult"></span></div>
                 <div class="lmm-modal-body">
                     <p id="lmm-scan-summary"></p>
@@ -2598,21 +2616,21 @@ createScanResultModal() {
                     <button class="lmm-btn lmm-btn-danger" id="lmm-scan-delete" data-i18n="deleteSelected"></button>
                 </div>
             `;
-    document.body.appendChild(modal);
-    this.scanModal = modal;
-}
+            document.body.appendChild(modal);
+            this.scanModal = modal;
+        }
 
-createGroupModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'lmm-modal-overlay';
-    modalOverlay.onclick = () => this.closeGroupModal();
-    document.body.appendChild(modalOverlay);
-    this.groupModalOverlay = modalOverlay;
+        createGroupModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            modalOverlay.onclick = () => this.closeGroupModal();
+            document.body.appendChild(modalOverlay);
+            this.groupModalOverlay = modalOverlay;
 
-    const modal = document.createElement('div');
-    modal.className = 'lmm-modal';
-    modal.style.minWidth = '360px';
-    modal.innerHTML = `
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.style.minWidth = '360px';
+            modal.innerHTML = `
                 <div class="lmm-modal-title">📁 <span data-i18n="groupManage"></span></div>
                 <div class="lmm-modal-body">
                     <div class="lmm-form-group">
@@ -2627,24 +2645,24 @@ createGroupModal() {
                     <button class="lmm-btn" id="lmm-group-close" data-i18n="close"></button>
                 </div>
             `;
-    document.body.appendChild(modal);
-    this.groupModal = modal;
+            document.body.appendChild(modal);
+            this.groupModal = modal;
 
-    modal.querySelector('#lmm-group-create').onclick = () => this.createGroup();
-    modal.querySelector('#lmm-group-close').onclick = () => this.closeGroupModal();
-}
+            modal.querySelector('#lmm-group-create').onclick = () => this.createGroup();
+            modal.querySelector('#lmm-group-close').onclick = () => this.closeGroupModal();
+        }
 
-createSettingsModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'lmm-modal-overlay';
-    modalOverlay.onclick = () => this.closeSettingsModal();
-    document.body.appendChild(modalOverlay);
-    this.settingsModalOverlay = modalOverlay;
+        createSettingsModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            modalOverlay.onclick = () => this.closeSettingsModal();
+            document.body.appendChild(modalOverlay);
+            this.settingsModalOverlay = modalOverlay;
 
-    const modal = document.createElement('div');
-    modal.className = 'lmm-modal';
-    modal.style.minWidth = '420px';
-    modal.innerHTML = `
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.style.minWidth = '420px';
+            modal.innerHTML = `
                 <div class="lmm-modal-title">⚙️ <span data-i18n="settingsTitle"></span></div>
                 <div class="lmm-modal-body">
                     <div class="lmm-setting-row">
@@ -2713,102 +2731,108 @@ createSettingsModal() {
                     <button class="lmm-btn lmm-btn-primary" id="lmm-settings-close" data-i18n="close"></button>
                 </div>
             `;
-    document.body.appendChild(modal);
-    this.settingsModal = modal;
+            document.body.appendChild(modal);
+            this.settingsModal = modal;
 
-    // 填充语言选项
-    const langSelect = modal.querySelector('#lmm-setting-lang');
-    Object.entries(I18N).forEach(([code, data]) => {
-        const opt = document.createElement('option');
-        opt.value = code;
-        opt.textContent = data.name;
-        langSelect.appendChild(opt);
-    });
+            // 填充语言选项
+            const langSelect = modal.querySelector('#lmm-setting-lang');
+            Object.entries(I18N).forEach(([code, data]) => {
+                const opt = document.createElement('option');
+                opt.value = code;
+                opt.textContent = data.name;
+                langSelect.appendChild(opt);
+            });
 
-    langSelect.onchange = () => {
-        this.dm.setLanguage(langSelect.value);
-        this.updateI18n();
-        this.updateSettingsModalI18n();
-        this.updateTopbar();
-        this.updateSidebar();
-        this.refresh();
-    };
+            langSelect.onchange = () => {
+                this.dm.setLanguage(langSelect.value);
+                this.updateI18n();
+                this.updateSettingsModalI18n();
+                this.updateTopbar();
+                this.updateSidebar();
+                this.refresh();
+            };
 
-    modal.querySelector('#lmm-setting-alert').onclick = (e) => {
-        const sw = e.currentTarget;
-        sw.classList.toggle('on');
-        this.dm.data.settings.showNewAlert = sw.classList.contains('on');
-        this.dm.save();
-    };
+            modal.querySelector('#lmm-setting-alert').onclick = (e) => {
+                const sw = e.currentTarget;
+                sw.classList.toggle('on');
+                this.dm.data.settings.showNewAlert = sw.classList.contains('on');
+                this.dm.save();
+            };
 
-    modal.querySelector('#lmm-setting-lock-fab').onclick = (e) => {
-        const sw = e.currentTarget;
-        sw.classList.toggle('on');
-        this.dm.data.settings.lockFabPosition = sw.classList.contains('on');
-        this.dm.save();
-    };
+            modal.querySelector('#lmm-setting-lock-fab').onclick = (e) => {
+                const sw = e.currentTarget;
+                sw.classList.toggle('on');
+                this.dm.data.settings.lockFabPosition = sw.classList.contains('on');
+                this.dm.save();
+            };
 
-    modal.querySelector('#lmm-setting-auto-sync').onclick = (e) => {
-        const sw = e.currentTarget;
-        sw.classList.toggle('on');
-        this.dm.data.settings.autoSync = sw.classList.contains('on');
-        modal.querySelector('#lmm-auto-sync-options').style.display = sw.classList.contains('on') ? 'block' : 'none';
-        this.dm.save();
-        this.setupAutoSync();
-    };
+            modal.querySelector('#lmm-setting-auto-sync').onclick = (e) => {
+                const sw = e.currentTarget;
+                sw.classList.toggle('on');
+                this.dm.data.settings.autoSync = sw.classList.contains('on');
+                modal.querySelector('#lmm-auto-sync-options').style.display = sw.classList.contains('on') ? 'block' : 'none';
+                this.dm.save();
+                this.setupAutoSync();
+            };
 
-    modal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
-        radio.onchange = () => {
-            this.dm.data.settings.autoSyncMode = radio.value;
-            this.dm.save();
-            this.setupAutoSync();
-        };
-    });
+            modal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
+                radio.onchange = () => {
+                    this.dm.data.settings.autoSyncMode = radio.value;
+                    this.dm.save();
+                    this.setupAutoSync();
+                };
+            });
 
-    modal.querySelector('#lmm-sync-interval').onchange = (e) => {
-        this.dm.data.settings.autoSyncInterval = parseInt(e.target.value) || 5;
-        this.dm.save();
-        this.setupAutoSync();
-    };
+            modal.querySelector('#lmm-sync-interval').onchange = (e) => {
+                const val = parseInt(e.target.value);
+                if (!val || val < 1 || val > 60) {
+                    this.scanner.toast(this.t('invalidSyncInterval'), 'warning');
+                    e.target.value = this.dm.data.settings.autoSyncInterval || 5;
+                    return;
+                }
+                this.dm.data.settings.autoSyncInterval = val;
+                this.dm.save();
+                this.setupAutoSync();
+            };
 
-    modal.querySelector('#lmm-setting-upload').onclick = () => this.gistUpload();
-    modal.querySelector('#lmm-setting-download').onclick = () => this.gistDownload();
+            modal.querySelector('#lmm-setting-upload').onclick = () => this.gistUpload();
+            modal.querySelector('#lmm-setting-download').onclick = () => this.gistDownload();
 
-    modal.querySelector('#lmm-setting-reset').onclick = () => {
-        this.closeSettingsModal();
-        this.showConfirm(this.t('resetData'), this.t('resetConfirm'), () => {
-            this.dm.resetAll();
-            this.scanner.toast(this.t('dataReset'), 'success');
-            this.updateTopbar();
-            this.updateSidebar();
-            this.refresh();
-            this.updateFabBadge();
-        });
-    };
+            modal.querySelector('#lmm-setting-reset').onclick = () => {
+                this.closeSettingsModal();
+                this.showConfirm(this.t('resetData'), this.t('resetConfirm'), () => {
+                    this.dm.resetAll();
+                    this.scanner.toast(this.t('dataReset'), 'success');
+                    this.updateTopbar();
+                    this.updateSidebar();
+                    this.refresh();
+                    this.updateFabBadge();
+                });
+            };
 
-    modal.querySelector('#lmm-settings-close').onclick = () => this.closeSettingsModal();
-}
+            modal.querySelector('#lmm-settings-close').onclick = () => this.closeSettingsModal();
+        }
 
-updateSettingsModalI18n() {
-    this.settingsModal.querySelectorAll('[data-i18n]').forEach(el => {
-        el.textContent = this.t(el.dataset.i18n);
-    });
-    this.settingsModal.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        el.placeholder = this.t(el.dataset.i18nPlaceholder);
-    });
-}
+        updateSettingsModalI18n() {
+            this.settingsModal.querySelectorAll('[data-i18n]').forEach(el => {
+                el.textContent = this.t(el.dataset.i18n);
+            });
+            this.settingsModal.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                el.placeholder = this.t(el.dataset.i18nPlaceholder);
+            });
+        }
 
-createGroupSelectModal() {
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'lmm-modal-overlay';
-    modalOverlay.onclick = () => this.closeGroupSelectModal();
-    document.body.appendChild(modalOverlay);
-    this.groupSelectModalOverlay = modalOverlay;
+        createGroupSelectModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            modalOverlay.onclick = () => this.closeGroupSelectModal();
+            document.body.appendChild(modalOverlay);
+            this.groupSelectModalOverlay = modalOverlay;
 
-    const modal = document.createElement('div');
-    modal.className = 'lmm-modal';
-    modal.style.minWidth = '300px';
-    modal.innerHTML = `
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.style.minWidth = '300px';
+            modal.innerHTML = `
                 <div class="lmm-modal-title">📁 <span data-i18n="selectGroup"></span></div>
                 <div class="lmm-modal-body">
                     <div class="lmm-group-list" id="lmm-group-select-list"></div>
@@ -2817,987 +2841,999 @@ createGroupSelectModal() {
                     <button class="lmm-btn" id="lmm-group-select-close" data-i18n="cancel"></button>
                 </div>
             `;
-    document.body.appendChild(modal);
-    this.groupSelectModal = modal;
+            document.body.appendChild(modal);
+            this.groupSelectModal = modal;
 
-    modal.querySelector('#lmm-group-select-close').onclick = () => this.closeGroupSelectModal();
-}
+            modal.querySelector('#lmm-group-select-close').onclick = () => this.closeGroupSelectModal();
+        }
 
-gmFetch(options) {
-    const self = this;
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            ...options,
-            onload: (response) => {
-                if (response.status >= 200 && response.status < 300) {
-                    resolve({
-                        ok: true,
-                        status: response.status,
-                        json: () => Promise.resolve(JSON.parse(response.responseText)),
-                        text: () => Promise.resolve(response.responseText)
-                    });
-                } else {
-                    resolve({
-                        ok: false,
-                        status: response.status,
-                        statusText: response.statusText
-                    });
-                }
-            },
-            onerror: (error) => {
-                reject(new Error(self.t('networkError')));
-            },
-            ontimeout: () => {
-                reject(new Error(self.t('networkError')));
+        gmFetch(options) {
+            const self = this;
+            return new Promise((resolve, reject) => {
+                GM_xmlhttpRequest({
+                    ...options,
+                    onload: (response) => {
+                        if (response.status >= 200 && response.status < 300) {
+                            resolve({
+                                ok: true,
+                                status: response.status,
+                                json: () => Promise.resolve(JSON.parse(response.responseText)),
+                                text: () => Promise.resolve(response.responseText)
+                            });
+                        } else {
+                            resolve({
+                                ok: false,
+                                status: response.status,
+                                statusText: response.statusText
+                            });
+                        }
+                    },
+                    onerror: (error) => {
+                        reject(new Error(self.t('networkError')));
+                    },
+                    ontimeout: () => {
+                        reject(new Error(self.t('networkError')));
+                    }
+                });
+            });
+        }
+
+        async gistUpload() {
+            const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
+            let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
+
+            if (!token) {
+                this.scanner.toast(this.t('tokenRequired'), 'warning');
+                return;
             }
-        });
-    });
-}
 
-async gistUpload() {
-    const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
-    let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
-
-    if (!token) {
-        this.scanner.toast(this.t('tokenRequired'), 'warning');
-        return;
-    }
-
-    // 保存 Token 和 gistId 到本地存储
-    this.dm.data.settings.gistToken = token;
-    this.dm.data.settings.gistId = gistId;
-    this.dm.save();
-
-    const data = this.dm.export();
-    const filename = 'arena-manager-data.json';
-
-    try {
-        let res;
-        if (gistId) {
-            res = await this.gmFetch({
-                method: 'PATCH',
-                url: `https://api.github.com/gists/${gistId}`,
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
-                },
-                data: JSON.stringify({
-                    files: { [filename]: { content: data } }
-                })
-            });
-        } else {
-            res = await this.gmFetch({
-                method: 'POST',
-                url: 'https://api.github.com/gists',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
-                },
-                data: JSON.stringify({
-                    description: 'Arena Manager Data Backup',
-                    public: false,
-                    files: { [filename]: { content: data } }
-                })
-            });
-        }
-
-        if (!res.ok) {
-            if (res.status === 401) throw new Error(this.t('invalidToken'));
-            if (res.status === 404) throw new Error(this.t('gistNotFound'));
-            throw new Error(`HTTP ${res.status}`);
-        }
-
-        const result = await res.json();
-
-        if (!gistId && result.id) {
-            gistId = result.id;
-            this.settingsModal.querySelector('#lmm-setting-gist-id').value = gistId;
+            // 保存 Token 和 gistId 到本地存储
+            this.dm.data.settings.gistToken = token;
             this.dm.data.settings.gistId = gistId;
             this.dm.save();
-            this.scanner.toast(`${this.t('uploadSuccess')} - ${this.t('gistIdSaved')}`, 'success');
-        } else {
-            this.scanner.toast(this.t('uploadSuccess'), 'success');
-        }
-    } catch (e) {
-        console.error('[Arena Manager] Gist upload error:', e);
-        this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
-    }
-}
 
-async gistDownload() {
-    const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
-    let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
-    if (!gistId) gistId = this.dm.data.settings.gistId || '';
-
-    if (!token) {
-        this.scanner.toast(this.t('tokenRequired'), 'warning');
-        return;
-    }
-
-    if (!gistId) {
-        this.scanner.toast(this.t('noGistId'), 'warning');
-        return;
-    }
-
-    // 保存 Token 和 gistId（下载前先保存，这样即使下载覆盖也能恢复）
-    const savedToken = token;
-    const savedGistId = gistId;
-    this.dm.data.settings.gistToken = token;
-    this.dm.data.settings.gistId = gistId;
-    this.dm.save();
-
-    this.closeSettingsModal();
-
-    this.showConfirm(this.t('syncDownload'), this.t('confirmDownload'), async () => {
-        try {
-            const res = await this.gmFetch({
-                method: 'GET',
-                url: `https://api.github.com/gists/${gistId}`,
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-
-            if (!res.ok) {
-                if (res.status === 401) throw new Error(this.t('invalidToken'));
-                if (res.status === 404) throw new Error(this.t('gistNotFound'));
-                throw new Error(`HTTP ${res.status}`);
-            }
-
-            const result = await res.json();
+            const data = this.dm.export();
             const filename = 'arena-manager-data.json';
 
-            let file = result.files?.[filename];
-            if (!file) {
-                file = result.files?.['lmarena-manager-data.json'];
+            try {
+                let res;
+                if (gistId) {
+                    res = await this.gmFetch({
+                        method: 'PATCH',
+                        url: `https://api.github.com/gists/${gistId}`,
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        data: JSON.stringify({
+                            files: { [filename]: { content: data } }
+                        })
+                    });
+                } else {
+                    res = await this.gmFetch({
+                        method: 'POST',
+                        url: 'https://api.github.com/gists',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        data: JSON.stringify({
+                            description: 'Arena Manager Data Backup',
+                            public: false,
+                            files: { [filename]: { content: data } }
+                        })
+                    });
+                }
+
+                if (!res.ok) {
+                    if (res.status === 401) throw new Error(this.t('invalidToken'));
+                    if (res.status === 404) throw new Error(this.t('gistNotFound'));
+                    throw new Error(`HTTP ${res.status}`);
+                }
+
+                const result = await res.json();
+
+                if (!gistId && result.id) {
+                    gistId = result.id;
+                    this.settingsModal.querySelector('#lmm-setting-gist-id').value = gistId;
+                    this.dm.data.settings.gistId = gistId;
+                    this.dm.save();
+                    this.scanner.toast(`${this.t('uploadSuccess')} - ${this.t('gistIdSaved')}`, 'success');
+                } else {
+                    this.scanner.toast(this.t('uploadSuccess'), 'success');
+                }
+            } catch (e) {
+                console.error('[Arena Manager] Gist upload error:', e);
+                this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+            }
+        }
+
+        async gistDownload() {
+            const token = this.settingsModal.querySelector('#lmm-setting-gist-token').value.trim();
+            let gistId = this.settingsModal.querySelector('#lmm-setting-gist-id').value.trim();
+            if (!gistId) gistId = this.dm.data.settings.gistId || '';
+
+            if (!token) {
+                this.scanner.toast(this.t('tokenRequired'), 'warning');
+                return;
             }
 
-            if (!file || !file.content) {
-                throw new Error('File not found in Gist');
+            if (!gistId) {
+                this.scanner.toast(this.t('noGistId'), 'warning');
+                return;
             }
 
-            if (this.dm.import(file.content)) {
-                // 恢复 Token 和 gistId（因为导入会覆盖，且云端数据不含Token）
-                this.dm.data.settings.gistToken = savedToken;
-                this.dm.data.settings.gistId = savedGistId;
-                this.dm.save();
+            // 保存 Token 和 gistId（下载前先保存，这样即使下载覆盖也能恢复）
+            const savedToken = token;
+            const savedGistId = gistId;
+            this.dm.data.settings.gistToken = token;
+            this.dm.data.settings.gistId = gistId;
+            this.dm.save();
 
-                this.scanner.toast(this.t('downloadSuccess'), 'success');
-                setTimeout(() => location.reload(), 1500);
+            this.closeSettingsModal();
+
+            this.showConfirm(this.t('syncDownload'), this.t('confirmDownload'), async () => {
+                try {
+                    const res = await this.gmFetch({
+                        method: 'GET',
+                        url: `https://api.github.com/gists/${gistId}`,
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+
+                    if (!res.ok) {
+                        if (res.status === 401) throw new Error(this.t('invalidToken'));
+                        if (res.status === 404) throw new Error(this.t('gistNotFound'));
+                        throw new Error(`HTTP ${res.status}`);
+                    }
+
+                    const result = await res.json();
+                    const filename = 'arena-manager-data.json';
+
+                    let file = result.files?.[filename];
+                    if (!file) {
+                        file = result.files?.['lmarena-manager-data.json'];
+                    }
+
+                    if (!file || !file.content) {
+                        throw new Error('File not found in Gist');
+                    }
+
+                    if (this.dm.import(file.content)) {
+                        // 恢复 Token 和 gistId（因为导入会覆盖，且云端数据不含Token）
+                        this.dm.data.settings.gistToken = savedToken;
+                        this.dm.data.settings.gistId = savedGistId;
+                        this.dm.save();
+
+                        this.scanner.toast(this.t('downloadSuccess'), 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        throw new Error('Invalid data format');
+                    }
+                } catch (e) {
+                    console.error('[Arena Manager] Gist download error:', e);
+                    this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+                }
+            });
+        }
+
+        showConfirm(title, msg, onConfirm) {
+            this.confirmModal.querySelector('#lmm-confirm-title').textContent = title;
+            this.confirmModal.querySelector('#lmm-confirm-msg').textContent = msg;
+            this.confirmModal.querySelector('#lmm-confirm-no').textContent = this.t('cancel');
+            this.confirmModal.querySelector('#lmm-confirm-yes').textContent = this.t('confirm');
+            this.confirmModalOverlay.classList.add('open');
+            this.confirmModal.classList.add('open');
+
+            const closeConfirm = () => {
+                this.confirmModalOverlay.classList.remove('open');
+                this.confirmModal.classList.remove('open');
+            };
+
+            this.confirmModal.querySelector('#lmm-confirm-yes').onclick = () => { closeConfirm(); onConfirm(); };
+            this.confirmModal.querySelector('#lmm-confirm-no').onclick = closeConfirm;
+            this.confirmModalOverlay.onclick = closeConfirm;
+        }
+
+        showScanResult(result) {
+            const { missing, scannedCount } = result;
+            this.scanModal.querySelector('#lmm-scan-summary').innerHTML = `${this.t('scannedCount')} <b>${scannedCount}</b> ${this.t('modelsText')}，${missing.length > 0 ? `${this.t('notScanned')}：` : this.t('allScanned') + ' ✓'}`;
+
+            const list = this.scanModal.querySelector('#lmm-scan-list');
+            if (missing.length > 0) {
+                list.innerHTML = `<div class="lmm-scan-item" style="font-weight:500;background:var(--lmm-bg3)"><input type="checkbox" id="lmm-scan-all" checked><label for="lmm-scan-all">${this.t('selectAll')}</label></div>` + missing.map(name => `<div class="lmm-scan-item"><input type="checkbox" class="lmm-scan-check" value="${this.esc(name)}" checked><span>${this.esc(name)}</span></div>`).join('');
+                list.querySelector('#lmm-scan-all').onchange = (e) => {
+                    list.querySelectorAll('.lmm-scan-check').forEach(cb => cb.checked = e.target.checked);
+                };
             } else {
-                throw new Error('Invalid data format');
+                list.innerHTML = '';
             }
-        } catch (e) {
-            console.error('[Arena Manager] Gist download error:', e);
-            this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
-        }
-    });
-}
 
-showConfirm(title, msg, onConfirm) {
-    this.confirmModal.querySelector('#lmm-confirm-title').textContent = title;
-    this.confirmModal.querySelector('#lmm-confirm-msg').textContent = msg;
-    this.confirmModal.querySelector('#lmm-confirm-no').textContent = this.t('cancel');
-    this.confirmModal.querySelector('#lmm-confirm-yes').textContent = this.t('confirm');
-    this.confirmModalOverlay.classList.add('open');
-    this.confirmModal.classList.add('open');
+            this.scanModal.querySelector('#lmm-scan-keep').textContent = this.t('keepAll');
+            this.scanModal.querySelector('#lmm-scan-delete').textContent = this.t('deleteSelected');
+            this.scanModal.querySelector('#lmm-scan-delete').style.display = missing.length > 0 ? '' : 'none';
+            this.scanModalOverlay.classList.add('open');
+            this.scanModal.classList.add('open');
 
-    const closeConfirm = () => {
-        this.confirmModalOverlay.classList.remove('open');
-        this.confirmModal.classList.remove('open');
-    };
+            const closeScan = () => {
+                this.scanModalOverlay.classList.remove('open');
+                this.scanModal.classList.remove('open');
+            };
 
-    this.confirmModal.querySelector('#lmm-confirm-yes').onclick = () => { closeConfirm(); onConfirm(); };
-    this.confirmModal.querySelector('#lmm-confirm-no').onclick = closeConfirm;
-    this.confirmModalOverlay.onclick = closeConfirm;
-}
-
-showScanResult(result) {
-    const { missing, scannedCount } = result;
-    this.scanModal.querySelector('#lmm-scan-summary').innerHTML = `${this.t('scannedCount')} <b>${scannedCount}</b> ${this.t('modelsText')}，${missing.length > 0 ? `${this.t('notScanned')}：` : this.t('allScanned') + ' ✓'}`;
-
-    const list = this.scanModal.querySelector('#lmm-scan-list');
-    if (missing.length > 0) {
-        list.innerHTML = `<div class="lmm-scan-item" style="font-weight:500;background:var(--lmm-bg3)"><input type="checkbox" id="lmm-scan-all" checked><label for="lmm-scan-all">${this.t('selectAll')}</label></div>` + missing.map(name => `<div class="lmm-scan-item"><input type="checkbox" class="lmm-scan-check" value="${this.esc(name)}" checked><span>${this.esc(name)}</span></div>`).join('');
-        list.querySelector('#lmm-scan-all').onchange = (e) => {
-            list.querySelectorAll('.lmm-scan-check').forEach(cb => cb.checked = e.target.checked);
-        };
-    } else {
-        list.innerHTML = '';
-    }
-
-    this.scanModal.querySelector('#lmm-scan-keep').textContent = this.t('keepAll');
-    this.scanModal.querySelector('#lmm-scan-delete').textContent = this.t('deleteSelected');
-    this.scanModal.querySelector('#lmm-scan-delete').style.display = missing.length > 0 ? '' : 'none';
-    this.scanModalOverlay.classList.add('open');
-    this.scanModal.classList.add('open');
-
-    const closeScan = () => {
-        this.scanModalOverlay.classList.remove('open');
-        this.scanModal.classList.remove('open');
-    };
-
-    this.scanModal.querySelector('#lmm-scan-keep').onclick = closeScan;
-    this.scanModal.querySelector('#lmm-scan-delete').onclick = () => {
-        const toDelete = [...list.querySelectorAll('.lmm-scan-check:checked')].map(cb => cb.value);
-        if (toDelete.length > 0) {
-            this.dm.deleteModels(toDelete);
-            this.scanner.toast(`${this.t('deleted')} ${toDelete.length}`, 'success');
-            this.refresh();
-            this.updateSidebar();
-            this.updateTopbar();
-        }
-        closeScan();
-    };
-    this.scanModalOverlay.onclick = closeScan;
-}
-
-$(sel) { return this.panel.querySelector(sel); }
-$$(sel) { return this.panel.querySelectorAll(sel); }
-
-bindEvents() {
-    this.$('#lmm-close').onclick = () => this.close();
-
-    this.$('#lmm-scan-toggle').onclick = () => {
-        const btn = this.$('#lmm-scan-toggle');
-        if (this.scanner.isScanActive()) {
-            const result = this.scanner.endScanSession();
-            btn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
-            btn.classList.remove('scanning', 'lmm-btn-success');
-            this.showScanResult(result);
-        } else {
-            this.scanner.startScanSession();
-            btn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
-            btn.classList.add('scanning', 'lmm-btn-success');
-        }
-    };
-
-    this.$('#lmm-export').onclick = () => {
-        const blob = new Blob([this.dm.export()], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `Arena-manager-${new Date().toISOString().slice(0,10)}.json`;
-        a.click();
-        this.scanner.toast(this.t('exported'), 'success');
-    };
-
-    this.$('#lmm-import').onclick = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json';
-        input.onchange = e => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => {
-                if (this.dm.import(ev.target.result)) {
+            this.scanModal.querySelector('#lmm-scan-keep').onclick = closeScan;
+            this.scanModal.querySelector('#lmm-scan-delete').onclick = () => {
+                const toDelete = [...list.querySelectorAll('.lmm-scan-check:checked')].map(cb => cb.value);
+                if (toDelete.length > 0) {
+                    this.dm.deleteModels(toDelete);
+                    this.scanner.toast(`${this.t('deleted')} ${toDelete.length}`, 'success');
                     this.refresh();
                     this.updateSidebar();
                     this.updateTopbar();
-                    this.scanner.toast(this.t('importSuccess'), 'success');
+                }
+                closeScan();
+            };
+            this.scanModalOverlay.onclick = closeScan;
+        }
+
+        $(sel) { return this.panel.querySelector(sel); }
+        $$(sel) { return this.panel.querySelectorAll(sel); }
+
+        bindEvents() {
+            this.$('#lmm-close').onclick = () => this.close();
+
+            this.$('#lmm-scan-toggle').onclick = () => {
+                const btn = this.$('#lmm-scan-toggle');
+                if (this.scanner.isScanActive()) {
+                    const result = this.scanner.endScanSession();
+                    btn.innerHTML = `🔍 <span>${this.t('startScan')}</span>`;
+                    btn.classList.remove('scanning', 'lmm-btn-success');
+                    this.showScanResult(result);
                 } else {
-                    this.scanner.toast(this.t('importFailed'), 'warning');
+                    this.scanner.startScanSession();
+                    btn.innerHTML = `⏹️ <span>${this.t('endScan')}</span>`;
+                    btn.classList.add('scanning', 'lmm-btn-success');
                 }
             };
-            reader.readAsText(file);
-        };
-        input.click();
-    };
 
-    this.$('#lmm-clear-new').onclick = () => {
-        this.dm.clearNewFlags();
-        this.refresh();
-        this.updateFabBadge();
-        this.scanner.toast(this.t('marksCleared'), 'success');
-    };
+            this.$('#lmm-export').onclick = () => {
+                const blob = new Blob([this.dm.export()], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `Arena-manager-${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                this.scanner.toast(this.t('exported'), 'success');
+            };
 
-    this.$('#lmm-groups-btn').onclick = () => this.openGroupModal();
-    this.$('#lmm-settings').onclick = () => this.openSettingsModal();
+            this.$('#lmm-import').onclick = () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = e => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = ev => {
+                        if (this.dm.import(ev.target.result)) {
+                            this.refresh();
+                            this.updateSidebar();
+                            this.updateTopbar();
+                            this.scanner.toast(this.t('importSuccess'), 'success');
+                        } else {
+                            this.scanner.toast(this.t('importFailed'), 'warning');
+                        }
+                    };
+                    reader.readAsText(file);
+                };
+                input.click();
+            };
 
-    const searchInput = this.$('#lmm-search');
-    let searchTimer = null;
-    searchInput.oninput = e => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-            this.filter.search = e.target.value;
-            this.refresh();
-        }, 150);
-    };
-    searchInput.onkeydown = e => {
-        if (e.key === 'Enter') {
-            const firstCard = this.$('.lmm-card');
-            if (firstCard) firstCard.click();
-        }
-    };
+            this.$('#lmm-clear-new').onclick = () => {
+                this.dm.clearNewFlags();
+                this.refresh();
+                this.updateFabBadge();
+                this.scanner.toast(this.t('marksCleared'), 'success');
+            };
 
-    this.$('#lmm-org').onchange = e => { this.filter.org = e.target.value; this.refresh(); };
-    this.$('#lmm-sort').onchange = e => {
-        const [by, order] = e.target.value.split('-');
-        this.sort = { by, order: order || 'asc' };
-        this.refresh();
-    };
+            this.$('#lmm-groups-btn').onclick = () => this.openGroupModal();
+            this.$('#lmm-settings').onclick = () => this.openSettingsModal();
 
-    this.$$('.lmm-view-btn').forEach(btn => {
-        btn.onclick = () => {
-            this.$$('.lmm-view-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            this.viewMode = btn.dataset.view;
-            this.updateGridView();
-        };
-    });
-
-    this.$('#lmm-subbar').querySelectorAll('.lmm-subbar-item').forEach(item => {
-        item.onclick = () => {
-            this.visibleSubMode = item.dataset.mode;
-            this.updateSubbar();
-            this.updateSidebar();
-            this.refresh();
-        };
-    });
-
-    this.$('#lmm-model-sort-btn').onclick = () => {
-        this.isModelSortMode = !this.isModelSortMode;
-        this.updateSubbar();
-        this.refresh();
-    };
-
-    this.$('#lmm-model-sort-reset').onclick = () => {
-        this.dm.setModelOrder(this.visibleSubMode, []);
-        this.refresh();
-        this.scanner.applyFilters();
-        this.scanner.toast(this.t('defaultOrderRestored'), 'success');
-    };
-}
-
-bindShortcuts() {
-    document.addEventListener('keydown', e => {
-        if (e.ctrlKey && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
-            e.preventDefault();
-            this.toggle();
-        }
-        if (e.key === 'Escape') {
-            if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
-            else if (this.groupSelectModal.classList.contains('open')) this.closeGroupSelectModal();
-            else if (this.groupModal.classList.contains('open')) this.closeGroupModal();
-            else if (this.editModal.classList.contains('open')) this.closeEditModal();
-            else if (this.confirmModal.classList.contains('open')) {
-                this.confirmModalOverlay.classList.remove('open');
-                this.confirmModal.classList.remove('open');
-            }
-            else if (this.scanModal.classList.contains('open')) {
-                this.scanModalOverlay.classList.remove('open');
-                this.scanModal.classList.remove('open');
-            }
-            else if (this.isOpen) this.close();
-        }
-        if (e.key === '/' && this.isOpen && !e.ctrlKey && !e.metaKey) {
             const searchInput = this.$('#lmm-search');
-            if (document.activeElement !== searchInput) {
-                e.preventDefault();
-                searchInput.focus();
-                searchInput.select();
-            }
-        }
-    });
-}
-
-toggle() { this.isOpen ? this.close() : this.open(); }
-
-open() {
-    this.isOpen = true;
-    this.panel.classList.add('open');
-    this.overlay.classList.add('open');
-    this.updateI18n();
-    this.updateTopbar();
-    this.refresh();
-    this.updateSidebar();
-}
-
-close() {
-    if (this.isMultiSelectMode) {
-        this.revertMultiSelectChanges();
-        this.exitMultiSelectMode();
-    }
-    this.isOpen = false;
-    this.isSortMode = false;
-    this.isModelSortMode = false;
-    this.updateGridView();
-    this.panel.classList.remove('open');
-    this.overlay.classList.remove('open');
-}
-
-updateGridView() {
-    const grid = this.$('#lmm-grid');
-    grid.classList.remove('compact-view', 'list-view');
-    if (this.viewMode === 'compact') grid.classList.add('compact-view');
-    else if (this.viewMode === 'list' || this.isModelSortMode) grid.classList.add('list-view');
-}
-
-updateTopbar() {
-    const counts = this.getModeCounts();
-    const groups = this.dm.getGroupNames();
-    const topbar = this.$('#lmm-topbar');
-
-    const items = [
-        { key: 'all', icon: '📋', label: this.t('all'), count: counts.all },
-        { key: 'text', icon: '📝', label: 'Text', count: counts.text },
-        { key: 'search', icon: '🔍', label: 'Search', count: counts.search },
-        { key: 'image', icon: '🎨', label: 'Image', count: counts.image },
-        { key: 'code', icon: '💻', label: 'Code', count: counts.code },
-        { key: 'video', icon: '🎬', label: 'Video', count: counts.video },
-    ];
-
-    let html = items.map(it => `<div class="lmm-topbar-item ${this.currentMode === it.key ? 'active' : ''}" data-mode="${it.key}">${it.icon} ${it.label} ${it.count > 0 ? `<span class="cnt">${it.count}</span>` : ''}</div>`).join('');
-    html += `<div class="lmm-topbar-sep"></div>`;
-    html += `<div class="lmm-topbar-item ${this.currentMode === 'visible' ? 'active' : ''}" data-mode="visible">👁️ ${this.t('enabled')}</div>`;
-    html += `<div class="lmm-topbar-item ${this.currentMode === 'hidden' ? 'active' : ''}" data-mode="hidden">🙈 ${this.t('hidden')}</div>`;
-    html += `<div class="lmm-topbar-item ${this.currentMode === 'starred' ? 'active' : ''}" data-mode="starred">⭐ ${this.t('starred')} ${counts.starred > 0 ? `<span class="cnt">${counts.starred}</span>` : ''}</div>`;
-    html += `<div class="lmm-topbar-item ${this.currentMode === 'new' ? 'active' : ''}" data-mode="new">✨ ${this.t('newFound')} ${counts.new > 0 ? `<span class="cnt">${counts.new}</span>` : ''}</div>`;
-
-    if (groups.length > 0) {
-        html += `<div class="lmm-topbar-sep"></div>`;
-        groups.forEach(name => {
-            const cnt = counts[`group_${name}`] || 0;
-            html += `<div class="lmm-topbar-item ${this.currentMode === `group_${name}` ? 'active' : ''}" data-mode="group_${name}">📁 ${this.esc(name)} ${cnt > 0 ? `<span class="cnt">${cnt}</span>` : ''}</div>`;
-        });
-    }
-
-    topbar.innerHTML = html;
-    topbar.querySelectorAll('.lmm-topbar-item').forEach(item => {
-        item.onclick = () => {
-            this.currentMode = item.dataset.mode;
-            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
-            this.$('#lmm-search').value = '';
-            this.$('#lmm-org').value = 'all';
-            this.isTier2Expanded = false;
-            this.isModelSortMode = false;
-            this.updateGridView();
-            this.updateTopbar();
-            this.updateSidebar();
-            this.updateSubbar();
-            this.refresh();
-        };
-    });
-}
-
-updateSubbar() {
-    const subbar = this.$('#lmm-subbar');
-    const content = this.$('#lmm-content');
-
-    if (this.currentMode === 'visible') {
-        subbar.style.display = 'flex';
-        content.classList.add('visible-mode');
-        subbar.querySelectorAll('.lmm-subbar-item').forEach(el => {
-            el.classList.toggle('active', el.dataset.mode === this.visibleSubMode);
-        });
-        const btn = this.$('#lmm-model-sort-btn');
-        const resetBtn = this.$('#lmm-model-sort-reset');
-        if (this.isModelSortMode) {
-            btn.innerHTML = `✓ ${this.t('sort')}`;
-            btn.classList.add('active');
-            resetBtn.style.display = '';
-            this.updateGridView();
-        } else {
-            btn.innerHTML = `⇅ ${this.t('sort')}`;
-            btn.classList.remove('active');
-            resetBtn.style.display = 'none';
-            this.updateGridView();
-        }
-    } else {
-        subbar.style.display = 'none';
-        content.classList.remove('visible-mode');
-    }
-}
-
-getModelsInCurrentMode() {
-    const models = this.dm.getAllModels();
-    if (this.currentMode === 'visible') {
-        return models.filter(m => m.visible !== false && Array.isArray(m.modes) && m.modes.includes(this.visibleSubMode));
-    }
-    if (this.currentMode.startsWith('group_')) {
-        const groupName = this.currentMode.substring(6);
-        const groupModels = this.dm.getModelsInGroup(groupName);
-        return models.filter(m => groupModels.includes(m.name));
-    }
-    switch (this.currentMode) {
-        case 'all': return models;
-        case 'starred': return models.filter(m => m.starred);
-        case 'hidden': return models.filter(m => m.visible === false);
-        case 'new': return models.filter(m => m.isNew);
-        default: return models.filter(m => Array.isArray(m.modes) && m.modes.includes(this.currentMode));
-    }
-}
-
-getSidebarMode() {
-    if (this.currentMode === 'visible') return this.visibleSubMode;
-    if (['text', 'search', 'image', 'code', 'video'].includes(this.currentMode)) return this.currentMode;
-    return 'text';
-}
-
-collapseTier2() {
-    this.isTier2Expanded = false;
-    const folderContent = this.$('#lmm-tier2-content');
-    const folder = this.$('#lmm-tier2-folder');
-    if (folderContent) folderContent.classList.remove('open');
-    if (folder) folder.querySelector('.icon').textContent = '📁';
-}
-
-updateSidebar() {
-    if (this.currentMode === 'visible') {
-        this.$('#lmm-content').classList.remove('visible-mode');
-    }
-
-    const modeModels = this.getModelsInCurrentMode();
-    const sidebarMode = this.getSidebarMode();
-    const orgOrder = this.dm.getOrgOrder(sidebarMode);
-    const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
-    const showImageTypes = sidebarMode === 'image';
-
-    const visionCount = modeModels.filter(m => m.vision === true).length;
-    const showVisionFilter = visionCount > 0 && sidebarMode !== 'image';
-
-    let html = `<div class="lmm-sidebar-header"><span class="lmm-sidebar-title">${this.t('byOrg')}</span><button class="lmm-sidebar-btn ${this.isSortMode ? 'active' : ''}" id="lmm-sort-btn">${this.isSortMode ? this.t('done') : this.t('sort')}</button>${this.isSortMode ? `<button class="lmm-sidebar-btn reset" id="lmm-sort-reset">${this.t('reset')}</button>` : ''}</div><div id="lmm-org-list"></div>`;
-
-    if (showImageTypes) {
-        html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('byType')}</span></div><div id="lmm-image-type-list"></div>`;
-    }
-
-    if (showVisionFilter) {
-        html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('features')}</span></div><div id="lmm-vision-list"></div>`;
-    }
-
-    this.$('#lmm-sidebar').innerHTML = html;
-
-    const orgs = {};
-    modeModels.forEach(m => {
-        const c = m.company || 'Other';
-        if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔' };
-        orgs[c].cnt++;
-    });
-
-    const tier1 = [], tier2 = [], other = [];
-    Object.entries(orgs).forEach(([name, data]) => {
-        const item = { name, ...data };
-        if (config.tier1.includes(name)) tier1.push(item);
-        else if (config.useFolder && config.tier2.includes(name)) tier2.push(item);
-        else if (name !== 'Other') other.push(item);
-    });
-
-    const sortByOrder = arr => arr.sort((a, b) => {
-        const ai = orgOrder.indexOf(a.name);
-        const bi = orgOrder.indexOf(b.name);
-        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-    });
-    sortByOrder(tier1);
-    sortByOrder(tier2);
-    sortByOrder(other);
-
-    const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
-    const hasOther = orgs['Other'];
-    this.renderOrgList(tier1, tier2, tier2Total, hasOther, other);
-
-    if (showImageTypes) {
-        const imageTypes = { universal: 0, t2i: 0, i2i: 0 };
-        modeModels.forEach(m => {
-            if (typeof m.vision === 'string' && imageTypes[m.vision] !== undefined) {
-                imageTypes[m.vision]++;
-            }
-        });
-
-        const imgTypeLabels = {
-            universal: { icon: '🔄', label: this.t('universal') },
-            t2i: { icon: '✨', label: this.t('t2iOnly') },
-            i2i: { icon: '🖼️', label: this.t('i2iOnly') }
-        };
-
-        const imgTypeList = this.$('#lmm-image-type-list');
-        if (imgTypeList) {
-            imgTypeList.innerHTML = Object.entries(imageTypes)
-                .filter(([_, cnt]) => cnt > 0)
-                .map(([type, cnt]) => `<div class="lmm-sidebar-item ${this.filter.imageType === type ? 'active' : ''}" data-imgtype="${type}"><span class="icon">${imgTypeLabels[type].icon}</span> <span>${imgTypeLabels[type].label}</span> <span class="cnt">${cnt}</span></div>`)
-                .join('');
-
-            imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
-                item.onclick = () => {
-                    imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                    this.filter.imageType = item.dataset.imgtype;
-                    this.collapseTier2();
+            let searchTimer = null;
+            searchInput.oninput = e => {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => {
+                    this.filter.search = e.target.value;
                     this.refresh();
-                };
-            });
-        }
-    }
-
-    if (showVisionFilter) {
-        const visionList = this.$('#lmm-vision-list');
-        if (visionList) {
-            visionList.innerHTML = `<div class="lmm-sidebar-item ${this.filter.hasVision === 'yes' ? 'active' : ''}" data-vision="yes"><span class="icon">👓</span> <span>${this.t('vision')}</span> <span class="cnt">${visionCount}</span></div>`;
-            visionList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
-                item.onclick = () => {
-                    if (item.classList.contains('active')) {
-                        item.classList.remove('active');
-                        this.filter.hasVision = 'all';
-                    } else {
-                        item.classList.add('active');
-                        this.filter.hasVision = 'yes';
-                    }
-                    this.collapseTier2();
-                    this.refresh();
-                };
-            });
-        }
-    }
-
-    this.$('#lmm-sort-btn').onclick = () => this.toggleSortMode();
-    if (this.isSortMode) {
-        this.$('#lmm-sort-reset').onclick = () => {
-            const sidebarMode = this.getSidebarMode();
-            this.dm.setOrgOrder(sidebarMode, getDefaultOrgOrder(sidebarMode));
-            this.updateSidebar();
-            this.scanner.toast(this.t('orgOrderRestored'), 'success');
-        };
-    }
-}
-
-renderOrgList(tier1, tier2, tier2Total, hasOther, other) {
-    const list = this.$('#lmm-org-list');
-    const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
-
-    let html = tier1.map(c => renderItem(c, false)).join('');
-    if (tier2.length > 0) {
-        html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
-    }
-    other.forEach(c => html += renderItem(c, false));
-    if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
-    list.innerHTML = html;
-
-    const folder = this.$('#lmm-tier2-folder');
-    if (folder) {
-        folder.onclick = () => {
-            this.isTier2Expanded = !this.isTier2Expanded;
-            this.$('#lmm-tier2-content').classList.toggle('open', this.isTier2Expanded);
-            folder.querySelector('.icon').textContent = this.isTier2Expanded ? '📂' : '📁';
-        };
-    }
-
-    list.querySelectorAll('.lmm-sidebar-item').forEach(item => {
-        if (this.isSortMode) {
-            this.bindDragEvents(item);
-            item.onclick = (e) => e.preventDefault();
-        } else {
-            item.onclick = (e) => {
-                if (e.target.closest('.lmm-drag-handle')) return;
-                list.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                this.filter.org = item.dataset.org;
-                if (item.dataset.inFolder !== 'true') {
-                    this.collapseTier2();
+                }, 150);
+            };
+            searchInput.onkeydown = e => {
+                if (e.key === 'Enter') {
+                    const firstCard = this.$('.lmm-card');
+                    if (firstCard) firstCard.click();
                 }
+            };
+
+            this.$('#lmm-org').onchange = e => { this.filter.org = e.target.value; this.refresh(); };
+            this.$('#lmm-sort').onchange = e => {
+                const [by, order] = e.target.value.split('-');
+                this.sort = { by, order: order || 'asc' };
                 this.refresh();
             };
-        }
-    });
-}
 
-toggleSortMode() {
-    this.isSortMode = !this.isSortMode;
-    const sidebarMode = this.getSidebarMode();
-    if (!this.isSortMode) {
-        const items = this.$('#lmm-org-list').querySelectorAll('.lmm-sidebar-item[data-org]');
-        const newOrder = [...items].map(i => i.dataset.org).filter(Boolean);
-        this.dm.setOrgOrder(sidebarMode, newOrder);
-    } else {
-        if (this.$('#lmm-tier2-folder')) this.isTier2Expanded = true;
-    }
-    this.updateSidebar();
-}
+            this.$$('.lmm-view-btn').forEach(btn => {
+                btn.onclick = () => {
+                    this.$$('.lmm-view-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    this.viewMode = btn.dataset.view;
+                    this.updateGridView();
+                };
+            });
 
-bindDragEvents(item) {
-    item.ondragstart = (e) => {
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', item.dataset.org);
-        item.classList.add('dragging');
-    };
-    item.ondragend = () => item.classList.remove('dragging');
-    item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-    item.ondrop = (e) => {
-        e.preventDefault();
-        const from = e.dataTransfer.getData('text/plain');
-        const to = item.dataset.org;
-        if (from && to && from !== to) {
-            const sidebarMode = this.getSidebarMode();
-            const order = this.dm.getOrgOrder(sidebarMode);
-            const fromIdx = order.indexOf(from);
-            if (fromIdx !== -1) {
-                order.splice(fromIdx, 1);
-                const toIdx = order.indexOf(to);
-                order.splice(toIdx === -1 ? order.length : toIdx, 0, from);
-                this.dm.setOrgOrder(sidebarMode, order);
-                this.updateSidebar();
-            }
-        }
-    };
-}
+            this.$('#lmm-subbar').querySelectorAll('.lmm-subbar-item').forEach(item => {
+                item.onclick = () => {
+                    this.visibleSubMode = item.dataset.mode;
+                    this.updateSubbar();
+                    this.updateSidebar();
+                    this.refresh();
+                };
+            });
 
-bindModelDragEvents(card) {
-    card.setAttribute('draggable', 'true');
-    card.ondragstart = (e) => {
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', card.dataset.name);
-        card.classList.add('dragging');
-    };
-    card.ondragend = () => card.classList.remove('dragging');
-    card.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-    card.ondrop = (e) => {
-        e.preventDefault();
-        const from = e.dataTransfer.getData('text/plain');
-        const to = card.dataset.name;
-        if (from && to && from !== to) {
-            const grid = this.$('#lmm-grid');
-            const cards = Array.from(grid.children);
-            const fromCard = cards.find(c => c.dataset.name === from);
-            const toCard = cards.find(c => c.dataset.name === to);
-            if (fromCard && toCard) {
-                const fromIdx = cards.indexOf(fromCard);
-                const toIdx = cards.indexOf(toCard);
-                if (fromIdx < toIdx) grid.insertBefore(fromCard, toCard.nextSibling);
-                else grid.insertBefore(fromCard, toCard);
-                const names = Array.from(grid.children).map(el => el.dataset.name).filter(Boolean);
-                this.dm.setModelOrder(this.visibleSubMode, names);
+            this.$('#lmm-model-sort-btn').onclick = () => {
+                this.isModelSortMode = !this.isModelSortMode;
+                this.updateSubbar();
+                this.refresh();
+            };
+
+            this.$('#lmm-model-sort-reset').onclick = () => {
+                this.dm.setModelOrder(this.visibleSubMode, []);
+                this.refresh();
                 this.scanner.applyFilters();
-                this.triggerSyncOnChange();
+                this.scanner.toast(this.t('defaultOrderRestored'), 'success');
+            };
+        }
+
+        bindShortcuts() {
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
+                    e.preventDefault();
+                    this.toggle();
+                }
+                if (e.key === 'Escape') {
+                    if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
+                    else if (this.groupSelectModal.classList.contains('open')) this.closeGroupSelectModal();
+                    else if (this.groupModal.classList.contains('open')) this.closeGroupModal();
+                    else if (this.editModal.classList.contains('open')) this.closeEditModal();
+                    else if (this.confirmModal.classList.contains('open')) {
+                        this.confirmModalOverlay.classList.remove('open');
+                        this.confirmModal.classList.remove('open');
+                    }
+                    else if (this.scanModal.classList.contains('open')) {
+                        this.scanModalOverlay.classList.remove('open');
+                        this.scanModal.classList.remove('open');
+                    }
+                    else if (this.isOpen) this.close();
+                }
+                if (e.key === '/' && this.isOpen && !e.ctrlKey && !e.metaKey) {
+                    const searchInput = this.$('#lmm-search');
+                    if (document.activeElement !== searchInput) {
+                        e.preventDefault();
+                        searchInput.focus();
+                        searchInput.select();
+                    }
+                }
+            });
+        }
+
+        toggle() { this.isOpen ? this.close() : this.open(); }
+
+        open() {
+            this.isOpen = true;
+            this.panel.classList.add('open');
+            this.overlay.classList.add('open');
+            this.updateI18n();
+            this.updateTopbar();
+            this.refresh();
+            this.updateSidebar();
+        }
+
+        close() {
+            if (this.isMultiSelectMode) {
+                this.revertMultiSelectChanges();
+                this.exitMultiSelectMode();
+            }
+            this.isOpen = false;
+            this.isSortMode = false;
+            this.isModelSortMode = false;
+            this.updateGridView();
+            this.panel.classList.remove('open');
+            this.overlay.classList.remove('open');
+        }
+
+        updateGridView() {
+            const grid = this.$('#lmm-grid');
+            grid.classList.remove('compact-view', 'list-view');
+            if (this.viewMode === 'compact') grid.classList.add('compact-view');
+            else if (this.viewMode === 'list' || this.isModelSortMode) grid.classList.add('list-view');
+        }
+
+        updateTopbar() {
+            const counts = this.getModeCounts();
+            const groups = this.dm.getGroupNames();
+            const topbar = this.$('#lmm-topbar');
+
+            const items = [
+                { key: 'all', icon: '📋', label: this.t('all'), count: counts.all },
+                { key: 'text', icon: '📝', label: 'Text', count: counts.text },
+                { key: 'search', icon: '🔍', label: 'Search', count: counts.search },
+                { key: 'image', icon: '🎨', label: 'Image', count: counts.image },
+                { key: 'code', icon: '💻', label: 'Code', count: counts.code },
+                { key: 'video', icon: '🎬', label: 'Video', count: counts.video },
+            ];
+
+            let html = items.map(it => `<div class="lmm-topbar-item ${this.currentMode === it.key ? 'active' : ''}" data-mode="${it.key}">${it.icon} ${it.label} ${it.count > 0 ? `<span class="cnt">${it.count}</span>` : ''}</div>`).join('');
+            html += `<div class="lmm-topbar-sep"></div>`;
+            html += `<div class="lmm-topbar-item ${this.currentMode === 'visible' ? 'active' : ''}" data-mode="visible">👁️ ${this.t('enabled')}</div>`;
+            html += `<div class="lmm-topbar-item ${this.currentMode === 'hidden' ? 'active' : ''}" data-mode="hidden">🙈 ${this.t('hidden')}</div>`;
+            html += `<div class="lmm-topbar-item ${this.currentMode === 'starred' ? 'active' : ''}" data-mode="starred">⭐ ${this.t('starred')} ${counts.starred > 0 ? `<span class="cnt">${counts.starred}</span>` : ''}</div>`;
+            html += `<div class="lmm-topbar-item ${this.currentMode === 'new' ? 'active' : ''}" data-mode="new">✨ ${this.t('newFound')} ${counts.new > 0 ? `<span class="cnt">${counts.new}</span>` : ''}</div>`;
+
+            if (groups.length > 0) {
+                html += `<div class="lmm-topbar-sep"></div>`;
+                groups.forEach(name => {
+                    const cnt = counts[`group_${name}`] || 0;
+                    html += `<div class="lmm-topbar-item ${this.currentMode === `group_${name}` ? 'active' : ''}" data-mode="group_${name}">📁 ${this.esc(name)} ${cnt > 0 ? `<span class="cnt">${cnt}</span>` : ''}</div>`;
+                });
+            }
+
+            topbar.innerHTML = html;
+            topbar.querySelectorAll('.lmm-topbar-item').forEach(item => {
+                item.onclick = () => {
+                    this.currentMode = item.dataset.mode;
+                    this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all', hasFileUpload: 'all' };
+                    this.$('#lmm-search').value = '';
+                    this.$('#lmm-org').value = 'all';
+                    this.isTier2Expanded = false;
+                    this.isModelSortMode = false;
+                    this.updateGridView();
+                    this.updateTopbar();
+                    this.updateSidebar();
+                    this.updateSubbar();
+                    this.refresh();
+                };
+            });
+        }
+
+        updateSubbar() {
+            const subbar = this.$('#lmm-subbar');
+            const content = this.$('#lmm-content');
+
+            if (this.currentMode === 'visible') {
+                subbar.style.display = 'flex';
+                content.classList.add('visible-mode');
+                subbar.querySelectorAll('.lmm-subbar-item').forEach(el => {
+                    el.classList.toggle('active', el.dataset.mode === this.visibleSubMode);
+                });
+                const btn = this.$('#lmm-model-sort-btn');
+                const resetBtn = this.$('#lmm-model-sort-reset');
+                if (this.isModelSortMode) {
+                    btn.innerHTML = `✓ ${this.t('sort')}`;
+                    btn.classList.add('active');
+                    resetBtn.style.display = '';
+                    this.updateGridView();
+                } else {
+                    btn.innerHTML = `⇅ ${this.t('sort')}`;
+                    btn.classList.remove('active');
+                    resetBtn.style.display = 'none';
+                    this.updateGridView();
+                }
+            } else {
+                subbar.style.display = 'none';
+                content.classList.remove('visible-mode');
             }
         }
-    };
-}
 
-updateOrgFilter() {
-    const modeModels = this.getModelsInCurrentMode();
-    const sidebarMode = this.getSidebarMode();
-    const orgOrder = this.dm.getOrgOrder(sidebarMode);
-    const orgs = [...new Set(modeModels.map(m => m.company).filter(Boolean))];
-    orgs.sort((a, b) => {
-        if (a === 'Other') return 1;
-        if (b === 'Other') return -1;
-        const ai = orgOrder.indexOf(a);
-        const bi = orgOrder.indexOf(b);
-        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-    });
-    const sel = this.$('#lmm-org');
-    const val = sel.value;
-    sel.innerHTML = `<option value="all">📂 ${this.t('allOrgs')}</option>` + orgs.map(c => `<option value="${this.esc(c)}">${this.esc(c)}</option>`).join('');
-    sel.value = orgs.includes(val) ? val : 'all';
-}
+        getModelsInCurrentMode() {
+            const models = this.dm.getAllModels();
+            if (this.currentMode === 'visible') {
+                return models.filter(m => m.visible !== false && Array.isArray(m.modes) && m.modes.includes(this.visibleSubMode));
+            }
+            if (this.currentMode.startsWith('group_')) {
+                const groupName = this.currentMode.substring(6);
+                const groupModels = this.dm.getModelsInGroup(groupName);
+                return models.filter(m => groupModels.includes(m.name));
+            }
+            switch (this.currentMode) {
+                case 'all': return models;
+                case 'starred': return models.filter(m => m.starred);
+                case 'hidden': return models.filter(m => m.visible === false);
+                case 'new': return models.filter(m => m.isNew);
+                default: return models.filter(m => Array.isArray(m.modes) && m.modes.includes(this.currentMode));
+            }
+        }
 
-matchesSearch(model, searchStr) {
-    if (!searchStr) return true;
-    const s = searchStr.trim();
-    if (!s) return true;
+        getSidebarMode() {
+            if (this.currentMode === 'visible') return this.visibleSubMode;
+            if (['text', 'search', 'image', 'code', 'video'].includes(this.currentMode)) return this.currentMode;
+            return 'text';
+        }
 
-    if (s.startsWith('/') && s.lastIndexOf('/') > 0) {
-        const lastSlash = s.lastIndexOf('/');
-        const pattern = s.substring(1, lastSlash);
-        const flags = s.substring(lastSlash + 1);
-        try {
-            const regex = new RegExp(pattern, flags || 'i');
-            return regex.test(model.name) || regex.test(model.company || '') || regex.test(model.note || '');
-        } catch (e) { /* fallback */ }
-    }
+        collapseTier2() {
+            this.isTier2Expanded = false;
+            const folderContent = this.$('#lmm-tier2-content');
+            const folder = this.$('#lmm-tier2-folder');
+            if (folderContent) folderContent.classList.remove('open');
+            if (folder) folder.querySelector('.icon').textContent = '📁';
+        }
 
-    const keywords = s.toLowerCase().split(/\s+/).filter(k => k.length > 0);
-    const target = `${model.name} ${model.company || ''} ${model.note || ''}`.toLowerCase();
-    return keywords.every(kw => target.includes(kw));
-}
+        updateSidebar() {
+            if (this.currentMode === 'visible') {
+                this.$('#lmm-content').classList.remove('visible-mode');
+            }
 
-getFiltered() {
-    let models = this.getModelsInCurrentMode();
+            const modeModels = this.getModelsInCurrentMode();
+            const sidebarMode = this.getSidebarMode();
+            const orgOrder = this.dm.getOrgOrder(sidebarMode);
+            const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
+            const showImageTypes = sidebarMode === 'image';
 
-    if (this.filter.search) {
-        models = models.filter(m => this.matchesSearch(m, this.filter.search));
-    }
-    if (this.filter.org !== 'all') models = models.filter(m => m.company === this.filter.org);
-    if (this.filter.imageType !== 'all') models = models.filter(m => m.vision === this.filter.imageType);
-    if (this.filter.hasVision === 'yes') models = models.filter(m => m.vision === true);
+            const visionCount = modeModels.filter(m => m.vision === true).length;
+            const showVisionFilter = visionCount > 0 && sidebarMode !== 'image';
+            const fileUploadCount = modeModels.filter(m => m.fileUpload === true).length;
+            const showFileUploadFilter = fileUploadCount > 0 && ['text', 'code', 'search'].includes(sidebarMode);
+            const showFeaturesSection = showVisionFilter || showFileUploadFilter;
 
-    const sidebarMode = this.getSidebarMode();
-    const orgOrder = this.dm.getOrgOrder(sidebarMode);
+            let html = `<div class="lmm-sidebar-header"><span class="lmm-sidebar-title">${this.t('byOrg')}</span><button class="lmm-sidebar-btn ${this.isSortMode ? 'active' : ''}" id="lmm-sort-btn">${this.isSortMode ? this.t('done') : this.t('sort')}</button>${this.isSortMode ? `<button class="lmm-sidebar-btn reset" id="lmm-sort-reset">${this.t('reset')}</button>` : ''}</div><div id="lmm-org-list"></div>`;
 
-    if (this.currentMode === 'visible') {
-        const customOrder = this.dm.getModelOrder(this.visibleSubMode);
-        if (customOrder.length > 0) {
-            models.sort((a, b) => {
-                let ai = customOrder.indexOf(a.name);
-                let bi = customOrder.indexOf(b.name);
-                if (ai === -1) ai = 9999;
-                if (bi === -1) bi = 9999;
-                if (ai !== bi) return ai - bi;
-                if (sidebarMode === 'image') {
-                    const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                    const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                    if (ta !== tb) return ta - tb;
+            if (showImageTypes) {
+                html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('byType')}</span></div><div id="lmm-image-type-list"></div>`;
+            }
+
+            if (showFeaturesSection) {
+                html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('features')}</span></div><div id="lmm-features-list"></div>`;
+            }
+
+            this.$('#lmm-sidebar').innerHTML = html;
+
+            const orgs = {};
+            modeModels.forEach(m => {
+                const c = m.company || 'Other';
+                if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔' };
+                orgs[c].cnt++;
+            });
+
+            const tier1 = [], tier2 = [], other = [];
+            Object.entries(orgs).forEach(([name, data]) => {
+                const item = { name, ...data };
+                if (config.tier1.includes(name)) tier1.push(item);
+                else if (config.useFolder && config.tier2.includes(name)) tier2.push(item);
+                else if (name !== 'Other') other.push(item);
+            });
+
+            const sortByOrder = arr => arr.sort((a, b) => {
+                const ai = orgOrder.indexOf(a.name);
+                const bi = orgOrder.indexOf(b.name);
+                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+            });
+            sortByOrder(tier1);
+            sortByOrder(tier2);
+            sortByOrder(other);
+
+            const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
+            const hasOther = orgs['Other'];
+            this.renderOrgList(tier1, tier2, tier2Total, hasOther, other);
+
+            if (showImageTypes) {
+                const imageTypes = { universal: 0, t2i: 0, i2i: 0 };
+                modeModels.forEach(m => {
+                    if (typeof m.vision === 'string' && imageTypes[m.vision] !== undefined) {
+                        imageTypes[m.vision]++;
+                    }
+                });
+
+                const imgTypeLabels = {
+                    universal: { icon: '🔄', label: this.t('universal') },
+                    t2i: { icon: '✨', label: this.t('t2iOnly') },
+                    i2i: { icon: '🖼️', label: this.t('i2iOnly') }
+                };
+
+                const imgTypeList = this.$('#lmm-image-type-list');
+                if (imgTypeList) {
+                    imgTypeList.innerHTML = Object.entries(imageTypes)
+                        .filter(([_, cnt]) => cnt > 0)
+                        .map(([type, cnt]) => `<div class="lmm-sidebar-item ${this.filter.imageType === type ? 'active' : ''}" data-imgtype="${type}"><span class="icon">${imgTypeLabels[type].icon}</span> <span>${imgTypeLabels[type].label}</span> <span class="cnt">${cnt}</span></div>`)
+                        .join('');
+
+                    imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
+                        item.onclick = () => {
+                            imgTypeList.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
+                            item.classList.add('active');
+                            this.filter.imageType = item.dataset.imgtype;
+                            this.collapseTier2();
+                            this.refresh();
+                        };
+                    });
                 }
-                const cai = orgOrder.indexOf(a.company);
-                const cbi = orgOrder.indexOf(b.company);
-                return (cai === -1 ? 999 : cai) - (cbi === -1 ? 999 : cbi);
+            }
+
+            if (showFeaturesSection) {
+                const featuresList = this.$('#lmm-features-list');
+                if (featuresList) {
+                    let featHtml = '';
+                    if (showVisionFilter) {
+                        featHtml += `<div class="lmm-sidebar-item ${this.filter.hasVision === 'yes' ? 'active' : ''}" data-feature="vision"><span class="icon">👓</span> <span>${this.t('vision')}</span> <span class="cnt">${visionCount}</span></div>`;
+                    }
+                    if (showFileUploadFilter) {
+                        featHtml += `<div class="lmm-sidebar-item ${this.filter.hasFileUpload === 'yes' ? 'active' : ''}" data-feature="fileUpload"><span class="icon">📄</span> <span>${this.t('pdfUpload')}</span> <span class="cnt">${fileUploadCount}</span></div>`;
+                    }
+                    featuresList.innerHTML = featHtml;
+                    featuresList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
+                        item.onclick = () => {
+                            const feature = item.dataset.feature;
+                            const filterKey = feature === 'vision' ? 'hasVision' : 'hasFileUpload';
+                            if (item.classList.contains('active')) {
+                                item.classList.remove('active');
+                                this.filter[filterKey] = 'all';
+                            } else {
+                                item.classList.add('active');
+                                this.filter[filterKey] = 'yes';
+                            }
+                            this.collapseTier2();
+                            this.refresh();
+                        };
+                    });
+                }
+            }
+
+            this.$('#lmm-sort-btn').onclick = () => this.toggleSortMode();
+            if (this.isSortMode) {
+                this.$('#lmm-sort-reset').onclick = () => {
+                    const sidebarMode = this.getSidebarMode();
+                    this.dm.setOrgOrder(sidebarMode, getDefaultOrgOrder(sidebarMode));
+                    this.updateSidebar();
+                    this.scanner.toast(this.t('orgOrderRestored'), 'success');
+                };
+            }
+        }
+
+        renderOrgList(tier1, tier2, tier2Total, hasOther, other) {
+            const list = this.$('#lmm-org-list');
+            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
+
+            let html = tier1.map(c => renderItem(c, false)).join('');
+            if (tier2.length > 0) {
+                html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
+            }
+            other.forEach(c => html += renderItem(c, false));
+            if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
+            list.innerHTML = html;
+
+            const folder = this.$('#lmm-tier2-folder');
+            if (folder) {
+                folder.onclick = () => {
+                    this.isTier2Expanded = !this.isTier2Expanded;
+                    this.$('#lmm-tier2-content').classList.toggle('open', this.isTier2Expanded);
+                    folder.querySelector('.icon').textContent = this.isTier2Expanded ? '📂' : '📁';
+                };
+            }
+
+            list.querySelectorAll('.lmm-sidebar-item').forEach(item => {
+                if (this.isSortMode) {
+                    this.bindDragEvents(item);
+                    item.onclick = (e) => e.preventDefault();
+                } else {
+                    item.onclick = (e) => {
+                        if (e.target.closest('.lmm-drag-handle')) return;
+                        list.querySelectorAll('.lmm-sidebar-item').forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                        this.filter.org = item.dataset.org;
+                        if (item.dataset.inFolder !== 'true') {
+                            this.collapseTier2();
+                        }
+                        this.refresh();
+                    };
+                }
+            });
+        }
+
+        toggleSortMode() {
+            this.isSortMode = !this.isSortMode;
+            const sidebarMode = this.getSidebarMode();
+            if (!this.isSortMode) {
+                const items = this.$('#lmm-org-list').querySelectorAll('.lmm-sidebar-item[data-org]');
+                const newOrder = [...items].map(i => i.dataset.org).filter(Boolean);
+                this.dm.setOrgOrder(sidebarMode, newOrder);
+            } else {
+                if (this.$('#lmm-tier2-folder')) this.isTier2Expanded = true;
+            }
+            this.updateSidebar();
+        }
+
+        bindDragEvents(item) {
+            item.ondragstart = (e) => {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', item.dataset.org);
+                item.classList.add('dragging');
+            };
+            item.ondragend = () => item.classList.remove('dragging');
+            item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+            item.ondrop = (e) => {
+                e.preventDefault();
+                const from = e.dataTransfer.getData('text/plain');
+                const to = item.dataset.org;
+                if (from && to && from !== to) {
+                    const sidebarMode = this.getSidebarMode();
+                    const order = this.dm.getOrgOrder(sidebarMode);
+                    const fromIdx = order.indexOf(from);
+                    if (fromIdx !== -1) {
+                        order.splice(fromIdx, 1);
+                        const toIdx = order.indexOf(to);
+                        order.splice(toIdx === -1 ? order.length : toIdx, 0, from);
+                        this.dm.setOrgOrder(sidebarMode, order);
+                        this.updateSidebar();
+                    }
+                }
+            };
+        }
+
+        bindModelDragEvents(card) {
+            card.setAttribute('draggable', 'true');
+            card.ondragstart = (e) => {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', card.dataset.name);
+                card.classList.add('dragging');
+            };
+            card.ondragend = () => card.classList.remove('dragging');
+            card.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+            card.ondrop = (e) => {
+                e.preventDefault();
+                const from = e.dataTransfer.getData('text/plain');
+                const to = card.dataset.name;
+                if (from && to && from !== to) {
+                    const grid = this.$('#lmm-grid');
+                    const cards = Array.from(grid.children);
+                    const fromCard = cards.find(c => c.dataset.name === from);
+                    const toCard = cards.find(c => c.dataset.name === to);
+                    if (fromCard && toCard) {
+                        const fromIdx = cards.indexOf(fromCard);
+                        const toIdx = cards.indexOf(toCard);
+                        if (fromIdx < toIdx) grid.insertBefore(fromCard, toCard.nextSibling);
+                        else grid.insertBefore(fromCard, toCard);
+                        const names = Array.from(grid.children).map(el => el.dataset.name).filter(Boolean);
+                        this.dm.setModelOrder(this.visibleSubMode, names);
+                        this.scanner.applyFilters();
+                        this.triggerSyncOnChange();
+                    }
+                }
+            };
+        }
+
+        updateOrgFilter() {
+            const modeModels = this.getModelsInCurrentMode();
+            const sidebarMode = this.getSidebarMode();
+            const orgOrder = this.dm.getOrgOrder(sidebarMode);
+            const orgs = [...new Set(modeModels.map(m => m.company).filter(Boolean))];
+            orgs.sort((a, b) => {
+                if (a === 'Other') return 1;
+                if (b === 'Other') return -1;
+                const ai = orgOrder.indexOf(a);
+                const bi = orgOrder.indexOf(b);
+                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+            });
+            const sel = this.$('#lmm-org');
+            const val = sel.value;
+            sel.innerHTML = `<option value="all">📂 ${this.t('allOrgs')}</option>` + orgs.map(c => `<option value="${this.esc(c)}">${this.esc(c)}</option>`).join('');
+            sel.value = orgs.includes(val) ? val : 'all';
+        }
+
+        matchesSearch(model, searchStr) {
+            if (!searchStr) return true;
+            const s = searchStr.trim();
+            if (!s) return true;
+
+            if (s.startsWith('/') && s.lastIndexOf('/') > 0) {
+                const lastSlash = s.lastIndexOf('/');
+                const pattern = s.substring(1, lastSlash);
+                const flags = s.substring(lastSlash + 1);
+                try {
+                    const regex = new RegExp(pattern, flags || 'i');
+                    return regex.test(model.name) || regex.test(model.company || '') || regex.test(model.note || '');
+                } catch (e) { /* fallback */ }
+            }
+
+            const keywords = s.toLowerCase().split(/\s+/).filter(k => k.length > 0);
+            const target = `${model.name} ${model.company || ''} ${model.note || ''}`.toLowerCase();
+            return keywords.every(kw => target.includes(kw));
+        }
+
+        getFiltered() {
+            let models = this.getModelsInCurrentMode();
+
+            if (this.filter.search) {
+                models = models.filter(m => this.matchesSearch(m, this.filter.search));
+            }
+            if (this.filter.org !== 'all') models = models.filter(m => m.company === this.filter.org);
+            if (this.filter.imageType !== 'all') models = models.filter(m => m.vision === this.filter.imageType);
+            if (this.filter.hasVision === 'yes') models = models.filter(m => m.vision === true);
+            if (this.filter.hasFileUpload === 'yes') models = models.filter(m => m.fileUpload === true);
+
+            const sidebarMode = this.getSidebarMode();
+            const orgOrder = this.dm.getOrgOrder(sidebarMode);
+
+            if (this.currentMode === 'visible') {
+                const customOrder = this.dm.getModelOrder(this.visibleSubMode);
+                if (customOrder.length > 0) {
+                    models.sort((a, b) => {
+                        let ai = customOrder.indexOf(a.name);
+                        let bi = customOrder.indexOf(b.name);
+                        if (ai === -1) ai = 9999;
+                        if (bi === -1) bi = 9999;
+                        if (ai !== bi) return ai - bi;
+                        if (sidebarMode === 'image') {
+                            const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                            const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                            if (ta !== tb) return ta - tb;
+                        }
+                        const cai = orgOrder.indexOf(a.company);
+                        const cbi = orgOrder.indexOf(b.company);
+                        return (cai === -1 ? 999 : cai) - (cbi === -1 ? 999 : cbi);
+                    });
+                    return models;
+                }
+                models.sort((a, b) => {
+                    if (sidebarMode === 'image') {
+                        const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                        const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                        if (ta !== tb) return ta - tb;
+                    }
+                    const ai = orgOrder.indexOf(a.company);
+                    const bi = orgOrder.indexOf(b.company);
+                    const c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+                    return c !== 0 ? c : a.name.localeCompare(b.name);
+                });
+                return models;
+            }
+
+            models.sort((a, b) => {
+                if (this.sort.by === 'starred') {
+                    if (a.starred && !b.starred) return -1;
+                    if (!a.starred && b.starred) return 1;
+                    return a.name.localeCompare(b.name);
+                }
+                let c = 0;
+                if (this.sort.by === 'name') c = a.name.localeCompare(b.name);
+                else if (this.sort.by === 'org') {
+                    if (sidebarMode === 'image') {
+                        const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                        const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                        if (ta !== tb) return ta - tb;
+                    }
+                    const ai = orgOrder.indexOf(a.company);
+                    const bi = orgOrder.indexOf(b.company);
+                    c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+                }
+                return this.sort.order === 'desc' ? -c : c;
             });
             return models;
         }
-        models.sort((a, b) => {
-            if (sidebarMode === 'image') {
-                const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                if (ta !== tb) return ta - tb;
-            }
-            const ai = orgOrder.indexOf(a.company);
-            const bi = orgOrder.indexOf(b.company);
-            const c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-            return c !== 0 ? c : a.name.localeCompare(b.name);
-        });
-        return models;
-    }
 
-    models.sort((a, b) => {
-        if (this.sort.by === 'starred') {
-            if (a.starred && !b.starred) return -1;
-            if (!a.starred && b.starred) return 1;
-            return a.name.localeCompare(b.name);
+        // 多选模式方法
+        enterMultiSelectMode() {
+            this.isMultiSelectMode = true;
+            this.selectedModels.clear();
+            this.multiSelectBackup.clear();
+            this.getFiltered().forEach(m => {
+                this.multiSelectBackup.set(m.name, this.dm.isVisible(m.name));
+            });
+            this.refresh();
         }
-        let c = 0;
-        if (this.sort.by === 'name') c = a.name.localeCompare(b.name);
-        else if (this.sort.by === 'org') {
-            if (sidebarMode === 'image') {
-                const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                if (ta !== tb) return ta - tb;
-            }
-            const ai = orgOrder.indexOf(a.company);
-            const bi = orgOrder.indexOf(b.company);
-            c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+
+        exitMultiSelectMode() {
+            this.isMultiSelectMode = false;
+            this.selectedModels.clear();
+            this.multiSelectBackup.clear();
+            this.refresh();
         }
-        else if (this.sort.by === 'date') c = (b.addedAt || 0) - (a.addedAt || 0);
-        return this.sort.order === 'desc' ? -c : c;
-    });
-    return models;
-}
 
-// 多选模式方法
-enterMultiSelectMode() {
-    this.isMultiSelectMode = true;
-    this.selectedModels.clear();
-    this.multiSelectBackup.clear();
-    this.getFiltered().forEach(m => {
-        this.multiSelectBackup.set(m.name, this.dm.isVisible(m.name));
-    });
-    this.refresh();
-}
+        revertMultiSelectChanges() {
+            this.multiSelectBackup.forEach((visible, name) => {
+                this.dm.setVisibility(name, visible);
+            });
+            this.scanner.applyFilters();
+        }
 
-exitMultiSelectMode() {
-    this.isMultiSelectMode = false;
-    this.selectedModels.clear();
-    this.multiSelectBackup.clear();
-    this.refresh();
-}
+        multiSelectShow() {
+            this.selectedModels.forEach(name => {
+                this.dm.setVisibility(name, true);
+            });
+            this.refresh();
+            this.scanner.applyFilters();
+            this.triggerSyncOnChange();
+        }
 
-revertMultiSelectChanges() {
-    this.multiSelectBackup.forEach((visible, name) => {
-        this.dm.setVisibility(name, visible);
-    });
-    this.scanner.applyFilters();
-}
+        multiSelectHide() {
+            this.selectedModels.forEach(name => {
+                this.dm.setVisibility(name, false);
+            });
+            this.refresh();
+            this.scanner.applyFilters();
+            this.triggerSyncOnChange();
+        }
 
-multiSelectShow() {
-    this.selectedModels.forEach(name => {
-        this.dm.setVisibility(name, true);
-    });
-    this.refresh();
-    this.scanner.applyFilters();
-    this.triggerSyncOnChange();
-}
+        multiSelectAddToGroup() {
+            const groups = this.dm.getGroupNames();
+            if (groups.length === 0) {
+                this.scanner.toast(this.t('noGroupHint'), 'warning');
+                return;
+            }
+            this.openGroupSelectModal();
+        }
 
-multiSelectHide() {
-    this.selectedModels.forEach(name => {
-        this.dm.setVisibility(name, false);
-    });
-    this.refresh();
-    this.scanner.applyFilters();
-    this.triggerSyncOnChange();
-}
+        openGroupSelectModal() {
+            const list = this.groupSelectModal.querySelector('#lmm-group-select-list');
+            const groups = this.dm.getGroupNames();
 
-multiSelectAddToGroup() {
-    const groups = this.dm.getGroupNames();
-    if (groups.length === 0) {
-        this.scanner.toast(this.t('noGroupHint'), 'warning');
-        return;
-    }
-    this.openGroupSelectModal();
-}
-
-openGroupSelectModal() {
-    const list = this.groupSelectModal.querySelector('#lmm-group-select-list');
-    const groups = this.dm.getGroupNames();
-
-    list.innerHTML = groups.map(name => `
+            list.innerHTML = groups.map(name => `
                 <div class="lmm-group-item" data-group="${this.esc(name)}">
                     <span class="name">📁 ${this.esc(name)}</span>
                 </div>
             `).join('');
 
-    list.querySelectorAll('.lmm-group-item').forEach(item => {
-        item.onclick = () => {
-            const groupName = item.dataset.group;
-            this.selectedModels.forEach(modelName => {
-                this.dm.addToGroup(groupName, modelName);
+            list.querySelectorAll('.lmm-group-item').forEach(item => {
+                item.onclick = () => {
+                    const groupName = item.dataset.group;
+                    this.selectedModels.forEach(modelName => {
+                        this.dm.addToGroup(groupName, modelName);
+                    });
+                    this.closeGroupSelectModal();
+                    this.scanner.toast(this.t('addedToGroup'), 'success');
+                    this.updateTopbar();
+                    this.refresh();
+                    this.triggerSyncOnChange();
+                };
             });
-            this.closeGroupSelectModal();
-            this.scanner.toast(this.t('addedToGroup'), 'success');
-            this.updateTopbar();
-            this.refresh();
-            this.triggerSyncOnChange();
-        };
-    });
 
-    this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
-    this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
-    this.groupSelectModalOverlay.classList.add('open');
-    this.groupSelectModal.classList.add('open');
-}
-
-closeGroupSelectModal() {
-    this.groupSelectModalOverlay.classList.remove('open');
-    this.groupSelectModal.classList.remove('open');
-}
-
-multiSelectAll() {
-    const models = this.getFiltered();
-    models.forEach(m => this.selectedModels.add(m.name));
-    this.refresh();
-}
-
-multiDeselectAll() {
-    this.selectedModels.clear();
-    this.refresh();
-}
-
-multiInvert() {
-    const models = this.getFiltered();
-    models.forEach(m => {
-        if (this.selectedModels.has(m.name)) {
-            this.selectedModels.delete(m.name);
-        } else {
-            this.selectedModels.add(m.name);
+            this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
+            this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
+            this.groupSelectModalOverlay.classList.add('open');
+            this.groupSelectModal.classList.add('open');
         }
-    });
-    this.refresh();
-}
 
-renderBatchButtons() {
-    const batch = this.$('#lmm-batch');
-    if (this.isMultiSelectMode) {
-        batch.innerHTML = `
+        closeGroupSelectModal() {
+            this.groupSelectModalOverlay.classList.remove('open');
+            this.groupSelectModal.classList.remove('open');
+        }
+
+        multiSelectAll() {
+            const models = this.getFiltered();
+            models.forEach(m => this.selectedModels.add(m.name));
+            this.refresh();
+        }
+
+        multiDeselectAll() {
+            this.selectedModels.clear();
+            this.refresh();
+        }
+
+        multiInvert() {
+            const models = this.getFiltered();
+            models.forEach(m => {
+                if (this.selectedModels.has(m.name)) {
+                    this.selectedModels.delete(m.name);
+                } else {
+                    this.selectedModels.add(m.name);
+                }
+            });
+            this.refresh();
+        }
+
+        renderBatchButtons() {
+            const batch = this.$('#lmm-batch');
+            if (this.isMultiSelectMode) {
+                batch.innerHTML = `
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-show">${this.t('show')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-hide">${this.t('hide')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-add-group">${this.t('addToGroup')}</button>
@@ -3806,21 +3842,21 @@ renderBatchButtons() {
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-revert">${this.t('revert')}</button>
                     <button class="lmm-btn lmm-btn-sm lmm-btn-primary" id="lmm-multi-exit">${this.t('exitMulti')}</button>
                 `;
-        batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
-        batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
-        batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
-        batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
-            if (this.selectedModels.size > 0) this.multiDeselectAll();
-            else this.multiSelectAll();
-        };
-        batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
-        batch.querySelector('#lmm-multi-revert').onclick = () => {
-            this.revertMultiSelectChanges();
-            this.refresh();
-        };
-        batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
-    } else {
-        batch.innerHTML = `
+                batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
+                batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
+                batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
+                batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
+                    if (this.selectedModels.size > 0) this.multiDeselectAll();
+                    else this.multiSelectAll();
+                };
+                batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
+                batch.querySelector('#lmm-multi-revert').onclick = () => {
+                    this.revertMultiSelectChanges();
+                    this.refresh();
+                };
+                batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
+            } else {
+                batch.innerHTML = `
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
                     <button class="lmm-btn lmm-btn-primary" id="lmm-apply">✓ ${this.t('apply')}</button>
                 `;
@@ -3830,63 +3866,64 @@ renderBatchButtons() {
             this.scanner.toast(this.t('applied'), 'success');
         };
     }
-}
+        }
 
-esc(s) {
-    if (!s) return '';
-    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-}
+        esc(s) {
+            if (!s) return '';
+            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+        }
 
-getModeIcon(modes) {
-    if (!Array.isArray(modes) || modes.length === 0) return '❓';
-    const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-    if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
-    return icons[modes[0]] || '❓';
-}
+        getModeIcon(modes) {
+            if (!Array.isArray(modes) || modes.length === 0) return '❓';
+            const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+            if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
+            return icons[modes[0]] || '❓';
+        }
 
-refresh() {
-    const grid = this.$('#lmm-grid');
-    const models = this.getFiltered();
-    const sidebarMode = this.getSidebarMode();
+        refresh() {
+            const grid = this.$('#lmm-grid');
+            const models = this.getFiltered();
+            const sidebarMode = this.getSidebarMode();
 
-    this.updateGridView();
-    this.renderBatchButtons();
+            this.updateGridView();
+            this.renderBatchButtons();
 
-    if (models.length === 0) {
-        const isCustomGroup = this.currentMode.startsWith('group_');
-        const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
-        grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
-    } else {
-        grid.innerHTML = models.map(m => {
-            const vis = m.visible !== false;
-            const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
-            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+            if (models.length === 0) {
+                const isCustomGroup = this.currentMode.startsWith('group_');
+                const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
+                grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
+            } else {
+                grid.innerHTML = models.map(m => {
+                    const vis = m.visible !== false;
+                    const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
+                    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
 
-            const imgTypeLabels = {
-                universal: { icon: '🔄' },
-                t2i: { icon: '✨' },
-                i2i: { icon: '🖼️' }
-            };
-            const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
-            ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
-            const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
-            const modelGroups = this.dm.getModelGroups(m.name);
-            const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
+                    const imgTypeLabels = {
+                        universal: { icon: '🔄' },
+                        t2i: { icon: '✨' },
+                        i2i: { icon: '🖼️' }
+                    };
+                    const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
+                    ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
+                    const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
+                    const fileUploadTag = m.fileUpload ? `<span class="lmm-tag vision">📄</span>` : '';
+                    const modelGroups = this.dm.getModelGroups(m.name);
+                    const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
 
-            const isSelected = this.selectedModels.has(m.name);
-            const showCheck = this.isMultiSelectMode;
-            const cardClasses = [
-                'lmm-card',
-                vis ? 'visible' : 'hidden',
-                m.isNew ? 'new' : '',
-                m.starred ? 'starred' : '',
-                isSelected ? 'selected' : ''
-            ].filter(Boolean).join(' ');
+                    const isSelected = this.selectedModels.has(m.name);
+                    const showCheck = this.isMultiSelectMode;
+                    const cardClasses = [
+                        'lmm-card',
+                        vis ? 'visible' : 'hidden',
+                        m.isNew ? 'new' : '',
+                        m.starred ? 'starred' : '',
+                        isSelected ? 'selected' : ''
+                    ].filter(Boolean).join(' ');
 
-            // 备注显示（仅 grid 和 list 视图）
-            const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
+                    // 备注显示（仅 grid 和 list 视图）
+                    const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
 
-            return `
+                    return `
                         <div class="${cardClasses}" data-name="${this.esc(m.name)}">
                             ${dragHandle}
                             ${showCheck ? `<div class="lmm-check ${isSelected ? 'on' : ''}">${isSelected ? '✓' : ''}</div>` : ''}
@@ -3900,6 +3937,7 @@ refresh() {
                                     <span class="lmm-tag mode">${this.getModeIcon(modes)}</span>
                                     ${imgTypeTag}
                                     ${visionTag}
+                                    ${fileUploadTag}
                                     ${groupTags}
                                     ${m.isNew ? `<span class="lmm-tag new">${this.t('newFound')}</span>` : ''}
                                 </div>
@@ -3913,154 +3951,154 @@ refresh() {
                             ` : ''}
                         </div>
                     `;
-        }).join('');
+                }).join('');
 
-        grid.querySelectorAll('.lmm-card').forEach(card => {
-            const name = card.dataset.name;
+                grid.querySelectorAll('.lmm-card').forEach(card => {
+                    const name = card.dataset.name;
 
-            if (this.isModelSortMode) {
-                this.bindModelDragEvents(card);
-            } else if (this.isMultiSelectMode) {
-                card.onclick = () => {
-                    if (this.selectedModels.has(name)) {
-                        this.selectedModels.delete(name);
+                    if (this.isModelSortMode) {
+                        this.bindModelDragEvents(card);
+                    } else if (this.isMultiSelectMode) {
+                        card.onclick = () => {
+                            if (this.selectedModels.has(name)) {
+                                this.selectedModels.delete(name);
+                            } else {
+                                this.selectedModels.add(name);
+                            }
+                            this.refresh();
+                        };
                     } else {
-                        this.selectedModels.add(name);
+                        card.onclick = (e) => {
+                            if (e.target.closest('.lmm-card-actions')) return;
+                            const newVis = !this.dm.isVisible(name);
+                            this.dm.setVisibility(name, newVis);
+                            this.refresh();
+                            this.updateStats();
+                            this.updateFabBadge();
+                            this.triggerSyncOnChange();
+                        };
+                        card.ondblclick = () => this.openEditModal(name);
+
+                        const starBtn = card.querySelector('.lmm-star-btn');
+                        if (starBtn) {
+                            starBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                this.dm.toggleStar(name);
+                                this.refresh();
+                                this.updateTopbar();
+                                this.triggerSyncOnChange();
+                            };
+                        }
+
+                        const editBtn = card.querySelector('.lmm-edit-btn');
+                        if (editBtn) {
+                            editBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                this.openEditModal(name);
+                            };
+                        }
                     }
-                    this.refresh();
-                };
-            } else {
-                card.onclick = (e) => {
-                    if (e.target.closest('.lmm-card-actions')) return;
-                    const newVis = !this.dm.isVisible(name);
-                    this.dm.setVisibility(name, newVis);
-                    this.refresh();
-                    this.updateStats();
-                    this.updateFabBadge();
-                    this.triggerSyncOnChange();
-                };
-                card.ondblclick = () => this.openEditModal(name);
-
-                const starBtn = card.querySelector('.lmm-star-btn');
-                if (starBtn) {
-                    starBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.dm.toggleStar(name);
-                        this.refresh();
-                        this.updateTopbar();
-                        this.triggerSyncOnChange();
-                    };
-                }
-
-                const editBtn = card.querySelector('.lmm-edit-btn');
-                if (editBtn) {
-                    editBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.openEditModal(name);
-                    };
-                }
+                });
             }
-        });
-    }
 
-    this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
-    this.updateStats();
-    this.updateOrgFilter();
-}
+            this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
+            this.updateStats();
+            this.updateOrgFilter();
+        }
 
-updateStats() {
-    const modeModels = this.getModelsInCurrentMode();
-    const v = modeModels.filter(m => m.visible !== false).length;
-    this.$('#lmm-v').textContent = v;
-    this.$('#lmm-h').textContent = modeModels.length - v;
-    this.$('#lmm-t').textContent = modeModels.length;
-}
+        updateStats() {
+            const modeModels = this.getModelsInCurrentMode();
+            const v = modeModels.filter(m => m.visible !== false).length;
+            this.$('#lmm-v').textContent = v;
+            this.$('#lmm-h').textContent = modeModels.length - v;
+            this.$('#lmm-t').textContent = modeModels.length;
+        }
 
-// 计算模型在当前模式下的排序位置
-getModelRank(name) {
-    if (this.currentMode !== 'visible') return null;
-    const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
-    const customOrder = this.dm.getModelOrder(this.visibleSubMode);
+        // 计算模型在当前模式下的排序位置
+        getModelRank(name) {
+            if (this.currentMode !== 'visible') return null;
+            const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
+            const customOrder = this.dm.getModelOrder(this.visibleSubMode);
 
-    if (customOrder.length > 0) {
-        const sorted = [...models].sort((a, b) => {
-            let ai = customOrder.indexOf(a.name);
-            let bi = customOrder.indexOf(b.name);
-            if (ai === -1) ai = 9999;
-            if (bi === -1) bi = 9999;
-            return ai - bi;
-        });
-        const idx = sorted.findIndex(m => m.name === name);
-        return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-    }
-
-    const sidebarMode = this.getSidebarMode();
-    const orgOrder = this.dm.getOrgOrder(sidebarMode);
-    const sorted = [...models].sort((a, b) => {
-        const ai = orgOrder.indexOf(a.company);
-        const bi = orgOrder.indexOf(b.company);
-        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-    });
-    const idx = sorted.findIndex(m => m.name === name);
-    return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-}
-
-openEditModal(name) {
-    const m = this.dm.getModel(name);
-    if (!m) return;
-    this.editingModel = name;
-
-    const body = this.editModal.querySelector('#lmm-edit-body');
-    const allGroups = this.dm.getGroupNames();
-    const modelGroups = this.dm.getModelGroups(name);
-    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
-    const isVisible = m.visible !== false;
-
-    // 计算排序位置
-    let rankInfo = '';
-    if (isVisible) {
-        modes.forEach(mode => {
-            const visibleModels = this.dm.getAllModels().filter(
-                md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
-            );
-            const customOrder = this.dm.getModelOrder(mode);
-            const orgOrder = this.dm.getOrgOrder(mode);
-
-            let sorted;
             if (customOrder.length > 0) {
-                sorted = [...visibleModels].sort((a, b) => {
+                const sorted = [...models].sort((a, b) => {
                     let ai = customOrder.indexOf(a.name);
                     let bi = customOrder.indexOf(b.name);
                     if (ai === -1) ai = 9999;
                     if (bi === -1) bi = 9999;
                     return ai - bi;
                 });
-            } else {
-                sorted = [...visibleModels].sort((a, b) => {
-                    const ai = orgOrder.indexOf(a.company);
-                    const bi = orgOrder.indexOf(b.company);
-                    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+                const idx = sorted.findIndex(m => m.name === name);
+                return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+            }
+
+            const sidebarMode = this.getSidebarMode();
+            const orgOrder = this.dm.getOrgOrder(sidebarMode);
+            const sorted = [...models].sort((a, b) => {
+                const ai = orgOrder.indexOf(a.company);
+                const bi = orgOrder.indexOf(b.company);
+                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+            });
+            const idx = sorted.findIndex(m => m.name === name);
+            return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+        }
+
+        openEditModal(name) {
+            const m = this.dm.getModel(name);
+            if (!m) return;
+            this.editingModel = name;
+
+            const body = this.editModal.querySelector('#lmm-edit-body');
+            const allGroups = this.dm.getGroupNames();
+            const modelGroups = this.dm.getModelGroups(name);
+            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+            const isVisible = m.visible !== false;
+
+            // 计算排序位置
+            let rankInfo = '';
+            if (isVisible) {
+                modes.forEach(mode => {
+                    const visibleModels = this.dm.getAllModels().filter(
+                        md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
+                    );
+                    const customOrder = this.dm.getModelOrder(mode);
+                    const orgOrder = this.dm.getOrgOrder(mode);
+
+                    let sorted;
+                    if (customOrder.length > 0) {
+                        sorted = [...visibleModels].sort((a, b) => {
+                            let ai = customOrder.indexOf(a.name);
+                            let bi = customOrder.indexOf(b.name);
+                            if (ai === -1) ai = 9999;
+                            if (bi === -1) bi = 9999;
+                            return ai - bi;
+                        });
+                    } else {
+                        sorted = [...visibleModels].sort((a, b) => {
+                            const ai = orgOrder.indexOf(a.company);
+                            const bi = orgOrder.indexOf(b.company);
+                            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+                        });
+                    }
+
+                    const idx = sorted.findIndex(md => md.name === name);
+                    if (idx !== -1) {
+                        const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+                        rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
+                    }
                 });
             }
 
-            const idx = sorted.findIndex(md => md.name === name);
-            if (idx !== -1) {
-                const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-                rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
+            // Vision 显示
+            let visionDisplay = '';
+            if (typeof m.vision === 'string') {
+                const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
+                visionDisplay = visionLabels[m.vision] || m.vision;
+            } else {
+                visionDisplay = m.vision ? this.t('on') : this.t('off');
             }
-        });
-    }
 
-    // Vision 显示
-    let visionDisplay = '';
-    if (typeof m.vision === 'string') {
-        const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
-        visionDisplay = visionLabels[m.vision] || m.vision;
-    } else {
-        visionDisplay = m.vision ? this.t('on') : this.t('off');
-    }
-
-    body.innerHTML = `
+            body.innerHTML = `
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('modelName')}</span>
                     <span class="lmm-detail-value"><strong>${this.esc(name)}</strong></span>
@@ -4089,9 +4127,9 @@ openEditModal(name) {
                     <span class="lmm-detail-label">${this.t('modes')}</span>
                     <span class="lmm-detail-value">
                         ${modes.map(mode => {
-        const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-        return `<span class="lmm-tag mode">${icons[mode] || ''} ${mode}</span>`;
-    }).join(' ')}
+                const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+                return `<span class="lmm-tag mode">${icons[mode] || ''} ${mode}</span>`;
+            }).join(' ')}
                     </span>
                 </div>
                 <div class="lmm-detail-row">
@@ -4103,6 +4141,10 @@ openEditModal(name) {
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('vision')}</span>
                     <span class="lmm-detail-value">${visionDisplay}</span>
+                </div>
+                <div class="lmm-detail-row">
+                    <span class="lmm-detail-label">${this.t('pdfUpload')}</span>
+                    <span class="lmm-detail-value">${m.fileUpload ? this.t('on') : this.t('off')}</span>
                 </div>
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('belongGroups')}</span>
@@ -4120,139 +4162,139 @@ openEditModal(name) {
                 </div>
             `;
 
-    // 绑定事件
-    const starredSwitch = body.querySelector('#lmm-edit-starred');
-    if (starredSwitch) {
-        starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
-    }
-
-    const resetOrgBtn = body.querySelector('#lmm-reset-org');
-    if (resetOrgBtn) {
-        resetOrgBtn.onclick = () => {
-            // 重新分析组织
-            for (const rule of COMPANY_RULES) {
-                if (rule.patterns.some(p => p.test(name))) {
-                    body.querySelector('#lmm-edit-org').value = rule.company;
-                    break;
-                }
+            // 绑定事件
+            const starredSwitch = body.querySelector('#lmm-edit-starred');
+            if (starredSwitch) {
+                starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
             }
-        };
-    }
 
-    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
-        item.onclick = () => item.classList.toggle('checked');
-    });
+            const resetOrgBtn = body.querySelector('#lmm-reset-org');
+            if (resetOrgBtn) {
+                resetOrgBtn.onclick = () => {
+                    // 重新分析组织
+                    for (const rule of COMPANY_RULES) {
+                        if (rule.patterns.some(p => p.test(name))) {
+                            body.querySelector('#lmm-edit-org').value = rule.company;
+                            break;
+                        }
+                    }
+                };
+            }
 
-    // 更新模态框标题和按钮
-    this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
-    this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
-    this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
-    this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
+            body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
+                item.onclick = () => item.classList.toggle('checked');
+            });
 
-    this.editModalOverlay.classList.add('open');
-    this.editModal.classList.add('open');
-}
+            // 更新模态框标题和按钮
+            this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
+            this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
+            this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
+            this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
 
-closeEditModal() {
-    this.editModalOverlay.classList.remove('open');
-    this.editModal.classList.remove('open');
-    this.editingModel = null;
-}
-
-saveEdit() {
-    if (!this.editingModel) return;
-
-    const body = this.editModal.querySelector('#lmm-edit-body');
-    const company = body.querySelector('#lmm-edit-org').value.trim();
-    const icon = body.querySelector('#lmm-edit-icon').value.trim();
-    const note = body.querySelector('#lmm-edit-note').value.trim();
-    const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
-
-    const allGroups = this.dm.getGroupNames();
-    const selectedGroups = [];
-    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
-        selectedGroups.push(item.dataset.group);
-    });
-
-    allGroups.forEach(g => {
-        if (selectedGroups.includes(g)) {
-            this.dm.addToGroup(g, this.editingModel);
-        } else {
-            this.dm.removeFromGroup(g, this.editingModel);
+            this.editModalOverlay.classList.add('open');
+            this.editModal.classList.add('open');
         }
-    });
 
-    this.dm.updateModel(this.editingModel, {
-        company: company || 'Other',
-        companyManual: company !== '',
-        icon: icon || this.dm.getModel(this.editingModel).icon,
-        note: note,
-        starred: starred
-    });
+        closeEditModal() {
+            this.editModalOverlay.classList.remove('open');
+            this.editModal.classList.remove('open');
+            this.editingModel = null;
+        }
 
-    this.closeEditModal();
-    this.refresh();
-    this.updateSidebar();
-    this.updateTopbar();
-    this.scanner.toast(this.t('saved'), 'success');
-    this.triggerSyncOnChange();
-}
+        saveEdit() {
+            if (!this.editingModel) return;
 
-resetEdit() {
-    if (!this.editingModel) return;
-    this.dm.reanalyze(this.editingModel);
-    this.closeEditModal();
-    this.refresh();
-    this.updateSidebar();
-    this.updateTopbar();
-    this.scanner.toast(this.t('restored'), 'success');
-    this.triggerSyncOnChange();
-}
+            const body = this.editModal.querySelector('#lmm-edit-body');
+            const company = body.querySelector('#lmm-edit-org').value.trim();
+            const icon = body.querySelector('#lmm-edit-icon').value.trim();
+            const note = body.querySelector('#lmm-edit-note').value.trim();
+            const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
 
-openGroupModal() {
-    this.renderGroupList();
-    this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
-    this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
-    this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
-    this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
-    this.groupModalOverlay.classList.add('open');
-    this.groupModal.classList.add('open');
-}
+            const allGroups = this.dm.getGroupNames();
+            const selectedGroups = [];
+            body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
+                selectedGroups.push(item.dataset.group);
+            });
 
-closeGroupModal() {
-    this.groupModalOverlay.classList.remove('open');
-    this.groupModal.classList.remove('open');
-}
+            allGroups.forEach(g => {
+                if (selectedGroups.includes(g)) {
+                    this.dm.addToGroup(g, this.editingModel);
+                } else {
+                    this.dm.removeFromGroup(g, this.editingModel);
+                }
+            });
 
-createGroup() {
-    const input = this.groupModal.querySelector('#lmm-group-new-name');
-    const name = input.value.trim();
-    if (!name) {
-        this.scanner.toast(this.t('enterGroupName'), 'warning');
-        return;
-    }
-    if (this.dm.createGroup(name)) {
-        input.value = '';
-        this.renderGroupList();
-        this.updateTopbar();
-        this.scanner.toast(this.t('groupCreated'), 'success');
-        this.triggerSyncOnChange();
-    } else {
-        this.scanner.toast(this.t('groupExists'), 'warning');
-    }
-}
+            this.dm.updateModel(this.editingModel, {
+                company: company || 'Other',
+                companyManual: company !== '',
+                icon: icon || this.dm.getModel(this.editingModel).icon,
+                note: note,
+                starred: starred
+            });
 
-renderGroupList() {
-    const list = this.groupModal.querySelector('#lmm-group-list');
-    const groups = this.dm.getGroups();
-    const names = Object.keys(groups);
+            this.closeEditModal();
+            this.refresh();
+            this.updateSidebar();
+            this.updateTopbar();
+            this.scanner.toast(this.t('saved'), 'success');
+            this.triggerSyncOnChange();
+        }
 
-    if (names.length === 0) {
-        list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
-        return;
-    }
+        resetEdit() {
+            if (!this.editingModel) return;
+            this.dm.reanalyze(this.editingModel);
+            this.closeEditModal();
+            this.refresh();
+            this.updateSidebar();
+            this.updateTopbar();
+            this.scanner.toast(this.t('restored'), 'success');
+            this.triggerSyncOnChange();
+        }
 
-    list.innerHTML = names.map(name => `
+        openGroupModal() {
+            this.renderGroupList();
+            this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
+            this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
+            this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
+            this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
+            this.groupModalOverlay.classList.add('open');
+            this.groupModal.classList.add('open');
+        }
+
+        closeGroupModal() {
+            this.groupModalOverlay.classList.remove('open');
+            this.groupModal.classList.remove('open');
+        }
+
+        createGroup() {
+            const input = this.groupModal.querySelector('#lmm-group-new-name');
+            const name = input.value.trim();
+            if (!name) {
+                this.scanner.toast(this.t('enterGroupName'), 'warning');
+                return;
+            }
+            if (this.dm.createGroup(name)) {
+                input.value = '';
+                this.renderGroupList();
+                this.updateTopbar();
+                this.scanner.toast(this.t('groupCreated'), 'success');
+                this.triggerSyncOnChange();
+            } else {
+                this.scanner.toast(this.t('groupExists'), 'warning');
+            }
+        }
+
+        renderGroupList() {
+            const list = this.groupModal.querySelector('#lmm-group-list');
+            const groups = this.dm.getGroups();
+            const names = Object.keys(groups);
+
+            if (names.length === 0) {
+                list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
+                return;
+            }
+
+            list.innerHTML = names.map(name => `
                 <div class="lmm-group-item" data-group="${this.esc(name)}">
                     <span class="name">📁 ${this.esc(name)}</span>
                     <span style="color:var(--lmm-text2);font-size:10px">${groups[name].length} ${this.t('models')}</span>
@@ -4264,92 +4306,92 @@ renderGroupList() {
                 </div>
             `).join('');
 
-    list.querySelectorAll('.lmm-group-item').forEach(item => {
-        const name = item.dataset.group;
+            list.querySelectorAll('.lmm-group-item').forEach(item => {
+                const name = item.dataset.group;
 
-        item.querySelector('.lmm-export-group-btn').onclick = () => {
-            const data = this.dm.export(name);
-            const blob = new Blob([data], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            this.scanner.toast(this.t('groupExported'), 'success');
-        };
+                item.querySelector('.lmm-export-group-btn').onclick = () => {
+                    const data = this.dm.export(name);
+                    const blob = new Blob([data], { type: 'application/json' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
+                    a.click();
+                    this.scanner.toast(this.t('groupExported'), 'success');
+                };
 
-        item.querySelector('.lmm-rename-btn').onclick = () => {
-            const newName = prompt(this.t('inputNewName'), name);
-            if (newName && newName.trim() && newName !== name) {
-                if (this.dm.renameGroup(name, newName.trim())) {
-                    this.renderGroupList();
-                    this.updateTopbar();
-                    this.scanner.toast(this.t('renamed'), 'success');
-                    this.triggerSyncOnChange();
-                } else {
-                    this.scanner.toast(this.t('nameExists'), 'warning');
-                }
-            }
-        };
-        item.querySelector('.lmm-delete-btn').onclick = () => {
-            if (confirm(this.t('confirmDelete').replace('{0}', name))) {
-                this.dm.deleteGroup(name);
-                this.renderGroupList();
-                this.updateTopbar();
-                this.scanner.toast(this.t('deleted'), 'success');
-                this.triggerSyncOnChange();
-            }
-        };
-    });
-}
+                item.querySelector('.lmm-rename-btn').onclick = () => {
+                    const newName = prompt(this.t('inputNewName'), name);
+                    if (newName && newName.trim() && newName !== name) {
+                        if (this.dm.renameGroup(name, newName.trim())) {
+                            this.renderGroupList();
+                            this.updateTopbar();
+                            this.scanner.toast(this.t('renamed'), 'success');
+                            this.triggerSyncOnChange();
+                        } else {
+                            this.scanner.toast(this.t('nameExists'), 'warning');
+                        }
+                    }
+                };
+                item.querySelector('.lmm-delete-btn').onclick = () => {
+                    if (confirm(this.t('confirmDelete').replace('{0}', name))) {
+                        this.dm.deleteGroup(name);
+                        this.renderGroupList();
+                        this.updateTopbar();
+                        this.scanner.toast(this.t('deleted'), 'success');
+                        this.triggerSyncOnChange();
+                    }
+                };
+            });
+        }
 
-openSettingsModal() {
-    const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
-    langSelect.value = this.dm.getLanguage();
+        openSettingsModal() {
+            const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
+            langSelect.value = this.dm.getLanguage();
 
-    const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
-    alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
+            const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
+            alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
 
-    const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
-    lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
+            const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
+            lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
 
-    const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
-    autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
-    this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
+            const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
+            autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
+            this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
 
-    const syncMode = this.dm.data.settings.autoSyncMode || 'change';
-    this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
-        radio.checked = radio.value === syncMode;
-    });
-    this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
+            const syncMode = this.dm.data.settings.autoSyncMode || 'change';
+            this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
+                radio.checked = radio.value === syncMode;
+            });
+            this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
 
-    this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
-    this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
+            this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
+            this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
 
-    this.updateSettingsModalI18n();
-    this.settingsModalOverlay.classList.add('open');
-    this.settingsModal.classList.add('open');
-}
+            this.updateSettingsModalI18n();
+            this.settingsModalOverlay.classList.add('open');
+            this.settingsModal.classList.add('open');
+        }
 
-closeSettingsModal() {
-    this.settingsModalOverlay.classList.remove('open');
-    this.settingsModal.classList.remove('open');
-}
-}
+        closeSettingsModal() {
+            this.settingsModalOverlay.classList.remove('open');
+            this.settingsModal.classList.remove('open');
+        }
+    }
 
-// ==================== 初始化 ====================
-function init() {
-    console.log(`[Arena Manager] v${VERSION} 启动`);
-    const dm = new DataManager();
-    const scanner = new Scanner(dm);
-    const ui = new UI(dm, scanner);
-    ui.init();
-    scanner.startObserving();
-    setTimeout(() => scanner.scan(), 2000);
-}
+    // ==================== 初始化 ====================
+    function init() {
+        console.log(`[Arena Manager] v${VERSION} 启动`);
+        const dm = new DataManager();
+        const scanner = new Scanner(dm);
+        const ui = new UI(dm, scanner);
+        ui.init();
+        scanner.startObserving();
+        setTimeout(() => scanner.scan(), 2000);
+    }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
