@@ -1435,9 +1435,9 @@
             useFolder: true
         },
         video: {
-            tier1: [],
-            tier2: [],
-            useFolder: false
+            tier1: ['Google', 'OpenAI', 'xAI', 'Alibaba', 'Bytedance', 'KlingAI', 'Shengshu'],
+            tier2: ['Luma AI', 'MiniMax', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Gemmo AI', 'Runway'],
+            useFolder: true
         }
     };
 
@@ -1447,8 +1447,8 @@
     };
 
     const COMPANY_RULES = [
-        { patterns: [/^gemini/i, /^gemma/i, /^imagen/i], company: 'Google', icon: '🔵' },
-        { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i], company: 'OpenAI', icon: '🟢' },
+        { patterns: [/^gemini/i, /^gemma/i, /^imagen/i, /^veo/i], company: 'Google', icon: '🔵' },
+        { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i, /^sora/i], company: 'OpenAI', icon: '🟢' },
         { patterns: [/^claude/i], company: 'Anthropic', icon: '🟤' },
         { patterns: [/^grok/i], company: 'xAI', icon: '⚫' },
         { patterns: [/^deepseek/i], company: 'DeepSeek', icon: '🐋' },
@@ -1457,7 +1457,7 @@
         { patterns: [/^kimi/i], company: 'Moonshot', icon: '🌙' },
         { patterns: [/^ernie/i], company: 'Baidu', icon: '🔴' },
         { patterns: [/^mistral/i, /^magistral/i, /^devstral/i], company: 'Mistral', icon: '🟠' },
-        { patterns: [/^minimax/i], company: 'MiniMax', icon: '🎯' },
+        { patterns: [/^minimax/i, /^hailuo/i], company: 'MiniMax', icon: '🎯' },
         { patterns: [/^longcat/i], company: 'Meituan', icon: '🐱' },
         { patterns: [/^mimo/i], company: 'Xiaomi', icon: '🍊' },
         { patterns: [/^hunyuan/i], company: 'Tencent', icon: '🐧' },
@@ -1478,7 +1478,7 @@
         { patterns: [/^mai-/i, /^microsoft/i], company: 'Microsoft AI', icon: '🪟' },
         { patterns: [/^vidu/i], company: 'Shengshu', icon: '🎬' },
         { patterns: [/^recraft/i], company: 'Recraft', icon: '🎨' },
-        { patterns: [/^photon/i], company: 'Luma AI', icon: '💡' },
+        { patterns: [/^photon/i, /^ray/i], company: 'Luma AI', icon: '💡' },
         { patterns: [/^ideogram/i], company: 'Ideogram', icon: '✏️' },
         { patterns: [/^reve/i], company: 'Reve', icon: '💭' },
         { patterns: [/^lucid/i], company: 'Leonardo AI', icon: '🖼️' },
@@ -1486,6 +1486,12 @@
         { patterns: [/^yi-/i], company: '01 AI', icon: '0️⃣' },
         { patterns: [/^athene/i], company: 'NexusFlow', icon: '🔗' },
         { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
+        { patterns: [/^kling/i], company: 'KlingAI', icon: '🪐' },
+        { patterns: [/^kandinsky/i], company: 'Kandinsky', icon: '🇰🇱' }
+        { patterns: [/^ltx/i], company: 'lightricks', icon: '🥨' },
+        { patterns: [/^pika/i], company: 'Pika', icon: '🐇' },
+        { patterns: [/^mochi/i], company: 'Gemmo AI', icon: '📚' },
+        { patterns: [/^runway/i], company: 'Runway', icon: '📎' }
     ];
 
     const ICON_TO_ORG = {
