@@ -2904,11 +2904,5 @@
     "code": [],
     "video": []
   },
-  "groups": {
-    "32": [
-      "gemini-3-flash (thinking-minimal)",
-      "grok-4-0709",
-      "grok-4-1-fast-non-reasoning"
-    ]
-  }
+  "groups": {}
 }
