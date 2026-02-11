@@ -2897,22 +2897,6 @@
     ],
     "video": []
   },
-  "settings": {
-    "showNewAlert": true,
-    "defaultVisible": true,
-    "language": "zh-CN",
-    "gistId": "c7a9be5ae56c73684ba022cc78ca644e",
-    "autoSync": false,
-    "autoSyncMode": "change",
-    "autoSyncInterval": 5,
-    "lockFabPosition": true,
-    "fabPosition": {
-      "right": 12,
-      "top": null,
-      "bottom": null
-    },
-    "lastRecommendedDate": ""
-  },
   "modelOrder": {
     "text": [],
     "search": [],
