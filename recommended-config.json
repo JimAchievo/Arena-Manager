@@ -1,24 +1,10 @@
 {
   "models": {
-    "gemini-3-flash-grounding": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "gemini-3-pro-grounding": {
       "visible": true,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "search"
       ],
@@ -32,35 +18,7 @@
       "visible": true,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.1-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.2-search-non-reasoning": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "search"
       ],
@@ -74,7 +32,7 @@
       "visible": true,
       "company": "xAI",
       "icon": "⚫",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "search"
       ],
@@ -88,49 +46,7 @@
       "visible": true,
       "company": "Anthropic",
       "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-fast-search": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "o3-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-pro-grounding": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "search"
       ],
@@ -144,91 +60,7 @@
       "visible": true,
       "company": "Perplexity",
       "icon": "❓",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-search": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-sonnet-4-5-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-1-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.1-search-sp": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "search"
       ],
@@ -242,7 +74,7 @@
       "visible": true,
       "company": "Anthropic",
       "icon": "🟤",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -257,7 +89,7 @@
       "visible": true,
       "company": "Anthropic",
       "icon": "🟤",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -272,7 +104,7 @@
       "visible": true,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -287,7 +119,7 @@
       "visible": true,
       "company": "xAI",
       "icon": "⚫",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -295,80 +127,6 @@
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-3-flash": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": true
-    },
-    "claude-opus-4-5-20251101-thinking-32k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-5-20251101": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": true
-    },
-    "grok-4.1": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.1-high": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": false
     },
@@ -376,115 +134,13 @@
       "visible": true,
       "company": "Baidu",
       "icon": "🔴",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text"
       ],
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-sonnet-4-5-20250929": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": true
-    },
-    "claude-sonnet-4-5-20250929-thinking-32k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-pro": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": true
-    },
-    "ernie-5.0-preview-1203": {
-      "visible": false,
-      "company": "Baidu",
-      "icon": "🔴",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-1-20250805-thinking-16k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-1-20250805": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "chatgpt-4o-latest-20250326": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": false
     },
@@ -492,7 +148,7 @@
       "visible": true,
       "company": "Z.ai",
       "icon": "🔮",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -507,7 +163,7 @@
       "visible": true,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -517,214 +173,12 @@
       "vision": true,
       "note": "",
       "fileUpload": true
-    },
-    "gpt-5.1": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": true
-    },
-    "gpt-5.2": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": true
-    },
-    "gpt-5-high": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-max-preview": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "kimi-k2.5-instant": {
-      "visible": false,
-      "company": "Moonshot",
-      "icon": "🌙",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "o3-2025-04-16": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-1-fast-reasoning": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "kimi-k2-thinking-turbo": {
-      "visible": false,
-      "company": "Moonshot",
-      "icon": "🌙",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5-chat": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "glm-4.6": {
-      "visible": false,
-      "company": "Z.ai",
-      "icon": "🔮",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-max-2025-09-23": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-20250514-thinking-16k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-235b-a22b-instruct-2507": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-fast-chat": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
     },
     "deepseek-v3.2-thinking": {
       "visible": true,
       "company": "DeepSeek",
       "icon": "🐋",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -732,63 +186,6 @@
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "deepseek-v3.2": {
-      "visible": false,
-      "company": "DeepSeek",
-      "icon": "🐋",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "kimi-k2-0905-preview": {
-      "visible": false,
-      "company": "Moonshot",
-      "icon": "🌙",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "kimi-k2-0711-preview": {
-      "visible": false,
-      "company": "Moonshot",
-      "icon": "🌙",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-vl-235b-a22b-instruct": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": false
     },
@@ -796,194 +193,10 @@
       "visible": true,
       "company": "Mistral",
       "icon": "🟠",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-20250514": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-4.1-2025-04-14": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "mistral-medium-2508": {
-      "visible": false,
-      "company": "Mistral",
-      "icon": "🟠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-flash": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-0709": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-flash-preview-09-2025": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-haiku-4-5-20251001": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": true
-    },
-    "grok-4-fast-reasoning": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-235b-a22b-no-thinking": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-next-80b-a3b-instruct": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-sonnet-4-20250514-thinking-32k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "longcat-flash-chat": {
-      "visible": false,
-      "company": "Meituan",
-      "icon": "🐱",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-235b-a22b-thinking-2507": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
       ],
       "starred": false,
       "isNew": false,
@@ -995,156 +208,13 @@
       "visible": true,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text"
       ],
       "starred": false,
       "isNew": false,
       "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "mimo-v2-flash": {
-      "visible": false,
-      "company": "Xiaomi",
-      "icon": "🍊",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "mimo-v2-flash (thinking)": {
-      "visible": false,
-      "company": "Xiaomi",
-      "icon": "🍊",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "deepseek-v3-0324": {
-      "visible": false,
-      "company": "DeepSeek",
-      "icon": "🐋",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "hunyuan-vision-1.5-thinking": {
-      "visible": false,
-      "company": "Tencent",
-      "icon": "🐧",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "o4-mini-2025-04-16": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5-mini-high": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-sonnet-4-20250514": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-3-7-sonnet-20250219-thinking-32k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "hunyuan-t1-20250711": {
-      "visible": false,
-      "company": "Tencent",
-      "icon": "🐧",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-coder-480b-a35b-instruct": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
       "note": "",
       "fileUpload": false
     },
@@ -1152,7 +222,7 @@
       "visible": true,
       "company": "MiniMax",
       "icon": "🎯",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -1160,651 +230,6 @@
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "mistral-medium-2505": {
-      "visible": false,
-      "company": "Mistral",
-      "icon": "🟠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-30b-a3b-instruct-2507": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-4.1-mini-2025-04-14": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-flash-lite-preview-09-2025-no-thinking": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-flash-lite-preview-06-17-thinking": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-235b-a22b": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-3-5-sonnet-20241022": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-3-7-sonnet-20250219": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-next-80b-a3b-thinking": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "minimax-m1": {
-      "visible": false,
-      "company": "MiniMax",
-      "icon": "🎯",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "amazon-nova-experimental-chat-11-10": {
-      "visible": false,
-      "company": "Amazon",
-      "icon": "📦",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemma-3-27b-it": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-3-mini-high": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.0-flash-001": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-3-mini-beta": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "mistral-small-2506": {
-      "visible": false,
-      "company": "Mistral",
-      "icon": "🟠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "intellect-3": {
-      "visible": false,
-      "company": "Prime Intellect",
-      "icon": "🧠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-oss-120b": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "command-a-03-2025": {
-      "visible": false,
-      "company": "Cohere",
-      "icon": "🟡",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "o3-mini": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "minimax-m2": {
-      "visible": false,
-      "company": "MiniMax",
-      "icon": "🎯",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "ling-flash-2.0": {
-      "visible": false,
-      "company": "Ant Group",
-      "icon": "🐜",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "step-3": {
-      "visible": false,
-      "company": "StepFun",
-      "icon": "👣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5-nano-high": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "nova-2-lite": {
-      "visible": false,
-      "company": "Amazon",
-      "icon": "📦",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwq-32b": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-30b-a3b": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "llama-4-maverick-17b-128e-instruct": {
-      "visible": false,
-      "company": "Meta",
-      "icon": "🔷",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "olmo-3.1-32b-instruct": {
-      "visible": false,
-      "company": "Allen AI",
-      "icon": "🔬",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-3-5-haiku-20241022": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "ring-flash-2.0": {
-      "visible": false,
-      "company": "Ant Group",
-      "icon": "🐜",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "llama-3.3-70b-instruct": {
-      "visible": false,
-      "company": "Meta",
-      "icon": "🔷",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemma-3n-e4b-it": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-oss-20b": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "nvidia-nemotron-3-nano-30b-a3b-bf16": {
-      "visible": false,
-      "company": "Nvidia",
-      "icon": "💚",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "mercury": {
-      "visible": false,
-      "company": "Inception AI",
-      "icon": "☿️",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "olmo-3-32b-think": {
-      "visible": false,
-      "company": "Allen AI",
-      "icon": "🔬",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "magistral-medium-2506": {
-      "visible": false,
-      "company": "Mistral",
-      "icon": "🟠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "mistral-small-3.1-24b-instruct-2503": {
-      "visible": false,
-      "company": "Mistral",
-      "icon": "🟠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "ibm-granite-h-small": {
-      "visible": false,
-      "company": "IBM",
-      "icon": "💠",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "olmo-3.1-32b-think": {
-      "visible": false,
-      "company": "Allen AI",
-      "icon": "🔬",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-vl-8b-thinking": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-vl-8b-instruct": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "step-3.5-flash": {
-      "visible": false,
-      "company": "StepFun",
-      "icon": "👣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-1-fast-non-reasoning": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "amazon.nova-pro-v1:0": {
-      "visible": false,
-      "company": "Amazon",
-      "icon": "📦",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": false
     },
@@ -1812,164 +237,7 @@
       "visible": true,
       "company": "Moonshot",
       "icon": "🌙",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "amazon-nova-experimental-chat-12-10": {
-      "visible": false,
-      "company": "Amazon",
-      "icon": "📦",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "ernie-5.0-preview-1220": {
-      "visible": false,
-      "company": "Baidu",
-      "icon": "🔴",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-max-2025-09-26": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "MiMo-7B": {
-      "visible": false,
-      "company": "Xiaomi",
-      "icon": "🍊",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen3-omni-flash": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen-vl-max-2025-08-13": {
-      "visible": false,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "minimax-m2-preview": {
-      "visible": false,
-      "company": "MiniMax",
-      "icon": "🎯",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5-high-new-system-prompt": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "MiMo-VL-7B-RL-2508": {
-      "visible": false,
-      "company": "Xiaomi",
-      "icon": "🍊",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "glm-4.7-flash": {
-      "visible": false,
-      "company": "Z.ai",
-      "icon": "🔮",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-3-flash (thinking-minimal)": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -1984,7 +252,7 @@
       "visible": true,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -1999,7 +267,1907 @@
       "visible": true,
       "company": "Bytedance",
       "icon": "🎵",
-      "companyManual": false,
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.2-codex": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-image-1.5-high-fidelity": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3-pro-image-preview-2k (nano-banana-pro)": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "flux-2-max": {
+      "visible": true,
+      "company": "Black Forest Labs",
+      "icon": "🌊",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "hunyuan-image-3.0": {
+      "visible": true,
+      "company": "Tencent",
+      "icon": "🐧",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "seedream-4.5": {
+      "visible": true,
+      "company": "Bytedance",
+      "icon": "🎵",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen-image-2512": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "wan2.6-t2i": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen-image-edit-2511": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "i2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "wan2.6-image": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "i2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "hunyuan-image-3.0-instruct": {
+      "visible": true,
+      "company": "Tencent",
+      "icon": "🐧",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "i2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-imagine-image-pro": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3-flash-grounding": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.1-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.2-search-non-reasoning": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-fast-search": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "o3-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-pro-grounding": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-search": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-5-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-1-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.1-search-sp": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3-flash": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "claude-opus-4-5-20251101-thinking-32k": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-5-20251101": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": true
+    },
+    "grok-4.1": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.1-high": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-5-20250929": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": true
+    },
+    "claude-sonnet-4-5-20250929-thinking-32k": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-pro": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "ernie-5.0-preview-1203": {
+      "visible": false,
+      "company": "Baidu",
+      "icon": "🔴",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-1-20250805-thinking-16k": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-1-20250805": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "chatgpt-4o-latest-20250326": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.1": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "gpt-5.2": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "gpt-5-high": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-max-preview": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "kimi-k2.5-instant": {
+      "visible": false,
+      "company": "Moonshot",
+      "icon": "🌙",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "o3-2025-04-16": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-1-fast-reasoning": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "kimi-k2-thinking-turbo": {
+      "visible": false,
+      "company": "Moonshot",
+      "icon": "🌙",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5-chat": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "glm-4.6": {
+      "visible": false,
+      "company": "Z.ai",
+      "icon": "🔮",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-max-2025-09-23": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-20250514-thinking-16k": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-235b-a22b-instruct-2507": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-fast-chat": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "deepseek-v3.2": {
+      "visible": false,
+      "company": "DeepSeek",
+      "icon": "🐋",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "kimi-k2-0905-preview": {
+      "visible": false,
+      "company": "Moonshot",
+      "icon": "🌙",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "kimi-k2-0711-preview": {
+      "visible": false,
+      "company": "Moonshot",
+      "icon": "🌙",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-vl-235b-a22b-instruct": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-20250514": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-4.1-2025-04-14": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "mistral-medium-2508": {
+      "visible": false,
+      "company": "Mistral",
+      "icon": "🟠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-flash": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-0709": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-flash-preview-09-2025": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-haiku-4-5-20251001": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": true
+    },
+    "grok-4-fast-reasoning": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-235b-a22b-no-thinking": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-next-80b-a3b-instruct": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-20250514-thinking-32k": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "longcat-flash-chat": {
+      "visible": false,
+      "company": "Meituan",
+      "icon": "🐱",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-235b-a22b-thinking-2507": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mimo-v2-flash": {
+      "visible": false,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mimo-v2-flash (thinking)": {
+      "visible": false,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "deepseek-v3-0324": {
+      "visible": false,
+      "company": "DeepSeek",
+      "icon": "🐋",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "hunyuan-vision-1.5-thinking": {
+      "visible": false,
+      "company": "Tencent",
+      "icon": "🐧",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "o4-mini-2025-04-16": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5-mini-high": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-20250514": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-3-7-sonnet-20250219-thinking-32k": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "hunyuan-t1-20250711": {
+      "visible": false,
+      "company": "Tencent",
+      "icon": "🐧",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-coder-480b-a35b-instruct": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mistral-medium-2505": {
+      "visible": false,
+      "company": "Mistral",
+      "icon": "🟠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-30b-a3b-instruct-2507": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-4.1-mini-2025-04-14": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-flash-lite-preview-09-2025-no-thinking": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-flash-lite-preview-06-17-thinking": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-235b-a22b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-3-5-sonnet-20241022": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-3-7-sonnet-20250219": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-next-80b-a3b-thinking": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "minimax-m1": {
+      "visible": false,
+      "company": "MiniMax",
+      "icon": "🎯",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "amazon-nova-experimental-chat-11-10": {
+      "visible": false,
+      "company": "Amazon",
+      "icon": "📦",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemma-3-27b-it": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-3-mini-high": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.0-flash-001": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-3-mini-beta": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mistral-small-2506": {
+      "visible": false,
+      "company": "Mistral",
+      "icon": "🟠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "intellect-3": {
+      "visible": false,
+      "company": "Prime Intellect",
+      "icon": "🧠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-oss-120b": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "command-a-03-2025": {
+      "visible": false,
+      "company": "Cohere",
+      "icon": "🟡",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "o3-mini": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "minimax-m2": {
+      "visible": false,
+      "company": "MiniMax",
+      "icon": "🎯",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "ling-flash-2.0": {
+      "visible": false,
+      "company": "Ant Group",
+      "icon": "🐜",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "step-3": {
+      "visible": false,
+      "company": "StepFun",
+      "icon": "👣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5-nano-high": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "nova-2-lite": {
+      "visible": false,
+      "company": "Amazon",
+      "icon": "📦",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwq-32b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-30b-a3b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "llama-4-maverick-17b-128e-instruct": {
+      "visible": false,
+      "company": "Meta",
+      "icon": "🔷",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "olmo-3.1-32b-instruct": {
+      "visible": false,
+      "company": "Allen AI",
+      "icon": "🔬",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-3-5-haiku-20241022": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "ring-flash-2.0": {
+      "visible": false,
+      "company": "Ant Group",
+      "icon": "🐜",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "llama-3.3-70b-instruct": {
+      "visible": false,
+      "company": "Meta",
+      "icon": "🔷",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemma-3n-e4b-it": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-oss-20b": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "nvidia-nemotron-3-nano-30b-a3b-bf16": {
+      "visible": false,
+      "company": "Nvidia",
+      "icon": "💚",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mercury": {
+      "visible": false,
+      "company": "Inception AI",
+      "icon": "☿️",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "olmo-3-32b-think": {
+      "visible": false,
+      "company": "Allen AI",
+      "icon": "🔬",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "magistral-medium-2506": {
+      "visible": false,
+      "company": "Mistral",
+      "icon": "🟠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mistral-small-3.1-24b-instruct-2503": {
+      "visible": false,
+      "company": "Mistral",
+      "icon": "🟠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "ibm-granite-h-small": {
+      "visible": false,
+      "company": "IBM",
+      "icon": "💠",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "olmo-3.1-32b-think": {
+      "visible": false,
+      "company": "Allen AI",
+      "icon": "🔬",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-vl-8b-thinking": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-vl-8b-instruct": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "step-3.5-flash": {
+      "visible": false,
+      "company": "StepFun",
+      "icon": "👣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-1-fast-non-reasoning": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "amazon.nova-pro-v1:0": {
+      "visible": false,
+      "company": "Amazon",
+      "icon": "📦",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "amazon-nova-experimental-chat-12-10": {
+      "visible": false,
+      "company": "Amazon",
+      "icon": "📦",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "ernie-5.0-preview-1220": {
+      "visible": false,
+      "company": "Baidu",
+      "icon": "🔴",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-max-2025-09-26": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "MiMo-7B": {
+      "visible": false,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3-omni-flash": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen-vl-max-2025-08-13": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "minimax-m2-preview": {
+      "visible": false,
+      "company": "MiniMax",
+      "icon": "🎯",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5-high-new-system-prompt": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "MiMo-VL-7B-RL-2508": {
+      "visible": false,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": true,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "glm-4.7-flash": {
+      "visible": false,
+      "company": "Z.ai",
+      "icon": "🔮",
+      "companyManual": true,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3-flash (thinking-minimal)": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": true,
       "modes": [
         "text",
         "code"
@@ -2014,7 +2182,7 @@
       "visible": false,
       "company": "Allen AI",
       "icon": "🔬",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "text"
       ],
@@ -2028,7 +2196,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2042,21 +2210,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.2-codex": {
-      "visible": true,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2070,7 +2224,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2084,7 +2238,7 @@
       "visible": false,
       "company": "KwaiKAT",
       "icon": "🎥",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2098,7 +2252,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2112,7 +2266,7 @@
       "visible": false,
       "company": "Mistral",
       "icon": "🟠",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2126,7 +2280,7 @@
       "visible": false,
       "company": "xAI",
       "icon": "⚫",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2140,7 +2294,7 @@
       "visible": false,
       "company": "Mistral",
       "icon": "🟠",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2154,7 +2308,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "code"
       ],
@@ -2164,53 +2318,11 @@
       "note": "",
       "fileUpload": false
     },
-    "gpt-image-1.5-high-fidelity": {
-      "visible": true,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-3-pro-image-preview-2k (nano-banana-pro)": {
-      "visible": true,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
-    "flux-2-max": {
-      "visible": true,
-      "company": "Black Forest Labs",
-      "icon": "🌊",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
     "flux-2-flex": {
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2224,27 +2336,13 @@
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
       "starred": false,
       "isNew": false,
       "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
-    "hunyuan-image-3.0": {
-      "visible": true,
-      "company": "Tencent",
-      "icon": "🐧",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
       "note": "",
       "fileUpload": false
     },
@@ -2252,41 +2350,13 @@
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
       "starred": false,
       "isNew": false,
       "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
-    "seedream-4.5": {
-      "visible": true,
-      "company": "Bytedance",
-      "icon": "🎵",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
-    "qwen-image-2512": {
-      "visible": true,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
       "note": "",
       "fileUpload": false
     },
@@ -2294,7 +2364,7 @@
       "visible": false,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2308,7 +2378,7 @@
       "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2322,7 +2392,7 @@
       "visible": false,
       "company": "Bytedance",
       "icon": "🎵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2336,7 +2406,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2350,7 +2420,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2360,25 +2430,11 @@
       "note": "",
       "fileUpload": false
     },
-    "wan2.6-t2i": {
-      "visible": true,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
-      "note": "",
-      "fileUpload": false
-    },
     "mai-image-1": {
       "visible": false,
       "company": "Microsoft AI",
       "icon": "🪟",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2392,7 +2448,7 @@
       "visible": false,
       "company": "Bytedance",
       "icon": "🎵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2406,7 +2462,7 @@
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2420,7 +2476,7 @@
       "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2434,7 +2490,7 @@
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2448,7 +2504,7 @@
       "visible": false,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2462,7 +2518,7 @@
       "visible": false,
       "company": "Pruna",
       "icon": "🍑",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2476,7 +2532,7 @@
       "visible": false,
       "company": "Ideogram",
       "icon": "✏️",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2490,7 +2546,7 @@
       "visible": false,
       "company": "Luma AI",
       "icon": "💡",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2504,7 +2560,7 @@
       "visible": false,
       "company": "Recraft",
       "icon": "🎨",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2518,7 +2574,7 @@
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2532,7 +2588,7 @@
       "visible": false,
       "company": "Leonardo AI",
       "icon": "🖼️",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2546,7 +2602,7 @@
       "visible": false,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2560,7 +2616,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2574,7 +2630,7 @@
       "visible": false,
       "company": "Black Forest Labs",
       "icon": "🌊",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2588,7 +2644,7 @@
       "visible": false,
       "company": "Shengshu",
       "icon": "🎬",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2602,7 +2658,7 @@
       "visible": false,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2612,25 +2668,11 @@
       "note": "",
       "fileUpload": false
     },
-    "qwen-image-edit-2511": {
-      "visible": true,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "i2i",
-      "note": "",
-      "fileUpload": false
-    },
     "imagen-4.0-ultra-generate-001": {
       "visible": false,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2644,21 +2686,7 @@
       "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "i2i",
-      "note": "",
-      "fileUpload": false
-    },
-    "wan2.6-image": {
-      "visible": true,
-      "company": "Alibaba",
-      "icon": "🟣",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2672,7 +2700,7 @@
       "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2686,7 +2714,7 @@
       "visible": false,
       "company": "Pruna",
       "icon": "🍑",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2700,7 +2728,7 @@
       "visible": false,
       "company": "Tencent",
       "icon": "🐧",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2714,7 +2742,7 @@
       "visible": false,
       "company": "Reve",
       "icon": "💭",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2728,7 +2756,7 @@
       "visible": false,
       "company": "Reve",
       "icon": "💭",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2742,7 +2770,7 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2756,7 +2784,7 @@
       "visible": false,
       "company": "Bytedance",
       "icon": "🎵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2770,7 +2798,7 @@
       "visible": false,
       "company": "Google",
       "icon": "🔵",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2780,39 +2808,11 @@
       "note": "",
       "fileUpload": false
     },
-    "hunyuan-image-3.0-instruct": {
-      "visible": true,
-      "company": "Tencent",
-      "icon": "🐧",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "i2i",
-      "note": "",
-      "fileUpload": false
-    },
     "grok-imagine-image": {
       "visible": false,
       "company": "xAI",
       "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-imagine-image-pro": {
-      "visible": true,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
+      "companyManual": true,
       "modes": [
         "image"
       ],
@@ -2904,5 +2904,7 @@
     "code": [],
     "video": []
   },
-  "groups": {}
+  "groups": {
+    "32": []
+  }
 }
