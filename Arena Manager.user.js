@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.7.1
+// @version      4.7.2
 // @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
 // @author       Arena Manager Team
 // @match        https://arena.ai/*
@@ -10,6 +10,7 @@
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @connect      api.github.com
+// @connect      raw.githubusercontent.com
 // @run-at       document-idle
 // @license MIT
 // @downloadURL https://update.greasyfork.org/scripts/563029/Arena%20Manager.user.js
@@ -20,7 +21,10 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '4.7.1';
+    const VERSION = '4.7.2';
+    const REPO_OWNER = 'JimAchievo';
+    const REPO_NAME = 'Arena-Manager';
+    const RECOMMENDED_FILE = 'recommended-config.json';
 
     // ==================== 1. 国际化系统 ====================
     const I18N = {
@@ -151,6 +155,33 @@
                 invalidToken: 'Token 无效或权限不足',
                 gistNotFound: 'Gist 不存在',
                 syncError: '同步错误',
+                recommendedConfig: '推荐模型配置',
+                useRecommended: '使用推荐配置',
+                checkUpdate: '检查更新',
+                localImported: '本地已导入',
+                latestAvailable: '最新可用',
+                notImported: '未导入',
+                configDiff: '配置差异',
+                visibilityChanges: '可见性变更',
+                sortChanges: '排序变更',
+                starChanges: '收藏变更',
+                modelInfoChanges: '模型信息变更',
+                groupChanges: '分组变更',
+                applySelected: '应用选中',
+                noChanges: '没有差异',
+                recommendedApplied: '推荐配置已应用',
+                adminMode: '管理员模式',
+                uploadRecommended: '上传推荐配置',
+                repoToken: '仓库 Token',
+                repoTokenPlaceholder: '输入仓库写入 Token',
+                uploadRecommendedSuccess: '推荐配置已上传',
+                addStarred: '新增收藏',
+                removeStarred: '取消收藏',
+                newGroups: '新增分组',
+                modifiedGroups: '修改分组',
+                noteIconOrgChanged: '备注/图标/组织有变更',
+                modelOrderText: '模型顺序',
+                orgOrderText: '组织顺序',
                 note: '备注',
                 notePlaceholder: '输入备注...',
                 visibleStatus: '可见状态',
@@ -304,6 +335,33 @@
                 invalidToken: 'Invalid token or insufficient permissions',
                 gistNotFound: 'Gist not found',
                 syncError: 'Sync error',
+                recommendedConfig: 'Recommended Config',
+                useRecommended: 'Use Recommended',
+                checkUpdate: 'Check Update',
+                localImported: 'Local Imported',
+                latestAvailable: 'Latest Available',
+                notImported: 'Not imported',
+                configDiff: 'Config Differences',
+                visibilityChanges: 'Visibility Changes',
+                sortChanges: 'Sort Changes',
+                starChanges: 'Star Changes',
+                modelInfoChanges: 'Model Info Changes',
+                groupChanges: 'Group Changes',
+                applySelected: 'Apply Selected',
+                noChanges: 'No differences',
+                recommendedApplied: 'Recommended config applied',
+                adminMode: 'Admin Mode',
+                uploadRecommended: 'Upload Recommended',
+                repoToken: 'Repo Token',
+                repoTokenPlaceholder: 'Enter repo write Token',
+                uploadRecommendedSuccess: 'Recommended config uploaded',
+                addStarred: 'Add star',
+                removeStarred: 'Remove star',
+                newGroups: 'New groups',
+                modifiedGroups: 'Modified groups',
+                noteIconOrgChanged: 'Note/icon/org changed',
+                modelOrderText: 'Model order',
+                orgOrderText: 'Org order',
                 note: 'Note',
                 notePlaceholder: 'Enter note...',
                 visibleStatus: 'Visibility',
@@ -457,6 +515,33 @@
                 invalidToken: 'Token 無效或權限不足',
                 gistNotFound: 'Gist 不存在',
                 syncError: '同步錯誤',
+                recommendedConfig: '推薦模型配置',
+                useRecommended: '使用推薦配置',
+                checkUpdate: '檢查更新',
+                localImported: '本地已匯入',
+                latestAvailable: '最新可用',
+                notImported: '未匯入',
+                configDiff: '配置差異',
+                visibilityChanges: '可見性變更',
+                sortChanges: '排序變更',
+                starChanges: '收藏變更',
+                modelInfoChanges: '模型資訊變更',
+                groupChanges: '分組變更',
+                applySelected: '套用選中',
+                noChanges: '沒有差異',
+                recommendedApplied: '推薦配置已套用',
+                adminMode: '管理員模式',
+                uploadRecommended: '上傳推薦配置',
+                repoToken: '倉庫 Token',
+                repoTokenPlaceholder: '輸入倉庫寫入 Token',
+                uploadRecommendedSuccess: '推薦配置已上傳',
+                addStarred: '新增收藏',
+                removeStarred: '取消收藏',
+                newGroups: '新增分組',
+                modifiedGroups: '修改分組',
+                noteIconOrgChanged: '備註/圖標/組織有變更',
+                modelOrderText: '模型順序',
+                orgOrderText: '組織順序',
                 note: '備註',
                 notePlaceholder: '輸入備註...',
                 visibleStatus: '可見狀態',
@@ -610,6 +695,33 @@
                 invalidToken: 'Tokenが無効または権限不足',
                 gistNotFound: 'Gistが見つかりません',
                 syncError: '同期エラー',
+                recommendedConfig: 'おすすめ設定',
+                useRecommended: 'おすすめを使用',
+                checkUpdate: '更新を確認',
+                localImported: 'ローカル導入済み',
+                latestAvailable: '最新版',
+                notImported: '未導入',
+                configDiff: '設定の差分',
+                visibilityChanges: '表示状態の変更',
+                sortChanges: '並び順の変更',
+                starChanges: 'お気に入りの変更',
+                modelInfoChanges: 'モデル情報の変更',
+                groupChanges: 'グループの変更',
+                applySelected: '選択を適用',
+                noChanges: '差分なし',
+                recommendedApplied: 'おすすめ設定を適用しました',
+                adminMode: '管理者モード',
+                uploadRecommended: 'おすすめ設定をアップロード',
+                repoToken: 'リポジトリToken',
+                repoTokenPlaceholder: 'リポジトリ書込みTokenを入力',
+                uploadRecommendedSuccess: 'おすすめ設定をアップロードしました',
+                addStarred: 'お気に入り追加',
+                removeStarred: 'お気に入り解除',
+                newGroups: '新規グループ',
+                modifiedGroups: '変更グループ',
+                noteIconOrgChanged: 'メモ/アイコン/組織に変更あり',
+                modelOrderText: 'モデル順序',
+                orgOrderText: '組織順序',
                 note: 'メモ',
                 notePlaceholder: 'メモを入力...',
                 visibleStatus: '表示状態',
@@ -763,6 +875,33 @@
                 invalidToken: '토큰이 유효하지 않거나 권한이 부족합니다',
                 gistNotFound: 'Gist를 찾을 수 없습니다',
                 syncError: '동기화 오류',
+                recommendedConfig: '추천 설정',
+                useRecommended: '추천 사용',
+                checkUpdate: '업데이트 확인',
+                localImported: '로컬 가져옴',
+                latestAvailable: '최신 버전',
+                notImported: '미가져옴',
+                configDiff: '설정 차이',
+                visibilityChanges: '표시 상태 변경',
+                sortChanges: '정렬 변경',
+                starChanges: '즐겨찾기 변경',
+                modelInfoChanges: '모델 정보 변경',
+                groupChanges: '그룹 변경',
+                applySelected: '선택 적용',
+                noChanges: '차이 없음',
+                recommendedApplied: '추천 설정 적용됨',
+                adminMode: '관리자 모드',
+                uploadRecommended: '추천 설정 업로드',
+                repoToken: '저장소 Token',
+                repoTokenPlaceholder: '저장소 쓰기 Token 입력',
+                uploadRecommendedSuccess: '추천 설정 업로드됨',
+                addStarred: '즐겨찾기 추가',
+                removeStarred: '즐겨찾기 해제',
+                newGroups: '새 그룹',
+                modifiedGroups: '수정된 그룹',
+                noteIconOrgChanged: '메모/아이콘/조직 변경됨',
+                modelOrderText: '모델 순서',
+                orgOrderText: '조직 순서',
                 note: '메모',
                 notePlaceholder: '메모 입력...',
                 visibleStatus: '표시 상태',
@@ -916,6 +1055,33 @@
                 invalidToken: 'Token inválido o permisos insuficientes',
                 gistNotFound: 'Gist no encontrado',
                 syncError: 'Error de sincronización',
+                recommendedConfig: 'Configuración Recomendada',
+                useRecommended: 'Usar Recomendada',
+                checkUpdate: 'Buscar Actualización',
+                localImported: 'Importado Local',
+                latestAvailable: 'Última Disponible',
+                notImported: 'No importado',
+                configDiff: 'Diferencias de Configuración',
+                visibilityChanges: 'Cambios de Visibilidad',
+                sortChanges: 'Cambios de Orden',
+                starChanges: 'Cambios de Favoritos',
+                modelInfoChanges: 'Cambios de Info del Modelo',
+                groupChanges: 'Cambios de Grupo',
+                applySelected: 'Aplicar Seleccionados',
+                noChanges: 'Sin diferencias',
+                recommendedApplied: 'Configuración recomendada aplicada',
+                adminMode: 'Modo Administrador',
+                uploadRecommended: 'Subir Recomendada',
+                repoToken: 'Token del Repositorio',
+                repoTokenPlaceholder: 'Ingrese Token de escritura',
+                uploadRecommendedSuccess: 'Configuración recomendada subida',
+                addStarred: 'Añadir favorito',
+                removeStarred: 'Quitar favorito',
+                newGroups: 'Nuevos grupos',
+                modifiedGroups: 'Grupos modificados',
+                noteIconOrgChanged: 'Nota/icono/org cambiados',
+                modelOrderText: 'Orden de modelos',
+                orgOrderText: 'Orden de organizaciones',
                 note: 'Nota',
                 notePlaceholder: 'Ingrese nota...',
                 visibleStatus: 'Estado de Visibilidad',
@@ -1069,6 +1235,33 @@
                 invalidToken: 'Token invalide ou permissions insuffisantes',
                 gistNotFound: 'Gist non trouvé',
                 syncError: 'Erreur de synchronisation',
+                recommendedConfig: 'Configuration Recommandée',
+                useRecommended: 'Utiliser la Recommandée',
+                checkUpdate: 'Vérifier la Mise à Jour',
+                localImported: 'Importé Localement',
+                latestAvailable: 'Dernière Disponible',
+                notImported: 'Non importé',
+                configDiff: 'Différences de Configuration',
+                visibilityChanges: 'Changements de Visibilité',
+                sortChanges: 'Changements de Tri',
+                starChanges: 'Changements de Favoris',
+                modelInfoChanges: 'Changements d\'Info du Modèle',
+                groupChanges: 'Changements de Groupe',
+                applySelected: 'Appliquer la Sélection',
+                noChanges: 'Aucune différence',
+                recommendedApplied: 'Configuration recommandée appliquée',
+                adminMode: 'Mode Administrateur',
+                uploadRecommended: 'Téléverser la Recommandée',
+                repoToken: 'Token du Dépôt',
+                repoTokenPlaceholder: 'Entrez le Token d\'écriture',
+                uploadRecommendedSuccess: 'Configuration recommandée téléversée',
+                addStarred: 'Ajouter aux favoris',
+                removeStarred: 'Retirer des favoris',
+                newGroups: 'Nouveaux groupes',
+                modifiedGroups: 'Groupes modifiés',
+                noteIconOrgChanged: 'Note/icône/org modifiés',
+                modelOrderText: 'Ordre des modèles',
+                orgOrderText: 'Ordre des organisations',
                 note: 'Note',
                 notePlaceholder: 'Entrez une note...',
                 visibleStatus: 'État de Visibilité',
@@ -1222,6 +1415,33 @@
                 invalidToken: 'Token ungültig oder unzureichende Berechtigungen',
                 gistNotFound: 'Gist nicht gefunden',
                 syncError: 'Synchronisierungsfehler',
+                recommendedConfig: 'Empfohlene Konfiguration',
+                useRecommended: 'Empfohlene Verwenden',
+                checkUpdate: 'Update Prüfen',
+                localImported: 'Lokal Importiert',
+                latestAvailable: 'Neueste Verfügbar',
+                notImported: 'Nicht importiert',
+                configDiff: 'Konfigurationsunterschiede',
+                visibilityChanges: 'Sichtbarkeitsänderungen',
+                sortChanges: 'Sortieränderungen',
+                starChanges: 'Favoritenänderungen',
+                modelInfoChanges: 'Modellinfoänderungen',
+                groupChanges: 'Gruppenänderungen',
+                applySelected: 'Ausgewählte Anwenden',
+                noChanges: 'Keine Unterschiede',
+                recommendedApplied: 'Empfohlene Konfiguration angewendet',
+                adminMode: 'Administratormodus',
+                uploadRecommended: 'Empfohlene Hochladen',
+                repoToken: 'Repository-Token',
+                repoTokenPlaceholder: 'Schreib-Token eingeben',
+                uploadRecommendedSuccess: 'Empfohlene Konfiguration hochgeladen',
+                addStarred: 'Favorit hinzufügen',
+                removeStarred: 'Favorit entfernen',
+                newGroups: 'Neue Gruppen',
+                modifiedGroups: 'Geänderte Gruppen',
+                noteIconOrgChanged: 'Notiz/Symbol/Org geändert',
+                modelOrderText: 'Modellreihenfolge',
+                orgOrderText: 'Organisationsreihenfolge',
                 note: 'Notiz',
                 notePlaceholder: 'Notiz eingeben...',
                 visibleStatus: 'Sichtbarkeitsstatus',
@@ -1375,6 +1595,33 @@
                 invalidToken: 'Недействительный токен или недостаточно прав',
                 gistNotFound: 'Gist не найден',
                 syncError: 'Ошибка синхронизации',
+                recommendedConfig: 'Рекомендуемая конфигурация',
+                useRecommended: 'Использовать рекомендуемую',
+                checkUpdate: 'Проверить обновление',
+                localImported: 'Локально импортировано',
+                latestAvailable: 'Последняя доступная',
+                notImported: 'Не импортировано',
+                configDiff: 'Различия конфигурации',
+                visibilityChanges: 'Изменения видимости',
+                sortChanges: 'Изменения сортировки',
+                starChanges: 'Изменения избранного',
+                modelInfoChanges: 'Изменения информации о модели',
+                groupChanges: 'Изменения групп',
+                applySelected: 'Применить выбранное',
+                noChanges: 'Нет различий',
+                recommendedApplied: 'Рекомендуемая конфигурация применена',
+                adminMode: 'Режим администратора',
+                uploadRecommended: 'Загрузить рекомендуемую',
+                repoToken: 'Токен репозитория',
+                repoTokenPlaceholder: 'Введите токен записи',
+                uploadRecommendedSuccess: 'Рекомендуемая конфигурация загружена',
+                addStarred: 'Добавить в избранное',
+                removeStarred: 'Убрать из избранного',
+                newGroups: 'Новые группы',
+                modifiedGroups: 'Изменённые группы',
+                noteIconOrgChanged: 'Заметка/иконка/организация изменены',
+                modelOrderText: 'Порядок моделей',
+                orgOrderText: 'Порядок организаций',
                 note: 'Заметка',
                 notePlaceholder: 'Введите заметку...',
                 visibleStatus: 'Статус видимости',
@@ -1435,9 +1682,9 @@
             useFolder: true
         },
         video: {
-            tier1: ['Google', 'OpenAI', 'xAI', 'Alibaba', 'Bytedance', 'KlingAI', 'Shengshu'],
-            tier2: ['Luma AI', 'MiniMax', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Gemmo AI', 'Runway'],
-            useFolder: true
+            tier1: [],
+            tier2: [],
+            useFolder: false
         }
     };
 
@@ -1447,8 +1694,8 @@
     };
 
     const COMPANY_RULES = [
-        { patterns: [/^gemini/i, /^gemma/i, /^imagen/i, /^veo/i], company: 'Google', icon: '🔵' },
-        { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i, /^sora/i], company: 'OpenAI', icon: '🟢' },
+        { patterns: [/^gemini/i, /^gemma/i, /^imagen/i], company: 'Google', icon: '🔵' },
+        { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i], company: 'OpenAI', icon: '🟢' },
         { patterns: [/^claude/i], company: 'Anthropic', icon: '🟤' },
         { patterns: [/^grok/i], company: 'xAI', icon: '⚫' },
         { patterns: [/^deepseek/i], company: 'DeepSeek', icon: '🐋' },
@@ -1457,7 +1704,7 @@
         { patterns: [/^kimi/i], company: 'Moonshot', icon: '🌙' },
         { patterns: [/^ernie/i], company: 'Baidu', icon: '🔴' },
         { patterns: [/^mistral/i, /^magistral/i, /^devstral/i], company: 'Mistral', icon: '🟠' },
-        { patterns: [/^minimax/i, /^hailuo/i], company: 'MiniMax', icon: '🎯' },
+        { patterns: [/^minimax/i], company: 'MiniMax', icon: '🎯' },
         { patterns: [/^longcat/i], company: 'Meituan', icon: '🐱' },
         { patterns: [/^mimo/i], company: 'Xiaomi', icon: '🍊' },
         { patterns: [/^hunyuan/i], company: 'Tencent', icon: '🐧' },
@@ -1478,7 +1725,7 @@
         { patterns: [/^mai-/i, /^microsoft/i], company: 'Microsoft AI', icon: '🪟' },
         { patterns: [/^vidu/i], company: 'Shengshu', icon: '🎬' },
         { patterns: [/^recraft/i], company: 'Recraft', icon: '🎨' },
-        { patterns: [/^photon/i, /^ray/i], company: 'Luma AI', icon: '💡' },
+        { patterns: [/^photon/i], company: 'Luma AI', icon: '💡' },
         { patterns: [/^ideogram/i], company: 'Ideogram', icon: '✏️' },
         { patterns: [/^reve/i], company: 'Reve', icon: '💭' },
         { patterns: [/^lucid/i], company: 'Leonardo AI', icon: '🖼️' },
@@ -1486,12 +1733,6 @@
         { patterns: [/^yi-/i], company: '01 AI', icon: '0️⃣' },
         { patterns: [/^athene/i], company: 'NexusFlow', icon: '🔗' },
         { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
-        { patterns: [/^kling/i], company: 'KlingAI', icon: '🪐' },
-        { patterns: [/^kandinsky/i], company: 'Kandinsky', icon: '🇰🇱' }
-        { patterns: [/^ltx/i], company: 'lightricks', icon: '🥨' },
-        { patterns: [/^pika/i], company: 'Pika', icon: '🐇' },
-        { patterns: [/^mochi/i], company: 'Gemmo AI', icon: '📚' },
-        { patterns: [/^runway/i], company: 'Runway', icon: '📎' }
     ];
 
     const ICON_TO_ORG = {
@@ -1560,11 +1801,11 @@
             if (!this.data.settings.language) this.data.settings.language = 'zh-CN';
             if (!this.data.settings.gistId) this.data.settings.gistId = '';
             if (!this.data.settings.gistToken) this.data.settings.gistToken = '';
-            // 新增设置项
             if (this.data.settings.autoSync === undefined) this.data.settings.autoSync = false;
             if (this.data.settings.autoSyncMode === undefined) this.data.settings.autoSyncMode = 'change'; // 'change' | 'interval'
             if (this.data.settings.autoSyncInterval === undefined) this.data.settings.autoSyncInterval = 5; // 分钟
             if (this.data.settings.lockFabPosition === undefined) this.data.settings.lockFabPosition = false;
+            if (!this.data.settings.lastRecommendedDate) this.data.settings.lastRecommendedDate = '';
             if (!this.data.settings.fabPosition) this.data.settings.fabPosition = { right: 12, top: null, bottom: null };
             if (!this.data.modelOrder) this.data.modelOrder = { text: [], search: [], image: [], code: [], video: [] };
             if (!this.data.groups) this.data.groups = {};
@@ -2044,9 +2285,12 @@
             this.isMultiSelectMode = false;
             this.selectedModels = new Set();
             this.multiSelectBackup = new Map();
-            // 自动同步定时器
             this.autoSyncTimer = null;
             this.pendingSync = false;
+            this.adminMode = false;
+            this.adminClickCount = 0;
+            this.adminClickTimer = null;
+            this.remoteDate = null;
         }
 
         t(key) {
@@ -2063,6 +2307,7 @@
             this.createScanResultModal();
             this.createGroupModal();
             this.createSettingsModal();
+            this.createDiffModal();
             this.createGroupSelectModal();
             this.bindShortcuts();
             this.initAutoSync();
@@ -2091,193 +2336,197 @@
                 .lmm-overlay.open { opacity: 1; visibility: visible; }
 
                 .lmm-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 96vw; max-width: 1000px; height: 88vh; max-height: 720px; background: var(--lmm-bg); border-radius: 12px; z-index: 99999; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: all 0.2s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: var(--lmm-text); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-.lmm-panel.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+                .lmm-panel.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
 
-.lmm-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 12px 12px 0 0; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
-.lmm-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
-.lmm-header-btns { display: flex; gap: 5px; align-items: center; margin-left: auto; flex-wrap: wrap; }
-.lmm-close { width: 28px; height: 28px; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--lmm-text2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; }
-.lmm-close:hover { background: var(--lmm-bg3); color: var(--lmm-danger); }
+                .lmm-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 12px 12px 0 0; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
+                .lmm-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
+                .lmm-header-btns { display: flex; gap: 5px; align-items: center; margin-left: auto; flex-wrap: wrap; }
+                .lmm-close { width: 28px; height: 28px; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--lmm-text2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; }
+                .lmm-close:hover { background: var(--lmm-bg3); color: var(--lmm-danger); }
 
-.lmm-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); color: var(--lmm-text); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; height: 28px; box-sizing: border-box; }
-.lmm-btn:hover { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
-.lmm-btn-primary { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-.lmm-btn-primary:hover { background: var(--lmm-primary-dark); }
-.lmm-btn-danger { background: var(--lmm-danger); color: #fff; border-color: var(--lmm-danger); }
-.lmm-btn-success { background: var(--lmm-success); color: #fff; border-color: var(--lmm-success); }
-.lmm-btn.scanning { animation: lmm-pulse 1.5s infinite; }
-.lmm-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-.lmm-btn-icon { padding: 5px 7px; min-width: 28px; justify-content: center; }
-.lmm-btn-sm { padding: 3px 8px; height: 24px; font-size: 11px; }
-@keyframes lmm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+                .lmm-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); color: var(--lmm-text); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; height: 28px; box-sizing: border-box; }
+                .lmm-btn:hover { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
+                .lmm-btn-primary { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+                .lmm-btn-primary:hover { background: var(--lmm-primary-dark); }
+                .lmm-btn-danger { background: var(--lmm-danger); color: #fff; border-color: var(--lmm-danger); }
+                .lmm-btn-success { background: var(--lmm-success); color: #fff; border-color: var(--lmm-success); }
+                .lmm-btn.scanning { animation: lmm-pulse 1.5s infinite; }
+                .lmm-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+                .lmm-btn-icon { padding: 5px 7px; min-width: 28px; justify-content: center; }
+                .lmm-btn-sm { padding: 3px 8px; height: 24px; font-size: 11px; }
+                @keyframes lmm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-.lmm-topbar { display: flex; gap: 5px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); overflow-x: auto; flex-shrink: 0; flex-wrap: wrap; }
-.lmm-topbar-item { padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; }
-.lmm-topbar-item:hover { border-color: var(--lmm-primary); color: var(--lmm-primary); }
-.lmm-topbar-item.active { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
-.lmm-topbar-item .cnt { font-size: 10px; background: rgba(0,0,0,0.1); padding: 1px 5px; border-radius: 8px; }
-.lmm-topbar-item.active .cnt { background: rgba(255,255,255,0.2); }
-.lmm-topbar-sep { border-left: 1px solid var(--lmm-border); margin: 0 4px; }
+                .lmm-topbar { display: flex; gap: 5px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); overflow-x: auto; flex-shrink: 0; flex-wrap: wrap; }
+                .lmm-topbar-item { padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; }
+                .lmm-topbar-item:hover { border-color: var(--lmm-primary); color: var(--lmm-primary); }
+                .lmm-topbar-item.active { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
+                .lmm-topbar-item .cnt { font-size: 10px; background: rgba(0,0,0,0.1); padding: 1px 5px; border-radius: 8px; }
+                .lmm-topbar-item.active .cnt { background: rgba(255,255,255,0.2); }
+                .lmm-topbar-sep { border-left: 1px solid var(--lmm-border); margin: 0 4px; }
 
-.lmm-subbar { display: flex; gap: 8px; padding: 8px 14px 0; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
-.lmm-subbar-group { display: flex; background: var(--lmm-bg2); border-radius: 6px; padding: 2px; border: 1px solid var(--lmm-border); }
-.lmm-subbar-item { padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
-.lmm-subbar-item.active { background: var(--lmm-bg); color: var(--lmm-text); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+                .lmm-subbar { display: flex; gap: 8px; padding: 8px 14px 0; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+                .lmm-subbar-group { display: flex; background: var(--lmm-bg2); border-radius: 6px; padding: 2px; border: 1px solid var(--lmm-border); }
+                .lmm-subbar-item { padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
+                .lmm-subbar-item.active { background: var(--lmm-bg); color: var(--lmm-text); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
-.lmm-toolbar { display: flex; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); flex-wrap: wrap; align-items: center; flex-shrink: 0; }
-.lmm-search { flex: 1; min-width: 140px; position: relative; }
-.lmm-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--lmm-text2); font-size: 12px; }
-.lmm-search input { width: 100%; padding: 6px 8px 6px 28px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 12px; background: var(--lmm-bg); color: var(--lmm-text); height: 30px; box-sizing: border-box; }
-.lmm-search input::placeholder { color: var(--lmm-text2); font-size: 11px; }
-.lmm-select { padding: 4px 22px 4px 8px; border: 1px solid var(--lmm-border); border-radius: 6px; background: var(--lmm-bg); color: var(--lmm-text); font-size: 11px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%2364748b' d='M1 3l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; height: 30px; box-sizing: border-box; }
-.lmm-view-toggle { display: flex; gap: 2px; }
-.lmm-view-btn { padding: 4px 8px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); cursor: pointer; font-size: 12px; transition: all 0.15s; }
-.lmm-view-btn:first-child { border-radius: 6px 0 0 6px; }
-.lmm-view-btn:last-child { border-radius: 0 6px 6px 0; }
-.lmm-view-btn:not(:first-child) { border-left: none; }
-.lmm-view-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-.lmm-view-btn:hover:not(.active) { background: var(--lmm-bg3); }
+                .lmm-toolbar { display: flex; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); flex-wrap: wrap; align-items: center; flex-shrink: 0; }
+                .lmm-search { flex: 1; min-width: 140px; position: relative; }
+                .lmm-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--lmm-text2); font-size: 12px; }
+                .lmm-search input { width: 100%; padding: 6px 8px 6px 28px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 12px; background: var(--lmm-bg); color: var(--lmm-text); height: 30px; box-sizing: border-box; }
+                .lmm-search input::placeholder { color: var(--lmm-text2); font-size: 11px; }
+                .lmm-select { padding: 4px 22px 4px 8px; border: 1px solid var(--lmm-border); border-radius: 6px; background: var(--lmm-bg); color: var(--lmm-text); font-size: 11px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%2364748b' d='M1 3l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; height: 30px; box-sizing: border-box; }
+                .lmm-view-toggle { display: flex; gap: 2px; }
+                .lmm-view-btn { padding: 4px 8px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); cursor: pointer; font-size: 12px; transition: all 0.15s; }
+                .lmm-view-btn:first-child { border-radius: 6px 0 0 6px; }
+                .lmm-view-btn:last-child { border-radius: 0 6px 6px 0; }
+                .lmm-view-btn:not(:first-child) { border-left: none; }
+                .lmm-view-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+                .lmm-view-btn:hover:not(.active) { background: var(--lmm-bg3); }
 
-.lmm-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
-.lmm-sidebar { width: 170px; border-right: 1px solid var(--lmm-border); background: var(--lmm-bg2); overflow-y: auto; padding: 8px 6px; flex-shrink: 0; }
-.lmm-content.visible-mode .lmm-sidebar { display: none; }
+                .lmm-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+                .lmm-sidebar { width: 170px; border-right: 1px solid var(--lmm-border); background: var(--lmm-bg2); overflow-y: auto; padding: 8px 6px; flex-shrink: 0; }
+                .lmm-content.visible-mode .lmm-sidebar { display: none; }
 
-.lmm-sidebar-item { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: all 0.1s; user-select: none; }
-.lmm-sidebar-item:hover { background: var(--lmm-bg3); }
-.lmm-sidebar-item.active { background: var(--lmm-primary); color: #fff; }
-.lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
-.lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
-.lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
-.lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
-.lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
-.lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
-.lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
-.lmm-sidebar-title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--lmm-text2); letter-spacing: 0.3px; }
-.lmm-sidebar-btn { font-size: 10px; color: var(--lmm-primary); cursor: pointer; background: none; border: none; padding: 2px 4px; }
-.lmm-sidebar-btn.active { color: var(--lmm-success); font-weight: 600; }
-.lmm-sidebar-btn.reset { color: var(--lmm-warning); }
-.lmm-sidebar-folder { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
-.lmm-sidebar-folder:hover { background: var(--lmm-bg3); color: var(--lmm-text); }
-.lmm-sidebar-folder .icon { display: inline-flex; width: 1.4em; justify-content: center; }
-.lmm-sidebar-folder .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
-.lmm-sidebar-folder-content { display: none; padding-left: 8px; }
-.lmm-sidebar-folder-content.open { display: block; }
+                .lmm-sidebar-item { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: all 0.1s; user-select: none; }
+                .lmm-sidebar-item:hover { background: var(--lmm-bg3); }
+                .lmm-sidebar-item.active { background: var(--lmm-primary); color: #fff; }
+                .lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
+                .lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
+                .lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
+                .lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
+                .lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
+                .lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
+                .lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
+                .lmm-sidebar-title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--lmm-text2); letter-spacing: 0.3px; }
+                .lmm-sidebar-btn { font-size: 10px; color: var(--lmm-primary); cursor: pointer; background: none; border: none; padding: 2px 4px; }
+                .lmm-sidebar-btn.active { color: var(--lmm-success); font-weight: 600; }
+                .lmm-sidebar-btn.reset { color: var(--lmm-warning); }
+                .lmm-sidebar-folder { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
+                .lmm-sidebar-folder:hover { background: var(--lmm-bg3); color: var(--lmm-text); }
+                .lmm-sidebar-folder .icon { display: inline-flex; width: 1.4em; justify-content: center; }
+                .lmm-sidebar-folder .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
+                .lmm-sidebar-folder-content { display: none; padding-left: 8px; }
+                .lmm-sidebar-folder-content.open { display: block; }
 
-.lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
-.lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
-.lmm-count { color: var(--lmm-text2); font-size: 12px; }
-.lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
+                .lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
+                .lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+                .lmm-count { color: var(--lmm-text2); font-size: 12px; }
+                .lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
 
-.lmm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
-.lmm-grid.compact-view { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
-.lmm-grid.list-view { display: flex; flex-direction: column; gap: 4px; }
+                .lmm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+                .lmm-grid.compact-view { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+                .lmm-grid.list-view { display: flex; flex-direction: column; gap: 4px; }
 
-.lmm-card { display: flex; align-items: flex-start; gap: 8px; padding: 9px; border: 2px solid var(--lmm-border); border-radius: 8px; background: var(--lmm-bg); cursor: pointer; transition: all 0.15s; position: relative; }
-.lmm-card:hover { border-color: var(--lmm-primary); }
-.lmm-card.visible { border-color: var(--lmm-primary); }
-.lmm-card.hidden { opacity: 0.5; background: var(--lmm-bg3); }
-.lmm-card.new { box-shadow: inset 0 0 0 1px var(--lmm-success); }
-.lmm-card.starred { box-shadow: inset 0 0 0 1px var(--lmm-warning); }
-.lmm-card.selected { background: rgba(99,102,241,0.1); border-color: var(--lmm-primary); }
+                .lmm-card { display: flex; align-items: flex-start; gap: 8px; padding: 9px; border: 2px solid var(--lmm-border); border-radius: 8px; background: var(--lmm-bg); cursor: pointer; transition: all 0.15s; position: relative; }
+                .lmm-card:hover { border-color: var(--lmm-primary); }
+                .lmm-card.visible { border-color: var(--lmm-primary); }
+                .lmm-card.hidden { opacity: 0.5; background: var(--lmm-bg3); }
+                .lmm-card.new { box-shadow: inset 0 0 0 1px var(--lmm-success); }
+                .lmm-card.starred { box-shadow: inset 0 0 0 1px var(--lmm-warning); }
+                .lmm-card.selected { background: rgba(99,102,241,0.1); border-color: var(--lmm-primary); }
 
-.lmm-grid.compact-view .lmm-card { padding: 6px 8px; gap: 6px; }
-.lmm-grid.compact-view .lmm-card-name { font-size: 10px; }
-.lmm-grid.compact-view .lmm-tags { display: none; }
-.lmm-grid.compact-view .lmm-card-actions { top: 2px; right: 2px; }
-.lmm-grid.compact-view .lmm-check { width: 13px; height: 13px; font-size: 8px; }
-.lmm-grid.compact-view .lmm-card-note { display: none; }
+                .lmm-grid.compact-view .lmm-card { padding: 6px 8px; gap: 6px; }
+                .lmm-grid.compact-view .lmm-card-name { font-size: 10px; }
+                .lmm-grid.compact-view .lmm-tags { display: none; }
+                .lmm-grid.compact-view .lmm-card-actions { top: 2px; right: 2px; }
+                .lmm-grid.compact-view .lmm-check { width: 13px; height: 13px; font-size: 8px; }
+                .lmm-grid.compact-view .lmm-card-note { display: none; }
 
-.lmm-grid.list-view .lmm-card { padding: 6px 10px; flex-direction: row; align-items: center; }
-.lmm-grid.list-view .lmm-card-info { display: flex; align-items: center; gap: 8px; flex-direction: row; }
-.lmm-grid.list-view .lmm-card-name { margin-bottom: 0; font-size: 12px; }
-.lmm-grid.list-view .lmm-tags { margin-left: auto; }
-.lmm-grid.list-view .lmm-card.dragging { opacity: 0.5; border-color: var(--lmm-primary); background: var(--lmm-bg3); }
+                .lmm-grid.list-view .lmm-card { padding: 6px 10px; flex-direction: row; align-items: center; }
+                .lmm-grid.list-view .lmm-card-info { display: flex; align-items: center; gap: 8px; flex-direction: row; }
+                .lmm-grid.list-view .lmm-card-name { margin-bottom: 0; font-size: 12px; }
+                .lmm-grid.list-view .lmm-tags { margin-left: auto; }
+                .lmm-grid.list-view .lmm-card.dragging { opacity: 0.5; border-color: var(--lmm-primary); background: var(--lmm-bg3); }
 
-.lmm-drag-handle { cursor: grab; color: var(--lmm-text2); font-size: 12px; margin-right: 4px; }
-.lmm-check { width: 15px; height: 15px; border: 2px solid var(--lmm-border); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; margin-top: 2px; }
-.lmm-check.on { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
-.lmm-card-info { flex: 1; min-width: 0; }
-.lmm-card-name { font-weight: 500; font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
-.lmm-card-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.lmm-card-note { font-size: 10px; color: var(--lmm-text2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
-.lmm-tags { display: flex; flex-wrap: wrap; gap: 2px; }
-.lmm-tag { padding: 1px 4px; border-radius: 3px; font-size: 9px; background: var(--lmm-bg3); color: var(--lmm-text2); }
-.lmm-tag.org { background: #e0e7ff; color: #4338ca; }
-.lmm-tag.mode { background: #fef3c7; color: #92400e; }
-.lmm-tag.new { background: #dcfce7; color: #166534; }
-.lmm-tag.imgtype { background: #fce7f3; color: #9d174d; }
-.lmm-tag.vision { background: #e0f2fe; color: #0369a1; }
-.lmm-tag.group { background: #f0fdf4; color: #15803d; }
-@media (prefers-color-scheme: dark) {
-    .lmm-tag.org { background: #3730a3; color: #c7d2fe; }
-    .lmm-tag.mode { background: #78350f; color: #fef3c7; }
-    .lmm-tag.new { background: #166534; color: #bbf7d0; }
-    .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
-    .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
-    .lmm-tag.group { background: #14532d; color: #bbf7d0; }
-}
-.lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
-.lmm-card:hover .lmm-card-actions { opacity: 1; }
-.lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
-.lmm-card-btn:hover { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-.lmm-card-btn.starred { color: var(--lmm-warning); }
+                .lmm-drag-handle { cursor: grab; color: var(--lmm-text2); font-size: 12px; margin-right: 4px; }
+                .lmm-check { width: 15px; height: 15px; border: 2px solid var(--lmm-border); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; margin-top: 2px; }
+                .lmm-check.on { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
+                .lmm-card-info { flex: 1; min-width: 0; }
+                .lmm-card-name { font-weight: 500; font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+                .lmm-card-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+                .lmm-card-note { font-size: 10px; color: var(--lmm-text2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
+                .lmm-tags { display: flex; flex-wrap: wrap; gap: 2px; }
+                .lmm-tag { padding: 1px 4px; border-radius: 3px; font-size: 9px; background: var(--lmm-bg3); color: var(--lmm-text2); }
+                .lmm-tag.org { background: #e0e7ff; color: #4338ca; }
+                .lmm-tag.mode { background: #fef3c7; color: #92400e; }
+                .lmm-tag.new { background: #dcfce7; color: #166534; }
+                .lmm-tag.imgtype { background: #fce7f3; color: #9d174d; }
+                .lmm-tag.vision { background: #e0f2fe; color: #0369a1; }
+                .lmm-tag.group { background: #f0fdf4; color: #15803d; }
+                @media (prefers-color-scheme: dark) {
+                    .lmm-tag.org { background: #3730a3; color: #c7d2fe; }
+                    .lmm-tag.mode { background: #78350f; color: #fef3c7; }
+                    .lmm-tag.new { background: #166534; color: #bbf7d0; }
+                    .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
+                    .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
+                    .lmm-tag.group { background: #14532d; color: #bbf7d0; }
+                                }
+                .lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
+                .lmm-card:hover .lmm-card-actions { opacity: 1; }
+                .lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
+                .lmm-card-btn:hover { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+                .lmm-card-btn.starred { color: var(--lmm-warning); }
 
-.lmm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 0 0 12px 12px; font-size: 11px; color: var(--lmm-text2); flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
-.lmm-stats { display: flex; gap: 12px; }
-.lmm-stat b { color: var(--lmm-text); }
-.lmm-empty { text-align: center; padding: 30px 20px; color: var(--lmm-text2); }
-.lmm-empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
-.lmm-toast { position: fixed; top: 60px; right: 12px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--lmm-bg); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 100001; animation: lmm-in 0.25s ease; border-left: 3px solid var(--lmm-primary); font-size: 13px; max-width: 350px; }
-.lmm-toast-success { border-left-color: var(--lmm-success); }
-.lmm-toast-warning { border-left-color: var(--lmm-warning); }
-@keyframes lmm-in { from { transform: translateX(100%); opacity: 0; } }
-    .lmm-toast-x { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--lmm-text2); }
-.lmm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); background: var(--lmm-bg); border-radius: 10px; padding: 16px; z-index: 100002; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.2s; }
-.lmm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-.lmm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100001; opacity: 0; visibility: hidden; transition: all 0.2s; }
-.lmm-modal-overlay.open { opacity: 1; visibility: visible; }
-.lmm-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-.lmm-modal-body { margin-bottom: 14px; }
-.lmm-modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
-.lmm-form-group { margin-bottom: 12px; }
-.lmm-form-label { display: block; font-size: 11px; font-weight: 500; margin-bottom: 4px; color: var(--lmm-text2); }
-.lmm-form-input, .lmm-form-select { width: 100%; padding: 7px 10px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 13px; background: var(--lmm-bg); color: var(--lmm-text); box-sizing: border-box; }
-.lmm-form-row { display: flex; gap: 8px; align-items: center; }
-.lmm-form-row .lmm-form-input { flex: 1; }
-.lmm-checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
-.lmm-checkbox-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
-.lmm-checkbox-item:hover { border-color: var(--lmm-primary); }
-.lmm-checkbox-item.checked { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-.lmm-scan-list { max-height: 300px; overflow-y: auto; margin: 10px 0; }
-.lmm-scan-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--lmm-border); font-size: 12px; }
-.lmm-scan-item:last-child { border-bottom: none; }
-.lmm-group-list { max-height: 200px; overflow-y: auto; margin: 8px 0; }
-.lmm-group-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; margin-bottom: 4px; font-size: 12px; }
-.lmm-group-item:hover { background: var(--lmm-bg3); }
-.lmm-group-item .name { flex: 1; }
-.lmm-group-item .actions { display: flex; gap: 4px; }
-.lmm-group-item .actions button { padding: 2px 6px; font-size: 10px; }
-.lmm-switch { position: relative; width: 40px; height: 22px; background: var(--lmm-border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
-.lmm-switch.on { background: var(--lmm-primary); }
-.lmm-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
-.lmm-switch.on::after { transform: translateX(18px); }
-.lmm-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--lmm-border); }
-.lmm-setting-row:last-child { border-bottom: none; }
-.lmm-setting-info { flex: 1; }
-.lmm-setting-title { font-weight: 500; margin-bottom: 2px; }
-.lmm-setting-desc { font-size: 11px; color: var(--lmm-text2); }
-.lmm-detail-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
-.lmm-detail-row:last-child { border-bottom: none; }
-.lmm-detail-label { width: 80px; font-size: 11px; color: var(--lmm-text2); flex-shrink: 0; }
-.lmm-detail-value { flex: 1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
-.lmm-detail-value input { max-width: 60px; }
+                .lmm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 0 0 12px 12px; font-size: 11px; color: var(--lmm-text2); flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+                .lmm-stats { display: flex; gap: 12px; }
+                .lmm-stat b { color: var(--lmm-text); }
+                .lmm-empty { text-align: center; padding: 30px 20px; color: var(--lmm-text2); }
+                .lmm-empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+                .lmm-toast { position: fixed; top: 60px; right: 12px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--lmm-bg); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 100001; animation: lmm-in 0.25s ease; border-left: 3px solid var(--lmm-primary); font-size: 13px; max-width: 350px; }
+                .lmm-toast-success { border-left-color: var(--lmm-success); }
+                .lmm-toast-warning { border-left-color: var(--lmm-warning); }
+                @keyframes lmm-in { from { transform: translateX(100%); opacity: 0; } }
+                .lmm-toast-x { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--lmm-text2); }
+                .lmm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); background: var(--lmm-bg); border-radius: 10px; padding: 16px; z-index: 100002; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.2s; }
+                .lmm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+                .lmm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100001; opacity: 0; visibility: hidden; transition: all 0.2s; }
+                .lmm-modal-overlay.open { opacity: 1; visibility: visible; }
+                .lmm-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+                .lmm-modal-body { margin-bottom: 14px; }
+                .lmm-modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
+                .lmm-form-group { margin-bottom: 12px; }
+                .lmm-form-label { display: block; font-size: 11px; font-weight: 500; margin-bottom: 4px; color: var(--lmm-text2); }
+                .lmm-form-input, .lmm-form-select { width: 100%; padding: 7px 10px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 13px; background: var(--lmm-bg); color: var(--lmm-text); box-sizing: border-box; }
+                .lmm-form-row { display: flex; gap: 8px; align-items: center; }
+                .lmm-form-row .lmm-form-input { flex: 1; }
+                .lmm-checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
+                .lmm-checkbox-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
+                .lmm-checkbox-item:hover { border-color: var(--lmm-primary); }
+                .lmm-checkbox-item.checked { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+                .lmm-scan-list { max-height: 300px; overflow-y: auto; margin: 10px 0; }
+                .lmm-scan-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--lmm-border); font-size: 12px; }
+                .lmm-scan-item:last-child { border-bottom: none; }
+                .lmm-group-list { max-height: 200px; overflow-y: auto; margin: 8px 0; }
+                .lmm-group-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; margin-bottom: 4px; font-size: 12px; }
+                .lmm-group-item:hover { background: var(--lmm-bg3); }
+                .lmm-group-item .name { flex: 1; }
+                .lmm-group-item .actions { display: flex; gap: 4px; }
+                .lmm-group-item .actions button { padding: 2px 6px; font-size: 10px; }
+                .lmm-switch { position: relative; width: 40px; height: 22px; background: var(--lmm-border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
+                .lmm-switch.on { background: var(--lmm-primary); }
+                .lmm-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+                .lmm-switch.on::after { transform: translateX(18px); }
+                .lmm-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--lmm-border); }
+                .lmm-setting-row:last-child { border-bottom: none; }
+                .lmm-setting-info { flex: 1; }
+                .lmm-setting-title { font-weight: 500; margin-bottom: 2px; }
+                .lmm-setting-desc { font-size: 11px; color: var(--lmm-text2); }
+                .lmm-detail-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
+                .lmm-detail-row:last-child { border-bottom: none; }
+                .lmm-detail-label { width: 80px; font-size: 11px; color: var(--lmm-text2); flex-shrink: 0; }
+                .lmm-detail-value { flex: 1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+                .lmm-detail-value input { max-width: 60px; }
 
-@media (max-width: 600px) {
-    .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
-    .lmm-sidebar { display: none; }
-    .lmm-grid { grid-template-columns: 1fr; }
-}
-`);
+                @media (max-width: 600px) {
+                    .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
+                    .lmm-sidebar { display: none; }
+                    .lmm-grid { grid-template-columns: 1fr; }
+                }
+                .lmm-diff-section { padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
+                .lmm-diff-section:last-child { border-bottom: none; }
+                .lmm-diff-category { display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer; font-size: 13px; }
+                .lmm-diff-details { padding: 4px 0 4px 24px; font-size: 11px; color: var(--lmm-text2); line-height: 1.6; }
+            `);
         }
 
         createFab() {
@@ -2460,7 +2709,7 @@
             panel.className = 'lmm-panel';
             panel.innerHTML = `
                 <div class="lmm-header">
-                    <div class="lmm-title"><span>🎛️</span> Arena Manager <span style="font-size:10px;color:var(--lmm-text2)">v${VERSION}</span></div>
+                    <div class="lmm-title"><span>🎛️</span> Arena Manager <span id="lmm-version" style="font-size:10px;color:var(--lmm-text2);cursor:default">v${VERSION}</span></div>
                     <div class="lmm-header-btns">
                         <button class="lmm-btn" id="lmm-scan-toggle">🔍 <span data-i18n="startScan"></span></button>
                         <button class="lmm-btn" id="lmm-export">📤 <span data-i18n="export"></span></button>
@@ -2725,6 +2974,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="lmm-setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+                        <div class="lmm-setting-title" data-i18n="recommendedConfig"></div>
+                        <div style="display:flex;gap:12px;font-size:12px;flex-wrap:wrap;align-items:center">
+                            <span><span data-i18n="localImported"></span>: <b id="lmm-rec-local-date">-</b></span>
+                            <span><span data-i18n="latestAvailable"></span>: <b id="lmm-rec-remote-date">-</b></span>
+                            <button class="lmm-btn lmm-btn-sm" id="lmm-rec-check" data-i18n="checkUpdate"></button>
+                        </div>
+                        <button class="lmm-btn lmm-btn-primary" id="lmm-rec-use" data-i18n="useRecommended"></button>
+                    </div>
+                    <div class="lmm-setting-row" id="lmm-admin-section" style="display:none;flex-direction:column;align-items:stretch;gap:8px;border-top:2px solid var(--lmm-primary);padding-top:12px;margin-top:12px">
+                        <div class="lmm-setting-title">🔒 <span data-i18n="adminMode"></span></div>
+                        <div class="lmm-form-group" style="margin:0">
+                            <label class="lmm-form-label" data-i18n="repoToken"></label>
+                            <input type="password" class="lmm-form-input" id="lmm-admin-token" data-i18n-placeholder="repoTokenPlaceholder">
+                        </div>
+                        <button class="lmm-btn lmm-btn-primary" id="lmm-admin-upload">📤 <span data-i18n="uploadRecommended"></span></button>
+                    </div>
                     <div class="lmm-setting-row" style="border-top:2px solid var(--lmm-danger);margin-top:12px;padding-top:12px">
                         <div class="lmm-setting-info">
                             <div class="lmm-setting-title" style="color:var(--lmm-danger)" data-i18n="resetData"></div>
@@ -2817,6 +3083,10 @@
             };
 
             modal.querySelector('#lmm-settings-close').onclick = () => this.closeSettingsModal();
+
+            modal.querySelector('#lmm-rec-check').onclick = () => this.checkRecommendedUpdate();
+            modal.querySelector('#lmm-rec-use').onclick = () => this.useRecommendedConfig();
+            modal.querySelector('#lmm-admin-upload').onclick = () => this.uploadRecommendedConfig();
         }
 
         updateSettingsModalI18n() {
@@ -3053,7 +3323,7 @@
             if (missing.length > 0) {
                 list.innerHTML = `<div class="lmm-scan-item" style="font-weight:500;background:var(--lmm-bg3)"><input type="checkbox" id="lmm-scan-all" checked><label for="lmm-scan-all">${this.t('selectAll')}</label></div>` + missing.map(name => `<div class="lmm-scan-item"><input type="checkbox" class="lmm-scan-check" value="${this.esc(name)}" checked><span>${this.esc(name)}</span></div>`).join('');
                 list.querySelector('#lmm-scan-all').onchange = (e) => {
-                    list.querySelectorAll('.lmm-scan-check').forEach(cb => cb.checked = e.target.checked);
+                    list.querySelectorAll('.lmm-scan-check').forEach(cb => { cb.checked = e.target.checked; });
                 };
             } else {
                 list.innerHTML = '';
@@ -3200,6 +3470,17 @@
                 this.scanner.applyFilters();
                 this.scanner.toast(this.t('defaultOrderRestored'), 'success');
             };
+
+            this.$('#lmm-version').onclick = () => {
+                this.adminClickCount++;
+                clearTimeout(this.adminClickTimer);
+                this.adminClickTimer = setTimeout(() => { this.adminClickCount = 0; }, 2000);
+                if (this.adminClickCount >= 5) {
+                    this.adminClickCount = 0;
+                    this.adminMode = true;
+                    this.openSettingsModal();
+                }
+            };
         }
 
         bindShortcuts() {
@@ -3221,6 +3502,7 @@
                         this.scanModalOverlay.classList.remove('open');
                         this.scanModal.classList.remove('open');
                     }
+                    else if (this.diffModal.classList.contains('open')) this.closeDiffModal();
                     else if (this.isOpen) this.close();
                 }
                 if (e.key === '/' && this.isOpen && !e.ctrlKey && !e.metaKey) {
@@ -3429,7 +3711,7 @@
             sortByOrder(other);
 
             const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
-            const hasOther = orgs['Other'];
+            const hasOther = orgs.Other;
             this.renderOrgList(tier1, tier2, tier2Total, hasOther, other);
 
             if (showImageTypes) {
@@ -3513,7 +3795,7 @@
             if (tier2.length > 0) {
                 html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
             }
-            other.forEach(c => html += renderItem(c, false));
+            other.forEach(c => { html += renderItem(c, false); });
             if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
             list.innerHTML = html;
 
@@ -3813,6 +4095,334 @@
             this.groupSelectModal.classList.remove('open');
         }
 
+        createDiffModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            modalOverlay.onclick = () => this.closeDiffModal();
+            document.body.appendChild(modalOverlay);
+            this.diffModalOverlay = modalOverlay;
+
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.style.minWidth = '450px';
+            modal.innerHTML = `
+        <div class="lmm-modal-title">📋 <span data-i18n="configDiff"></span></div>
+        <div class="lmm-modal-body" id="lmm-diff-body"></div>
+        <div class="lmm-modal-footer">
+            <button class="lmm-btn" id="lmm-diff-cancel" data-i18n="cancel"></button>
+            <button class="lmm-btn lmm-btn-primary" id="lmm-diff-apply">✓ <span data-i18n="applySelected"></span></button>
+        </div>
+    `;
+            document.body.appendChild(modal);
+            this.diffModal = modal;
+            modal.querySelector('#lmm-diff-cancel').onclick = () => this.closeDiffModal();
+        }
+
+        closeDiffModal() {
+            this.diffModalOverlay.classList.remove('open');
+            this.diffModal.classList.remove('open');
+        }
+
+        async checkRecommendedUpdate() {
+            const dateEl = this.settingsModal.querySelector('#lmm-rec-remote-date');
+            dateEl.textContent = '...';
+            try {
+                const res = await this.gmFetch({
+                    method: 'GET',
+                    url: `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits?path=${RECOMMENDED_FILE}&per_page=1`
+        });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const commits = await res.json();
+                if (commits.length > 0) {
+                    const d = new Date(commits[0].commit.committer.date);
+                    this.remoteDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                    dateEl.textContent = this.remoteDate;
+                } else {
+                    dateEl.textContent = '-';
+                }
+            } catch (e) {
+                dateEl.textContent = '❌';
+                console.error('[Arena Manager] Check update error:', e);
+            }
+        }
+
+        async useRecommendedConfig() {
+            try {
+                const res = await this.gmFetch({
+                    method: 'GET',
+                    url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${RECOMMENDED_FILE}?_=${Date.now()}`
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const remote = JSON.parse(await res.text());
+
+                if (!this.remoteDate) await this.checkRecommendedUpdate();
+
+                const diff = this.computeDiff(remote);
+                this.closeSettingsModal();
+                this.showDiffModal(diff, remote);
+            } catch (e) {
+                console.error('[Arena Manager] Download recommended config error:', e);
+                this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+            }
+        }
+
+        computeDiff(remote) {
+            const diff = {
+                visibility: { show: [], hide: [] },
+                sort: {},
+                stars: { added: [], removed: [] },
+                modelInfo: [],
+                groups: { added: [], modified: [] }
+            };
+
+            const remoteModels = remote.models || {};
+            const localModels = this.dm.data.models || {};
+
+            for (const [name, rm] of Object.entries(remoteModels)) {
+                const lm = localModels[name];
+                const remoteVis = rm.visible !== false;
+
+                if (!lm) {
+                    (remoteVis ? diff.visibility.show : diff.visibility.hide).push(name);
+                    if (rm.starred) diff.stars.added.push(name);
+                    if (rm.note || (rm.company && rm.company !== 'Other')) diff.modelInfo.push(name);
+                    continue;
+                }
+
+                if (remoteVis !== (lm.visible !== false)) {
+                    (remoteVis ? diff.visibility.show : diff.visibility.hide).push(name);
+                }
+                if (rm.starred && !lm.starred) diff.stars.added.push(name);
+                if (!rm.starred && lm.starred) diff.stars.removed.push(name);
+                if ((rm.note || '') !== (lm.note || '') ||
+                    (rm.icon || '') !== (lm.icon || '') ||
+                    (rm.company || 'Other') !== (lm.company || 'Other')) {
+                    diff.modelInfo.push(name);
+                }
+            }
+
+            ['text', 'search', 'image', 'code', 'video'].forEach(mode => {
+                const mo = JSON.stringify((remote.modelOrder || {})[mode] || []) !== JSON.stringify((this.dm.data.modelOrder || {})[mode] || []);
+                const oo = JSON.stringify((remote.orgOrder || {})[mode] || []) !== JSON.stringify((this.dm.data.orgOrder || {})[mode] || []);
+                if (mo || oo) diff.sort[mode] = { modelOrder: mo, orgOrder: oo };
+            });
+
+            const remoteGroups = remote.groups || {};
+            const localGroups = this.dm.data.groups || {};
+            for (const [name, members] of Object.entries(remoteGroups)) {
+                if (!localGroups[name]) diff.groups.added.push(name);
+                else if (JSON.stringify([...members].sort()) !== JSON.stringify([...localGroups[name]].sort())) diff.groups.modified.push(name);
+            }
+
+            return diff;
+        }
+
+        showDiffModal(diff, remote) {
+            const body = this.diffModal.querySelector('#lmm-diff-body');
+            const visCount = diff.visibility.show.length + diff.visibility.hide.length;
+            const sortModes = Object.keys(diff.sort);
+            const starCount = diff.stars.added.length + diff.stars.removed.length;
+            const infoCount = diff.modelInfo.length;
+            const groupCount = diff.groups.added.length + diff.groups.modified.length;
+            const hasChanges = visCount + sortModes.length + starCount + infoCount + groupCount > 0;
+
+            if (!hasChanges) {
+                body.innerHTML = `<div style="text-align:center;padding:20px;color:var(--lmm-text2)">✅ ${this.t('noChanges')}</div>`;
+                this.diffModal.querySelector('#lmm-diff-apply').style.display = 'none';
+                this.diffModalOverlay.classList.add('open');
+                this.diffModal.classList.add('open');
+                return;
+            }
+
+            const trunc = (arr, max = 5) => {
+                const s = arr.slice(0, max).join(', ');
+                return arr.length > max ? `${s} +${arr.length - max}` : s;
+            };
+            const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+            let html = '';
+
+            if (visCount > 0) {
+                html += `<div class="lmm-diff-section"><label class="lmm-diff-category"><input type="checkbox" checked data-diff="visibility"> ${this.t('visibilityChanges')}（${visCount} ${this.t('models')}）</label><div class="lmm-diff-details">`;
+                if (diff.visibility.show.length) html += `<div>${this.t('show')}: ${trunc(diff.visibility.show)}</div>`;
+                if (diff.visibility.hide.length) html += `<div>${this.t('hide')}: ${trunc(diff.visibility.hide)}</div>`;
+                html += '</div></div>';
+            }
+
+            if (sortModes.length > 0) {
+                html += `<div class="lmm-diff-section"><label class="lmm-diff-category"><input type="checkbox" checked data-diff="sort"> ${this.t('sortChanges')}</label><div class="lmm-diff-details">`;
+                sortModes.forEach(mode => {
+                    const s = diff.sort[mode], parts = [];
+                    if (s.modelOrder) parts.push(this.t('modelOrderText'));
+                    if (s.orgOrder) parts.push(this.t('orgOrderText'));
+                    html += `<div>${modeIcons[mode] || ''} ${mode}: ${parts.join(', ')}</div>`;
+                });
+                html += '</div></div>';
+            }
+
+            if (starCount > 0) {
+                html += `<div class="lmm-diff-section"><label class="lmm-diff-category"><input type="checkbox" checked data-diff="stars"> ${this.t('starChanges')}（${starCount} ${this.t('models')}）</label><div class="lmm-diff-details">`;
+                if (diff.stars.added.length) html += `<div>${this.t('addStarred')}: ${trunc(diff.stars.added)}</div>`;
+                if (diff.stars.removed.length) html += `<div>${this.t('removeStarred')}: ${trunc(diff.stars.removed)}</div>`;
+                html += '</div></div>';
+            }
+
+            if (infoCount > 0) {
+                html += `<div class="lmm-diff-section"><label class="lmm-diff-category"><input type="checkbox" checked data-diff="modelInfo"> ${this.t('modelInfoChanges')}（${infoCount} ${this.t('models')}）</label><div class="lmm-diff-details"><div>${this.t('noteIconOrgChanged')}: ${trunc(diff.modelInfo)}</div></div></div>`;
+            }
+
+            if (groupCount > 0) {
+                html += `<div class="lmm-diff-section"><label class="lmm-diff-category"><input type="checkbox" checked data-diff="groups"> ${this.t('groupChanges')}</label><div class="lmm-diff-details">`;
+                if (diff.groups.added.length) html += `<div>${this.t('newGroups')}: ${diff.groups.added.join(', ')}</div>`;
+                if (diff.groups.modified.length) html += `<div>${this.t('modifiedGroups')}: ${diff.groups.modified.join(', ')}</div>`;
+                html += '</div></div>';
+            }
+
+            body.innerHTML = html;
+            this.diffModal.querySelector('#lmm-diff-apply').style.display = '';
+            this.diffModal.querySelector('#lmm-diff-apply').onclick = () => {
+                this.applyDiff(diff, remote);
+                this.closeDiffModal();
+            };
+            this.diffModal.querySelector('[data-i18n="configDiff"]').textContent = this.t('configDiff');
+            this.diffModal.querySelector('#lmm-diff-cancel').textContent = this.t('cancel');
+            this.diffModal.querySelector('#lmm-diff-apply').querySelector('[data-i18n="applySelected"]').textContent = this.t('applySelected');
+            this.diffModalOverlay.classList.add('open');
+            this.diffModal.classList.add('open');
+        }
+
+        applyDiff(diff, remote) {
+            const checked = sel => this.diffModal.querySelector(`input[data-diff="${sel}"]`)?.checked;
+
+            if (checked('visibility')) {
+                diff.visibility.show.forEach(name => {
+                    if (!this.dm.data.models[name] && remote.models[name]) {
+                        this.dm.setModel(name, { ...remote.models[name] });
+                    }
+                    this.dm.setVisibility(name, true);
+                });
+                diff.visibility.hide.forEach(name => {
+                    if (!this.dm.data.models[name] && remote.models[name]) {
+                        this.dm.setModel(name, { ...remote.models[name] });
+                    }
+                    this.dm.setVisibility(name, false);
+                });
+            }
+
+            if (checked('sort')) {
+                Object.entries(diff.sort).forEach(([mode, s]) => {
+                    if (s.modelOrder) this.dm.setModelOrder(mode, (remote.modelOrder || {})[mode] || []);
+                    if (s.orgOrder) this.dm.setOrgOrder(mode, (remote.orgOrder || {})[mode] || []);
+                });
+            }
+
+            if (checked('stars')) {
+                diff.stars.added.forEach(name => {
+                    if (this.dm.data.models[name]) this.dm.updateModel(name, { starred: true });
+                });
+                diff.stars.removed.forEach(name => {
+                    if (this.dm.data.models[name]) this.dm.updateModel(name, { starred: false });
+                });
+            }
+
+            if (checked('modelInfo')) {
+                diff.modelInfo.forEach(name => {
+                    const rm = remote.models[name];
+                    if (!rm) return;
+                    const updates = {};
+                    if (rm.note !== undefined) updates.note = rm.note;
+                    if (rm.icon !== undefined) updates.icon = rm.icon;
+                    if (rm.company && rm.company !== 'Other') {
+                        updates.company = rm.company;
+                        updates.companyManual = true;
+                    }
+                    if (this.dm.data.models[name]) {
+                        this.dm.updateModel(name, updates);
+                    } else {
+                        this.dm.setModel(name, { ...rm });
+                    }
+                });
+            }
+
+            if (checked('groups')) {
+                const remoteGroups = remote.groups || {};
+                diff.groups.added.forEach(name => {
+                    this.dm.createGroup(name);
+                    (remoteGroups[name] || []).forEach(m => this.dm.addToGroup(name, m));
+                });
+                diff.groups.modified.forEach(name => {
+                    (remoteGroups[name] || []).forEach(m => this.dm.addToGroup(name, m));
+                });
+            }
+
+            this.dm.data.settings.lastRecommendedDate = this.remoteDate || (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; })();
+            this.dm.save();
+            this.scanner.applyFilters();
+            this.updateTopbar();
+            this.updateSidebar();
+            this.refresh();
+            this.updateFabBadge();
+            this.scanner.toast(this.t('recommendedApplied'), 'success');
+        }
+
+        async uploadRecommendedConfig() {
+            const token = this.settingsModal.querySelector('#lmm-admin-token').value.trim();
+            if (!token) {
+                this.scanner.toast(this.t('tokenRequired'), 'warning');
+                return;
+            }
+
+            try {
+                // 获取当前文件 SHA（如果存在）
+                let sha = null;
+                try {
+                    const getRes = await this.gmFetch({
+                        method: 'GET',
+                        url: `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${RECOMMENDED_FILE}`,
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    if (getRes.ok) {
+                        const fileInfo = await getRes.json();
+                        sha = fileInfo.sha;
+                    }
+                } catch (e) { /* 文件不存在，sha 为 null */ }
+
+                // 准备导出数据（去除敏感信息和设置）
+                const data = JSON.parse(JSON.stringify(this.dm.data));
+                delete data.settings;
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+
+                const body = {
+                    message: `Update recommended config ${new Date().toISOString().slice(0, 10)}`,
+                    content: content
+                };
+                if (sha) body.sha = sha;
+
+                const res = await this.gmFetch({
+                    method: 'PUT',
+                    url: `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${RECOMMENDED_FILE}`,
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    data: JSON.stringify(body)
+                });
+
+                if (!res.ok) {
+                    if (res.status === 401) throw new Error(this.t('invalidToken'));
+                    throw new Error(`HTTP ${res.status}`);
+                }
+
+                this.scanner.toast(this.t('uploadRecommendedSuccess'), 'success');
+            } catch (e) {
+                console.error('[Arena Manager] Upload recommended config error:', e);
+                this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+            }
+        }
+
         multiSelectAll() {
             const models = this.getFiltered();
             models.forEach(m => this.selectedModels.add(m.name));
@@ -3866,12 +4476,12 @@
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
                     <button class="lmm-btn lmm-btn-primary" id="lmm-apply">✓ ${this.t('apply')}</button>
                 `;
-        batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
-        batch.querySelector('#lmm-apply').onclick = () => {
-            this.scanner.applyFilters();
-            this.scanner.toast(this.t('applied'), 'success');
-        };
-    }
+                batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
+                batch.querySelector('#lmm-apply').onclick = () => {
+                    this.scanner.applyFilters();
+                    this.scanner.toast(this.t('applied'), 'success');
+                };
+            }
         }
 
         esc(s) {
@@ -4374,6 +4984,11 @@
             this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
 
             this.updateSettingsModalI18n();
+            const localDate = this.dm.data.settings.lastRecommendedDate;
+            this.settingsModal.querySelector('#lmm-rec-local-date').textContent = localDate || this.t('notImported');
+            this.settingsModal.querySelector('#lmm-rec-remote-date').textContent = this.remoteDate || '-';
+            const adminSection = this.settingsModal.querySelector('#lmm-admin-section');
+            if (adminSection) adminSection.style.display = this.adminMode ? '' : 'none';
             this.settingsModalOverlay.classList.add('open');
             this.settingsModal.classList.add('open');
         }
@@ -4381,6 +4996,7 @@
         closeSettingsModal() {
             this.settingsModalOverlay.classList.remove('open');
             this.settingsModal.classList.remove('open');
+            this.adminMode = false;
         }
     }
 
