@@ -1149,7 +1149,7 @@
       "fileUpload": false
     },
     "minimax-m2.1-preview": {
-      "visible": true,
+      "visible": false,
       "company": "MiniMax",
       "icon": "🎯",
       "companyManual": false,
@@ -2826,6 +2826,21 @@
       "visible": true,
       "company": "Z.ai",
       "icon": "🔮",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "minimax-m2.5": {
+      "visible": true,
+      "company": "MiniMax",
+      "icon": "🎯",
       "companyManual": false,
       "modes": [
         "text",
