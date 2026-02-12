@@ -4229,6 +4229,9 @@
             if (!hasChanges) {
                 body.innerHTML = `<div style="text-align:center;padding:20px;color:var(--lmm-text2)">✅ ${this.t('noChanges')}</div>`;
                 this.diffModal.querySelector('#lmm-diff-apply').style.display = 'none';
+                this.dm.data.settings.lastRecommendedDate = this.remoteDate || this.dm.data.settings.lastRecommendedDate;
+                this.dm.save();
+                this.settingsModal.querySelector('#lmm-rec-local-date').textContent = this.dm.data.settings.lastRecommendedDate || this.t('notImported');
                 this.diffModalOverlay.classList.add('open');
                 this.diffModal.classList.add('open');
                 return;
