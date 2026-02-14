@@ -2851,6 +2851,20 @@
       "vision": false,
       "note": "",
       "fileUpload": false
+    },
+    "gpt-5.2-chat-latest": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
