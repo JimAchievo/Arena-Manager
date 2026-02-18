@@ -85,7 +85,7 @@
       "fileUpload": false
     },
     "claude-opus-4-5-search": {
-      "visible": true,
+      "visible": false,
       "company": "Anthropic",
       "icon": "🟤",
       "companyManual": false,
@@ -2949,6 +2949,34 @@
       "starred": false,
       "isNew": false,
       "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-6-search": {
+      "visible": true,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-6-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
       "note": "",
       "fileUpload": false
     }
