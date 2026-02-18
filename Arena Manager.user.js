@@ -2461,7 +2461,7 @@
                     .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
                     .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
                     .lmm-tag.group { background: #14532d; color: #bbf7d0; }
-                                }
+                }
                 .lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
                 .lmm-card:hover .lmm-card-actions { opacity: 1; }
                 .lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
@@ -2527,6 +2527,8 @@
                 .lmm-diff-section:last-child { border-bottom: none; }
                 .lmm-diff-category { display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer; font-size: 13px; }
                 .lmm-diff-details { padding: 4px 0 4px 24px; font-size: 11px; color: var(--lmm-text2); line-height: 1.6; }
+                .lmm-sidebar-separator { text-align: center; padding: 4px 8px; font-size: 10px; color: var(--lmm-text2); border-top: 1px dashed var(--lmm-border); border-bottom: 1px dashed var(--lmm-border); margin: 4px 0; user-select: none; }
+                .lmm-sidebar-separator.drag-over { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
             `);
         }
 
@@ -3698,17 +3700,31 @@
             Object.entries(orgs).forEach(([name, data]) => {
                 if (name !== 'Other') allOrgItems.push({ name, ...data });
             });
+
+            const cleanOrder = orgOrder.filter(x => x !== '---');
             allOrgItems.sort((a, b) => {
-                const ai = orgOrder.indexOf(a.name);
-                const bi = orgOrder.indexOf(b.name);
+                const ai = cleanOrder.indexOf(a.name);
+                const bi = cleanOrder.indexOf(b.name);
                 return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
             });
 
             let tier1, tier2;
-            const splitAt = config.tier1.length;
-            if (config.useFolder && allOrgItems.length > splitAt) {
-                tier1 = allOrgItems.slice(0, splitAt);
-                tier2 = allOrgItems.slice(splitAt);
+            const sepPos = orgOrder.indexOf('---');
+            if (config.useFolder) {
+                if (sepPos !== -1) {
+                    const tier1Names = orgOrder.slice(0, sepPos);
+                    tier1 = allOrgItems.filter(c => tier1Names.includes(c.name));
+                    tier2 = allOrgItems.filter(c => !tier1Names.includes(c.name));
+                } else {
+                    const splitAt = config.tier1.length;
+                    if (allOrgItems.length > splitAt) {
+                        tier1 = allOrgItems.slice(0, splitAt);
+                        tier2 = allOrgItems.slice(splitAt);
+                    } else {
+                        tier1 = allOrgItems;
+                        tier2 = [];
+                    }
+                }
             } else {
                 tier1 = allOrgItems;
                 tier2 = [];
@@ -3783,8 +3799,14 @@
             this.$('#lmm-sort-btn').onclick = () => this.toggleSortMode();
             if (this.isSortMode) {
                 this.$('#lmm-sort-reset').onclick = () => {
-                    const sidebarMode = this.getSidebarMode();
-                    this.dm.setOrgOrder(sidebarMode, getDefaultOrgOrder(sidebarMode));
+                    const sm = this.getSidebarMode();
+                    const defaultOrder = [...getDefaultOrgOrder(sm)];
+                    const cfg = MODE_ORG_CONFIG[sm] || MODE_ORG_CONFIG.text;
+                    if (cfg.useFolder && this.isSortMode) {
+                        const splitAt = Math.min(cfg.tier1.length, defaultOrder.length);
+                        defaultOrder.splice(splitAt, 0, '---');
+                    }
+                    this.dm.setOrgOrder(sm, defaultOrder);
                     this.updateSidebar();
                     this.scanner.toast(this.t('orgOrderRestored'), 'success');
                 };
@@ -3793,32 +3815,71 @@
 
         renderOrgList(tier1, tier2, tier2Total, hasOther, other) {
             const list = this.$('#lmm-org-list');
+            const sidebarMode = this.getSidebarMode();
+            const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
             const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
 
-        let html;
-        if (this.isSortMode) {
-            const allItems = [...tier1, ...tier2, ...other];
-            if (hasOther) allItems.push({ name: 'Other', icon: '❔', cnt: hasOther.cnt });
-            html = allItems.map(c => renderItem(c, false)).join('');
-        } else {
-            html = tier1.map(c => renderItem(c, false)).join('');
-            if (tier2.length > 0) {
-                html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
+            let html;
+            if (this.isSortMode) {
+                html = tier1.map(c => renderItem(c, false)).join('');
+                if (config.useFolder) {
+                    html += `<div class="lmm-sidebar-separator" id="lmm-tier-separator">── ${this.t('moreOrgs')} ──</div>`;
+                }
+                html += tier2.map(c => renderItem(c, false)).join('');
+                if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
+            } else {
+                html = tier1.map(c => renderItem(c, false)).join('');
+                if (tier2.length > 0) {
+                    html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
+                }
+                other.forEach(c => {html += renderItem(c, false)});
+                if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
             }
-            other.forEach(c => {html += renderItem(c, false)});
-            if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
-        }
-        list.innerHTML = html;
+            list.innerHTML = html;
 
-            const folder = this.$('#lmm-tier2-folder');
-            if (folder) {
-                folder.onclick = () => {
-                    this.isTier2Expanded = !this.isTier2Expanded;
-                    this.$('#lmm-tier2-content').classList.toggle('open', this.isTier2Expanded);
-                    folder.querySelector('.icon').textContent = this.isTier2Expanded ? '📂' : '📁';
-                };
+            // separator drop 事件
+            if (this.isSortMode) {
+                const sep = this.$('#lmm-tier-separator');
+                if (sep) {
+                    sep.ondragover = (e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        sep.classList.add('drag-over');
+                    };
+                    sep.ondragleave = () => sep.classList.remove('drag-over');
+                    sep.ondrop = (e) => {
+                        e.preventDefault();
+                        sep.classList.remove('drag-over');
+                        const from = e.dataTransfer.getData('text/plain');
+                        if (from) {
+                            const order = this.dm.getOrgOrder(sidebarMode);
+                            const fromIdx = order.indexOf(from);
+                            const sepIdx = order.indexOf('---');
+                            if (fromIdx !== -1 && sepIdx !== -1) {
+                                order.splice(fromIdx, 1);
+                                const newSepIdx = order.indexOf('---');
+                                order.splice(newSepIdx + 1, 0, from);
+                                this.dm.setOrgOrder(sidebarMode, order);
+                                this.updateSidebar();
+                            }
+                        }
+                    };
+                }
             }
 
+            // folder 事件
+            if (!this.isSortMode) {
+                const folder = this.$('#lmm-tier2-folder');
+                if (folder) {
+                    folder.onclick = () => {
+                        this.isTier2Expanded = !this.isTier2Expanded;
+                        this.$('#lmm-tier2-content').classList.toggle('open', this.isTier2Expanded);
+                        folder.querySelector('.icon').textContent = this.isTier2Expanded ? '📂' : '📁';
+                    };
+                }
+            }
+
+            // item 事件
             list.querySelectorAll('.lmm-sidebar-item').forEach(item => {
                 if (this.isSortMode) {
                     this.bindDragEvents(item);
@@ -3841,12 +3902,29 @@
         toggleSortMode() {
             this.isSortMode = !this.isSortMode;
             const sidebarMode = this.getSidebarMode();
-            if (!this.isSortMode) {
-                const items = this.$('#lmm-org-list').querySelectorAll('.lmm-sidebar-item[data-org]');
-                const newOrder = [...items].map(i => i.dataset.org).filter(Boolean);
-                this.dm.setOrgOrder(sidebarMode, newOrder);
-            } else {
+            const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
+
+            if (this.isSortMode) {
                 if (this.$('#lmm-tier2-folder')) this.isTier2Expanded = true;
+                if (config.useFolder) {
+                    const order = this.dm.getOrgOrder(sidebarMode);
+                    if (!order.includes('---')) {
+                        const splitAt = Math.min(config.tier1.length, order.length);
+                        order.splice(splitAt, 0, '---');
+                        this.dm.setOrgOrder(sidebarMode, order);
+                    }
+                }
+            } else {
+                const list = this.$('#lmm-org-list');
+                const newOrder = [];
+                for (const child of list.children) {
+                    if (child.id === 'lmm-tier-separator') {
+                        newOrder.push('---');
+                    } else if (child.dataset && child.dataset.org) {
+                        newOrder.push(child.dataset.org);
+                    }
+                }
+                this.dm.setOrgOrder(sidebarMode, newOrder);
             }
             this.updateSidebar();
         }
@@ -4498,62 +4576,62 @@
             }
         }
 
-        esc(s) {
-            if (!s) return '';
-            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-        }
+esc(s) {
+    if (!s) return '';
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
 
-        getModeIcon(modes) {
-            if (!Array.isArray(modes) || modes.length === 0) return '❓';
-            const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-            if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
-            return icons[modes[0]] || '❓';
-        }
+getModeIcon(modes) {
+    if (!Array.isArray(modes) || modes.length === 0) return '❓';
+    const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+    if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
+    return icons[modes[0]] || '❓';
+}
 
-        refresh() {
-            const grid = this.$('#lmm-grid');
-            const models = this.getFiltered();
-            const sidebarMode = this.getSidebarMode();
+refresh() {
+    const grid = this.$('#lmm-grid');
+    const models = this.getFiltered();
+    const sidebarMode = this.getSidebarMode();
 
-            this.updateGridView();
-            this.renderBatchButtons();
+    this.updateGridView();
+    this.renderBatchButtons();
 
-            if (models.length === 0) {
-                const isCustomGroup = this.currentMode.startsWith('group_');
-                const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
-                grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
-            } else {
-                grid.innerHTML = models.map(m => {
-                    const vis = m.visible !== false;
-                    const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
-                    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+    if (models.length === 0) {
+        const isCustomGroup = this.currentMode.startsWith('group_');
+        const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
+        grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
+    } else {
+        grid.innerHTML = models.map(m => {
+            const vis = m.visible !== false;
+            const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
+            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
 
-                    const imgTypeLabels = {
-                        universal: { icon: '🔄' },
-                        t2i: { icon: '✨' },
-                        i2i: { icon: '🖼️' }
-                    };
-                    const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
-                    ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
-                    const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
-                    const fileUploadTag = m.fileUpload ? `<span class="lmm-tag vision">📄</span>` : '';
-                    const modelGroups = this.dm.getModelGroups(m.name);
-                    const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
+            const imgTypeLabels = {
+                universal: { icon: '🔄' },
+                t2i: { icon: '✨' },
+                i2i: { icon: '🖼️' }
+            };
+            const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
+            ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
+            const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
+            const fileUploadTag = m.fileUpload ? `<span class="lmm-tag vision">📄</span>` : '';
+            const modelGroups = this.dm.getModelGroups(m.name);
+            const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
 
-                    const isSelected = this.selectedModels.has(m.name);
-                    const showCheck = this.isMultiSelectMode;
-                    const cardClasses = [
-                        'lmm-card',
-                        vis ? 'visible' : 'hidden',
-                        m.isNew ? 'new' : '',
-                        m.starred ? 'starred' : '',
-                        isSelected ? 'selected' : ''
-                    ].filter(Boolean).join(' ');
+            const isSelected = this.selectedModels.has(m.name);
+            const showCheck = this.isMultiSelectMode;
+            const cardClasses = [
+                'lmm-card',
+                vis ? 'visible' : 'hidden',
+                m.isNew ? 'new' : '',
+                m.starred ? 'starred' : '',
+                isSelected ? 'selected' : ''
+            ].filter(Boolean).join(' ');
 
-                    // 备注显示（仅 grid 和 list 视图）
-                    const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
+            // 备注显示（仅 grid 和 list 视图）
+            const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
 
-                    return `
+            return `
                         <div class="${cardClasses}" data-name="${this.esc(m.name)}">
                             ${dragHandle}
                             ${showCheck ? `<div class="lmm-check ${isSelected ? 'on' : ''}">${isSelected ? '✓' : ''}</div>` : ''}
@@ -4636,99 +4714,99 @@
             this.updateOrgFilter();
         }
 
-        updateStats() {
-            const modeModels = this.getModelsInCurrentMode();
-            const v = modeModels.filter(m => m.visible !== false).length;
-            this.$('#lmm-v').textContent = v;
-            this.$('#lmm-h').textContent = modeModels.length - v;
-            this.$('#lmm-t').textContent = modeModels.length;
-        }
+updateStats() {
+    const modeModels = this.getModelsInCurrentMode();
+    const v = modeModels.filter(m => m.visible !== false).length;
+    this.$('#lmm-v').textContent = v;
+    this.$('#lmm-h').textContent = modeModels.length - v;
+    this.$('#lmm-t').textContent = modeModels.length;
+}
 
-        // 计算模型在当前模式下的排序位置
-        getModelRank(name) {
-            if (this.currentMode !== 'visible') return null;
-            const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
-            const customOrder = this.dm.getModelOrder(this.visibleSubMode);
+// 计算模型在当前模式下的排序位置
+getModelRank(name) {
+    if (this.currentMode !== 'visible') return null;
+    const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
+    const customOrder = this.dm.getModelOrder(this.visibleSubMode);
 
+    if (customOrder.length > 0) {
+        const sorted = [...models].sort((a, b) => {
+            let ai = customOrder.indexOf(a.name);
+            let bi = customOrder.indexOf(b.name);
+            if (ai === -1) ai = 9999;
+            if (bi === -1) bi = 9999;
+            return ai - bi;
+        });
+        const idx = sorted.findIndex(m => m.name === name);
+        return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+    }
+
+    const sidebarMode = this.getSidebarMode();
+    const orgOrder = this.dm.getOrgOrder(sidebarMode);
+    const sorted = [...models].sort((a, b) => {
+        const ai = orgOrder.indexOf(a.company);
+        const bi = orgOrder.indexOf(b.company);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+    });
+    const idx = sorted.findIndex(m => m.name === name);
+    return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+}
+
+openEditModal(name) {
+    const m = this.dm.getModel(name);
+    if (!m) return;
+    this.editingModel = name;
+
+    const body = this.editModal.querySelector('#lmm-edit-body');
+    const allGroups = this.dm.getGroupNames();
+    const modelGroups = this.dm.getModelGroups(name);
+    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+    const isVisible = m.visible !== false;
+
+    // 计算排序位置
+    let rankInfo = '';
+    if (isVisible) {
+        modes.forEach(mode => {
+            const visibleModels = this.dm.getAllModels().filter(
+                md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
+            );
+            const customOrder = this.dm.getModelOrder(mode);
+            const orgOrder = this.dm.getOrgOrder(mode);
+
+            let sorted;
             if (customOrder.length > 0) {
-                const sorted = [...models].sort((a, b) => {
+                sorted = [...visibleModels].sort((a, b) => {
                     let ai = customOrder.indexOf(a.name);
                     let bi = customOrder.indexOf(b.name);
                     if (ai === -1) ai = 9999;
                     if (bi === -1) bi = 9999;
                     return ai - bi;
                 });
-                const idx = sorted.findIndex(m => m.name === name);
-                return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-            }
-
-            const sidebarMode = this.getSidebarMode();
-            const orgOrder = this.dm.getOrgOrder(sidebarMode);
-            const sorted = [...models].sort((a, b) => {
-                const ai = orgOrder.indexOf(a.company);
-                const bi = orgOrder.indexOf(b.company);
-                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-            });
-            const idx = sorted.findIndex(m => m.name === name);
-            return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-        }
-
-        openEditModal(name) {
-            const m = this.dm.getModel(name);
-            if (!m) return;
-            this.editingModel = name;
-
-            const body = this.editModal.querySelector('#lmm-edit-body');
-            const allGroups = this.dm.getGroupNames();
-            const modelGroups = this.dm.getModelGroups(name);
-            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
-            const isVisible = m.visible !== false;
-
-            // 计算排序位置
-            let rankInfo = '';
-            if (isVisible) {
-                modes.forEach(mode => {
-                    const visibleModels = this.dm.getAllModels().filter(
-                        md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
-                    );
-                    const customOrder = this.dm.getModelOrder(mode);
-                    const orgOrder = this.dm.getOrgOrder(mode);
-
-                    let sorted;
-                    if (customOrder.length > 0) {
-                        sorted = [...visibleModels].sort((a, b) => {
-                            let ai = customOrder.indexOf(a.name);
-                            let bi = customOrder.indexOf(b.name);
-                            if (ai === -1) ai = 9999;
-                            if (bi === -1) bi = 9999;
-                            return ai - bi;
-                        });
-                    } else {
-                        sorted = [...visibleModels].sort((a, b) => {
-                            const ai = orgOrder.indexOf(a.company);
-                            const bi = orgOrder.indexOf(b.company);
-                            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-                        });
-                    }
-
-                    const idx = sorted.findIndex(md => md.name === name);
-                    if (idx !== -1) {
-                        const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-                        rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
-                    }
+            } else {
+                sorted = [...visibleModels].sort((a, b) => {
+                    const ai = orgOrder.indexOf(a.company);
+                    const bi = orgOrder.indexOf(b.company);
+                    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
                 });
             }
 
-            // Vision 显示
-            let visionDisplay = '';
-            if (typeof m.vision === 'string') {
-                const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
-                visionDisplay = visionLabels[m.vision] || m.vision;
-            } else {
-                visionDisplay = m.vision ? this.t('on') : this.t('off');
+            const idx = sorted.findIndex(md => md.name === name);
+            if (idx !== -1) {
+                const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+                rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
             }
+        });
+    }
 
-            body.innerHTML = `
+    // Vision 显示
+    let visionDisplay = '';
+    if (typeof m.vision === 'string') {
+        const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
+        visionDisplay = visionLabels[m.vision] || m.vision;
+    } else {
+        visionDisplay = m.vision ? this.t('on') : this.t('off');
+    }
+
+    body.innerHTML = `
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('modelName')}</span>
                     <span class="lmm-detail-value"><strong>${this.esc(name)}</strong></span>
@@ -4825,106 +4903,106 @@
             this.editModal.classList.add('open');
         }
 
-        closeEditModal() {
-            this.editModalOverlay.classList.remove('open');
-            this.editModal.classList.remove('open');
-            this.editingModel = null;
+closeEditModal() {
+    this.editModalOverlay.classList.remove('open');
+    this.editModal.classList.remove('open');
+    this.editingModel = null;
+}
+
+saveEdit() {
+    if (!this.editingModel) return;
+
+    const body = this.editModal.querySelector('#lmm-edit-body');
+    const company = body.querySelector('#lmm-edit-org').value.trim();
+    const icon = body.querySelector('#lmm-edit-icon').value.trim();
+    const note = body.querySelector('#lmm-edit-note').value.trim();
+    const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
+
+    const allGroups = this.dm.getGroupNames();
+    const selectedGroups = [];
+    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
+        selectedGroups.push(item.dataset.group);
+    });
+
+    allGroups.forEach(g => {
+        if (selectedGroups.includes(g)) {
+            this.dm.addToGroup(g, this.editingModel);
+        } else {
+            this.dm.removeFromGroup(g, this.editingModel);
         }
+    });
 
-        saveEdit() {
-            if (!this.editingModel) return;
+    this.dm.updateModel(this.editingModel, {
+        company: company || 'Other',
+        companyManual: company !== '',
+        icon: icon || this.dm.getModel(this.editingModel).icon,
+        note: note,
+        starred: starred
+    });
 
-            const body = this.editModal.querySelector('#lmm-edit-body');
-            const company = body.querySelector('#lmm-edit-org').value.trim();
-            const icon = body.querySelector('#lmm-edit-icon').value.trim();
-            const note = body.querySelector('#lmm-edit-note').value.trim();
-            const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
+    this.closeEditModal();
+    this.refresh();
+    this.updateSidebar();
+    this.updateTopbar();
+    this.scanner.toast(this.t('saved'), 'success');
+    this.triggerSyncOnChange();
+}
 
-            const allGroups = this.dm.getGroupNames();
-            const selectedGroups = [];
-            body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
-                selectedGroups.push(item.dataset.group);
-            });
+resetEdit() {
+    if (!this.editingModel) return;
+    this.dm.reanalyze(this.editingModel);
+    this.closeEditModal();
+    this.refresh();
+    this.updateSidebar();
+    this.updateTopbar();
+    this.scanner.toast(this.t('restored'), 'success');
+    this.triggerSyncOnChange();
+}
 
-            allGroups.forEach(g => {
-                if (selectedGroups.includes(g)) {
-                    this.dm.addToGroup(g, this.editingModel);
-                } else {
-                    this.dm.removeFromGroup(g, this.editingModel);
-                }
-            });
+openGroupModal() {
+    this.renderGroupList();
+    this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
+    this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
+    this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
+    this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
+    this.groupModalOverlay.classList.add('open');
+    this.groupModal.classList.add('open');
+}
 
-            this.dm.updateModel(this.editingModel, {
-                company: company || 'Other',
-                companyManual: company !== '',
-                icon: icon || this.dm.getModel(this.editingModel).icon,
-                note: note,
-                starred: starred
-            });
+closeGroupModal() {
+    this.groupModalOverlay.classList.remove('open');
+    this.groupModal.classList.remove('open');
+}
 
-            this.closeEditModal();
-            this.refresh();
-            this.updateSidebar();
-            this.updateTopbar();
-            this.scanner.toast(this.t('saved'), 'success');
-            this.triggerSyncOnChange();
-        }
+createGroup() {
+    const input = this.groupModal.querySelector('#lmm-group-new-name');
+    const name = input.value.trim();
+    if (!name) {
+        this.scanner.toast(this.t('enterGroupName'), 'warning');
+        return;
+    }
+    if (this.dm.createGroup(name)) {
+        input.value = '';
+        this.renderGroupList();
+        this.updateTopbar();
+        this.scanner.toast(this.t('groupCreated'), 'success');
+        this.triggerSyncOnChange();
+    } else {
+        this.scanner.toast(this.t('groupExists'), 'warning');
+    }
+}
 
-        resetEdit() {
-            if (!this.editingModel) return;
-            this.dm.reanalyze(this.editingModel);
-            this.closeEditModal();
-            this.refresh();
-            this.updateSidebar();
-            this.updateTopbar();
-            this.scanner.toast(this.t('restored'), 'success');
-            this.triggerSyncOnChange();
-        }
+renderGroupList() {
+    const list = this.groupModal.querySelector('#lmm-group-list');
+    const groups = this.dm.getGroups();
+    const names = Object.keys(groups);
 
-        openGroupModal() {
-            this.renderGroupList();
-            this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
-            this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
-            this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
-            this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
-            this.groupModalOverlay.classList.add('open');
-            this.groupModal.classList.add('open');
-        }
+    if (names.length === 0) {
+        list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
+        return;
+    }
 
-        closeGroupModal() {
-            this.groupModalOverlay.classList.remove('open');
-            this.groupModal.classList.remove('open');
-        }
-
-        createGroup() {
-            const input = this.groupModal.querySelector('#lmm-group-new-name');
-            const name = input.value.trim();
-            if (!name) {
-                this.scanner.toast(this.t('enterGroupName'), 'warning');
-                return;
-            }
-            if (this.dm.createGroup(name)) {
-                input.value = '';
-                this.renderGroupList();
-                this.updateTopbar();
-                this.scanner.toast(this.t('groupCreated'), 'success');
-                this.triggerSyncOnChange();
-            } else {
-                this.scanner.toast(this.t('groupExists'), 'warning');
-            }
-        }
-
-        renderGroupList() {
-            const list = this.groupModal.querySelector('#lmm-group-list');
-            const groups = this.dm.getGroups();
-            const names = Object.keys(groups);
-
-            if (names.length === 0) {
-                list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
-                return;
-            }
-
-            list.innerHTML = names.map(name => `
+    list.innerHTML = names.map(name => `
                 <div class="lmm-group-item" data-group="${this.esc(name)}">
                     <span class="name">📁 ${this.esc(name)}</span>
                     <span style="color:var(--lmm-text2);font-size:10px">${groups[name].length} ${this.t('models')}</span>
@@ -4974,60 +5052,60 @@
             });
         }
 
-        openSettingsModal() {
-            const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
-            langSelect.value = this.dm.getLanguage();
+openSettingsModal() {
+    const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
+    langSelect.value = this.dm.getLanguage();
 
-            const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
-            alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
+    const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
+    alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
 
-            const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
-            lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
+    const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
+    lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
 
-            const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
-            autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
-            this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
+    const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
+    autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
+    this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
 
-            const syncMode = this.dm.data.settings.autoSyncMode || 'change';
-            this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
-                radio.checked = radio.value === syncMode;
-            });
-            this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
+    const syncMode = this.dm.data.settings.autoSyncMode || 'change';
+    this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
+        radio.checked = radio.value === syncMode;
+    });
+    this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
 
-            this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
-            this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
+    this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
+    this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
 
-            this.updateSettingsModalI18n();
-            const localDate = this.dm.data.settings.lastRecommendedDate;
-            this.settingsModal.querySelector('#lmm-rec-local-date').textContent = localDate || this.t('notImported');
-            this.settingsModal.querySelector('#lmm-rec-remote-date').textContent = this.remoteDate || '-';
-            const adminSection = this.settingsModal.querySelector('#lmm-admin-section');
-            if (adminSection) adminSection.style.display = this.adminMode ? '' : 'none';
-            this.settingsModalOverlay.classList.add('open');
-            this.settingsModal.classList.add('open');
-        }
+    this.updateSettingsModalI18n();
+    const localDate = this.dm.data.settings.lastRecommendedDate;
+    this.settingsModal.querySelector('#lmm-rec-local-date').textContent = localDate || this.t('notImported');
+    this.settingsModal.querySelector('#lmm-rec-remote-date').textContent = this.remoteDate || '-';
+    const adminSection = this.settingsModal.querySelector('#lmm-admin-section');
+    if (adminSection) adminSection.style.display = this.adminMode ? '' : 'none';
+    this.settingsModalOverlay.classList.add('open');
+    this.settingsModal.classList.add('open');
+}
 
-        closeSettingsModal() {
-            this.settingsModalOverlay.classList.remove('open');
-            this.settingsModal.classList.remove('open');
-            this.adminMode = false;
-        }
-    }
+closeSettingsModal() {
+    this.settingsModalOverlay.classList.remove('open');
+    this.settingsModal.classList.remove('open');
+    this.adminMode = false;
+}
+}
 
-    // ==================== 初始化 ====================
-    function init() {
-        console.log(`[Arena Manager] v${VERSION} 启动`);
-        const dm = new DataManager();
-        const scanner = new Scanner(dm);
-        const ui = new UI(dm, scanner);
-        ui.init();
-        scanner.startObserving();
-        setTimeout(() => scanner.scan(), 2000);
-    }
+// ==================== 初始化 ====================
+function init() {
+    console.log(`[Arena Manager] v${VERSION} 启动`);
+    const dm = new DataManager();
+    const scanner = new Scanner(dm);
+    const ui = new UI(dm, scanner);
+    ui.init();
+    scanner.startObserving();
+    setTimeout(() => scanner.scan(), 2000);
+}
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
 })();
