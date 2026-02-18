@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.7.2
+// @version      4.7.3
 // @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
 // @author       Arena Manager Team
 // @match        https://arena.ai/*
@@ -21,7 +21,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '4.7.2';
+    const VERSION = '4.7.3';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -1662,7 +1662,7 @@
 
     const MODE_ORG_CONFIG = {
         text: {
-            tier1: ['Google', 'xAI', 'Anthropic', 'OpenAI', 'Baidu', 'Moonshot', 'Z.ai', 'Alibaba', 'DeepSeek', 'Mistral', 'MiniMax', 'Bytedance'],
+            tier1: ['Google', 'Anthropic', 'xAI', 'OpenAI', 'Bytedance', 'Z.ai', 'Baidu', 'Moonshot', 'Alibaba', 'DeepSeek', 'Mistral', 'MiniMax', 'Arcee AI'],
             tier2: ['Meituan', 'Amazon', 'Xiaomi', 'Tencent', 'Microsoft AI', 'Prime Intellect', 'Cohere', 'Nvidia', 'Ant Group', 'StepFun', 'Meta', 'Allen AI', 'Inception AI', 'IBM', '01 AI', 'NexusFlow'],
             useFolder: true
         },
@@ -1720,7 +1720,7 @@
         { patterns: [/^mercury/i], company: 'Inception AI', icon: '☿️' },
         { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity', icon: '❓' },
         { patterns: [/^diffbot/i], company: 'Diffbot', icon: '🤖' },
-        { patterns: [/^seed/i], company: 'Bytedance', icon: '🎵' },
+        { patterns: [/^seed/i, /^dola/i], company: 'Bytedance', icon: '🎵' },
         { patterns: [/^flux/i], company: 'Black Forest Labs', icon: '🌊' },
         { patterns: [/^mai-/i, /^microsoft/i], company: 'Microsoft AI', icon: '🪟' },
         { patterns: [/^vidu/i], company: 'Shengshu', icon: '🎬' },
@@ -1733,6 +1733,7 @@
         { patterns: [/^yi-/i], company: '01 AI', icon: '0️⃣' },
         { patterns: [/^athene/i], company: 'NexusFlow', icon: '🔗' },
         { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
+        { patterns: [/^trinity/i], company: 'Arcee AI', icon: '🔺' }
     ];
 
     const ICON_TO_ORG = {
@@ -3693,26 +3694,29 @@
                 orgs[c].cnt++;
             });
 
-            const tier1 = [], tier2 = [], other = [];
+            const allOrgItems = [];
             Object.entries(orgs).forEach(([name, data]) => {
-                const item = { name, ...data };
-                if (config.tier1.includes(name)) tier1.push(item);
-                else if (config.useFolder && config.tier2.includes(name)) tier2.push(item);
-                else if (name !== 'Other') other.push(item);
+                if (name !== 'Other') allOrgItems.push({ name, ...data });
             });
-
-            const sortByOrder = arr => arr.sort((a, b) => {
+            allOrgItems.sort((a, b) => {
                 const ai = orgOrder.indexOf(a.name);
                 const bi = orgOrder.indexOf(b.name);
                 return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
             });
-            sortByOrder(tier1);
-            sortByOrder(tier2);
-            sortByOrder(other);
+
+            let tier1, tier2;
+            const splitAt = config.tier1.length;
+            if (config.useFolder && allOrgItems.length > splitAt) {
+                tier1 = allOrgItems.slice(0, splitAt);
+                tier2 = allOrgItems.slice(splitAt);
+            } else {
+                tier1 = allOrgItems;
+                tier2 = [];
+            }
 
             const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
             const hasOther = orgs.Other;
-            this.renderOrgList(tier1, tier2, tier2Total, hasOther, other);
+            this.renderOrgList(tier1, tier2, tier2Total, hasOther, []);
 
             if (showImageTypes) {
                 const imageTypes = { universal: 0, t2i: 0, i2i: 0 };
@@ -3791,13 +3795,20 @@
             const list = this.$('#lmm-org-list');
             const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
 
-            let html = tier1.map(c => renderItem(c, false)).join('');
+        let html;
+        if (this.isSortMode) {
+            const allItems = [...tier1, ...tier2, ...other];
+            if (hasOther) allItems.push({ name: 'Other', icon: '❔', cnt: hasOther.cnt });
+            html = allItems.map(c => renderItem(c, false)).join('');
+        } else {
+            html = tier1.map(c => renderItem(c, false)).join('');
             if (tier2.length > 0) {
                 html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
             }
-            other.forEach(c => { html += renderItem(c, false); });
+            other.forEach(c => {html += renderItem(c, false)});
             if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
-            list.innerHTML = html;
+        }
+        list.innerHTML = html;
 
             const folder = this.$('#lmm-tier2-folder');
             if (folder) {
