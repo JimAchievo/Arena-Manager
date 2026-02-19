@@ -1007,20 +1007,6 @@
       "note": "",
       "fileUpload": false
     },
-    "deepseek-v3-0324": {
-      "visible": false,
-      "company": "DeepSeek",
-      "icon": "🐋",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "hunyuan-vision-1.5-thinking": {
       "visible": false,
       "company": "Tencent",
@@ -1511,20 +1497,6 @@
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "llama-4-maverick-17b-128e-instruct": {
-      "visible": false,
-      "company": "Meta",
-      "icon": "🔷",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": false
     },
