@@ -269,7 +269,7 @@
       "fileUpload": false
     },
     "gemini-3-pro": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -632,21 +632,6 @@
       "starred": false,
       "isNew": false,
       "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "glm-4.6": {
-      "visible": false,
-      "company": "Z.ai",
-      "icon": "🔮",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
       "note": "",
       "fileUpload": false
     },
@@ -1514,20 +1499,6 @@
       "note": "",
       "fileUpload": false
     },
-    "claude-3-5-haiku-20241022": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "ring-flash-2.0": {
       "visible": false,
       "company": "Ant Group",
@@ -1616,20 +1587,6 @@
       "visible": false,
       "company": "Allen AI",
       "icon": "🔬",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "magistral-medium-2506": {
-      "visible": false,
-      "company": "Mistral",
-      "icon": "🟠",
       "companyManual": false,
       "modes": [
         "text"
@@ -1809,20 +1766,6 @@
       "note": "",
       "fileUpload": false
     },
-    "MiMo-7B": {
-      "visible": false,
-      "company": "Xiaomi",
-      "icon": "🍊",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "qwen3-omni-flash": {
       "visible": false,
       "company": "Alibaba",
@@ -1870,20 +1813,6 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "MiMo-VL-7B-RL-2508": {
-      "visible": false,
-      "company": "Xiaomi",
-      "icon": "🍊",
       "companyManual": false,
       "modes": [
         "text"
@@ -2486,20 +2415,6 @@
       "note": "",
       "fileUpload": false
     },
-    "gemini-2.0-flash-preview-image-generation": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
     "dall-e-3": {
       "visible": false,
       "company": "OpenAI",
@@ -2949,6 +2864,21 @@
       "starred": false,
       "isNew": false,
       "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3.1-pro-preview": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
       "note": "",
       "fileUpload": false
     }
