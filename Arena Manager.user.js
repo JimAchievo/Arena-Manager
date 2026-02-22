@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.7.3
+// @version      4.7.4
 // @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
 // @author       Arena Manager Team
 // @match        https://arena.ai/*
@@ -21,10 +21,12 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '4.7.3';
+    const VERSION = '4.7.4';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
+    const LOGO_CACHE_KEY = 'arena_manager_logos';
+    const LOGO_BASE_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/Organization%20Logos/`;
 
     // ==================== 1. 国际化系统 ====================
     const I18N = {
@@ -2288,6 +2290,7 @@
             this.multiSelectBackup = new Map();
             this.autoSyncTimer = null;
             this.pendingSync = false;
+            this.logoCache = JSON.parse(GM_getValue(LOGO_CACHE_KEY) || '{}');
             this.adminMode = false;
             this.adminClickCount = 0;
             this.adminClickTimer = null;
@@ -2312,6 +2315,7 @@
             this.createGroupSelectModal();
             this.bindShortcuts();
             this.initAutoSync();
+            setTimeout(() => this.loadVisibleLogos(), 2000);
         }
 
         injectStyles() {
@@ -2337,199 +2341,202 @@
                 .lmm-overlay.open { opacity: 1; visibility: visible; }
 
                 .lmm-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 96vw; max-width: 1000px; height: 88vh; max-height: 720px; background: var(--lmm-bg); border-radius: 12px; z-index: 99999; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: all 0.2s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: var(--lmm-text); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-                .lmm-panel.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+.lmm-panel.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
 
-                .lmm-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 12px 12px 0 0; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
-                .lmm-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
-                .lmm-header-btns { display: flex; gap: 5px; align-items: center; margin-left: auto; flex-wrap: wrap; }
-                .lmm-close { width: 28px; height: 28px; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--lmm-text2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; }
-                .lmm-close:hover { background: var(--lmm-bg3); color: var(--lmm-danger); }
+.lmm-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 12px 12px 0 0; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
+.lmm-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
+.lmm-header-btns { display: flex; gap: 5px; align-items: center; margin-left: auto; flex-wrap: wrap; }
+.lmm-close { width: 28px; height: 28px; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--lmm-text2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; }
+.lmm-close:hover { background: var(--lmm-bg3); color: var(--lmm-danger); }
 
-                .lmm-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); color: var(--lmm-text); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; height: 28px; box-sizing: border-box; }
-                .lmm-btn:hover { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
-                .lmm-btn-primary { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-btn-primary:hover { background: var(--lmm-primary-dark); }
-                .lmm-btn-danger { background: var(--lmm-danger); color: #fff; border-color: var(--lmm-danger); }
-                .lmm-btn-success { background: var(--lmm-success); color: #fff; border-color: var(--lmm-success); }
-                .lmm-btn.scanning { animation: lmm-pulse 1.5s infinite; }
-                .lmm-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-btn-icon { padding: 5px 7px; min-width: 28px; justify-content: center; }
-                .lmm-btn-sm { padding: 3px 8px; height: 24px; font-size: 11px; }
-                @keyframes lmm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+.lmm-btn { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); color: var(--lmm-text); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; height: 28px; box-sizing: border-box; }
+.lmm-btn:hover { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
+.lmm-btn-primary { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-btn-primary:hover { background: var(--lmm-primary-dark); }
+.lmm-btn-danger { background: var(--lmm-danger); color: #fff; border-color: var(--lmm-danger); }
+.lmm-btn-success { background: var(--lmm-success); color: #fff; border-color: var(--lmm-success); }
+.lmm-btn.scanning { animation: lmm-pulse 1.5s infinite; }
+.lmm-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-btn-icon { padding: 5px 7px; min-width: 28px; justify-content: center; }
+.lmm-btn-sm { padding: 3px 8px; height: 24px; font-size: 11px; }
+@keyframes lmm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-                .lmm-topbar { display: flex; gap: 5px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); overflow-x: auto; flex-shrink: 0; flex-wrap: wrap; }
-                .lmm-topbar-item { padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; }
-                .lmm-topbar-item:hover { border-color: var(--lmm-primary); color: var(--lmm-primary); }
-                .lmm-topbar-item.active { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
-                .lmm-topbar-item .cnt { font-size: 10px; background: rgba(0,0,0,0.1); padding: 1px 5px; border-radius: 8px; }
-                .lmm-topbar-item.active .cnt { background: rgba(255,255,255,0.2); }
-                .lmm-topbar-sep { border-left: 1px solid var(--lmm-border); margin: 0 4px; }
+.lmm-topbar { display: flex; gap: 5px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); overflow-x: auto; flex-shrink: 0; flex-wrap: wrap; }
+.lmm-topbar-item { padding: 4px 8px; border-radius: 12px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; }
+.lmm-topbar-item:hover { border-color: var(--lmm-primary); color: var(--lmm-primary); }
+.lmm-topbar-item.active { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
+.lmm-topbar-item .cnt { font-size: 10px; background: rgba(0,0,0,0.1); padding: 1px 5px; border-radius: 8px; }
+.lmm-topbar-item.active .cnt { background: rgba(255,255,255,0.2); }
+.lmm-topbar-sep { border-left: 1px solid var(--lmm-border); margin: 0 4px; }
 
-                .lmm-subbar { display: flex; gap: 8px; padding: 8px 14px 0; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
-                .lmm-subbar-group { display: flex; background: var(--lmm-bg2); border-radius: 6px; padding: 2px; border: 1px solid var(--lmm-border); }
-                .lmm-subbar-item { padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
-                .lmm-subbar-item.active { background: var(--lmm-bg); color: var(--lmm-text); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.lmm-subbar { display: flex; gap: 8px; padding: 8px 14px 0; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+.lmm-subbar-group { display: flex; background: var(--lmm-bg2); border-radius: 6px; padding: 2px; border: 1px solid var(--lmm-border); }
+.lmm-subbar-item { padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
+.lmm-subbar-item.active { background: var(--lmm-bg); color: var(--lmm-text); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
-                .lmm-toolbar { display: flex; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); flex-wrap: wrap; align-items: center; flex-shrink: 0; }
-                .lmm-search { flex: 1; min-width: 140px; position: relative; }
-                .lmm-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--lmm-text2); font-size: 12px; }
-                .lmm-search input { width: 100%; padding: 6px 8px 6px 28px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 12px; background: var(--lmm-bg); color: var(--lmm-text); height: 30px; box-sizing: border-box; }
-                .lmm-search input::placeholder { color: var(--lmm-text2); font-size: 11px; }
-                .lmm-select { padding: 4px 22px 4px 8px; border: 1px solid var(--lmm-border); border-radius: 6px; background: var(--lmm-bg); color: var(--lmm-text); font-size: 11px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%2364748b' d='M1 3l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; height: 30px; box-sizing: border-box; }
-                .lmm-view-toggle { display: flex; gap: 2px; }
-                .lmm-view-btn { padding: 4px 8px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); cursor: pointer; font-size: 12px; transition: all 0.15s; }
-                .lmm-view-btn:first-child { border-radius: 6px 0 0 6px; }
-                .lmm-view-btn:last-child { border-radius: 0 6px 6px 0; }
-                .lmm-view-btn:not(:first-child) { border-left: none; }
-                .lmm-view-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-view-btn:hover:not(.active) { background: var(--lmm-bg3); }
+.lmm-toolbar { display: flex; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--lmm-border); flex-wrap: wrap; align-items: center; flex-shrink: 0; }
+.lmm-search { flex: 1; min-width: 140px; position: relative; }
+.lmm-search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--lmm-text2); font-size: 12px; }
+.lmm-search input { width: 100%; padding: 6px 8px 6px 28px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 12px; background: var(--lmm-bg); color: var(--lmm-text); height: 30px; box-sizing: border-box; }
+.lmm-search input::placeholder { color: var(--lmm-text2); font-size: 11px; }
+.lmm-select { padding: 4px 22px 4px 8px; border: 1px solid var(--lmm-border); border-radius: 6px; background: var(--lmm-bg); color: var(--lmm-text); font-size: 11px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%2364748b' d='M1 3l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; height: 30px; box-sizing: border-box; }
+.lmm-view-toggle { display: flex; gap: 2px; }
+.lmm-view-btn { padding: 4px 8px; border: 1px solid var(--lmm-border); background: var(--lmm-bg); cursor: pointer; font-size: 12px; transition: all 0.15s; }
+.lmm-view-btn:first-child { border-radius: 6px 0 0 6px; }
+.lmm-view-btn:last-child { border-radius: 0 6px 6px 0; }
+.lmm-view-btn:not(:first-child) { border-left: none; }
+.lmm-view-btn.active { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-view-btn:hover:not(.active) { background: var(--lmm-bg3); }
 
-                .lmm-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
-                .lmm-sidebar { width: 170px; border-right: 1px solid var(--lmm-border); background: var(--lmm-bg2); overflow-y: auto; padding: 8px 6px; flex-shrink: 0; }
-                .lmm-content.visible-mode .lmm-sidebar { display: none; }
+.lmm-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+.lmm-sidebar { width: 170px; border-right: 1px solid var(--lmm-border); background: var(--lmm-bg2); overflow-y: auto; padding: 8px 6px; flex-shrink: 0; }
+.lmm-content.visible-mode .lmm-sidebar { display: none; }
 
-                .lmm-sidebar-item { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: all 0.1s; user-select: none; }
-                .lmm-sidebar-item:hover { background: var(--lmm-bg3); }
-                .lmm-sidebar-item.active { background: var(--lmm-primary); color: #fff; }
-                .lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
-                .lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
-                .lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
-                .lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
-                .lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
-                .lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
-                .lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
-                .lmm-sidebar-title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--lmm-text2); letter-spacing: 0.3px; }
-                .lmm-sidebar-btn { font-size: 10px; color: var(--lmm-primary); cursor: pointer; background: none; border: none; padding: 2px 4px; }
-                .lmm-sidebar-btn.active { color: var(--lmm-success); font-weight: 600; }
-                .lmm-sidebar-btn.reset { color: var(--lmm-warning); }
-                .lmm-sidebar-folder { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
-                .lmm-sidebar-folder:hover { background: var(--lmm-bg3); color: var(--lmm-text); }
-                .lmm-sidebar-folder .icon { display: inline-flex; width: 1.4em; justify-content: center; }
-                .lmm-sidebar-folder .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
-                .lmm-sidebar-folder-content { display: none; padding-left: 8px; }
-                .lmm-sidebar-folder-content.open { display: block; }
+.lmm-sidebar-item { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: all 0.1s; user-select: none; }
+.lmm-sidebar-item:hover { background: var(--lmm-bg3); }
+.lmm-sidebar-item.active { background: var(--lmm-primary); color: #fff; }
+.lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
+.lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
+.lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
+.lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
+.lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
+.lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
+.lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
+.lmm-sidebar-title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--lmm-text2); letter-spacing: 0.3px; }
+.lmm-sidebar-btn { font-size: 10px; color: var(--lmm-primary); cursor: pointer; background: none; border: none; padding: 2px 4px; }
+.lmm-sidebar-btn.active { color: var(--lmm-success); font-weight: 600; }
+.lmm-sidebar-btn.reset { color: var(--lmm-warning); }
+.lmm-sidebar-folder { display: flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; color: var(--lmm-text2); transition: all 0.1s; }
+.lmm-sidebar-folder:hover { background: var(--lmm-bg3); color: var(--lmm-text); }
+.lmm-sidebar-folder .icon { display: inline-flex; width: 1.4em; justify-content: center; }
+.lmm-sidebar-folder .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
+.lmm-sidebar-folder-content { display: none; padding-left: 8px; }
+.lmm-sidebar-folder-content.open { display: block; }
 
-                .lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
-                .lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
-                .lmm-count { color: var(--lmm-text2); font-size: 12px; }
-                .lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
+.lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
+.lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+.lmm-count { color: var(--lmm-text2); font-size: 12px; }
+.lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
 
-                .lmm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
-                .lmm-grid.compact-view { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
-                .lmm-grid.list-view { display: flex; flex-direction: column; gap: 4px; }
+.lmm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.lmm-grid.compact-view { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+.lmm-grid.list-view { display: flex; flex-direction: column; gap: 4px; }
 
-                .lmm-card { display: flex; align-items: flex-start; gap: 8px; padding: 9px; border: 2px solid var(--lmm-border); border-radius: 8px; background: var(--lmm-bg); cursor: pointer; transition: all 0.15s; position: relative; }
-                .lmm-card:hover { border-color: var(--lmm-primary); }
-                .lmm-card.visible { border-color: var(--lmm-primary); }
-                .lmm-card.hidden { opacity: 0.5; background: var(--lmm-bg3); }
-                .lmm-card.new { box-shadow: inset 0 0 0 1px var(--lmm-success); }
-                .lmm-card.starred { box-shadow: inset 0 0 0 1px var(--lmm-warning); }
-                .lmm-card.selected { background: rgba(99,102,241,0.1); border-color: var(--lmm-primary); }
+.lmm-card { display: flex; align-items: flex-start; gap: 8px; padding: 9px; border: 2px solid var(--lmm-border); border-radius: 8px; background: var(--lmm-bg); cursor: pointer; transition: all 0.15s; position: relative; }
+.lmm-card:hover { border-color: var(--lmm-primary); }
+.lmm-card.visible { border-color: var(--lmm-primary); }
+.lmm-card.hidden { opacity: 0.5; background: var(--lmm-bg3); }
+.lmm-card.new { box-shadow: inset 0 0 0 1px var(--lmm-success); }
+.lmm-card.starred { box-shadow: inset 0 0 0 1px var(--lmm-warning); }
+.lmm-card.selected { background: rgba(99,102,241,0.1); border-color: var(--lmm-primary); }
 
-                .lmm-grid.compact-view .lmm-card { padding: 6px 8px; gap: 6px; }
-                .lmm-grid.compact-view .lmm-card-name { font-size: 10px; }
-                .lmm-grid.compact-view .lmm-tags { display: none; }
-                .lmm-grid.compact-view .lmm-card-actions { top: 2px; right: 2px; }
-                .lmm-grid.compact-view .lmm-check { width: 13px; height: 13px; font-size: 8px; }
-                .lmm-grid.compact-view .lmm-card-note { display: none; }
+.lmm-grid.compact-view .lmm-card { padding: 6px 8px; gap: 6px; }
+.lmm-grid.compact-view .lmm-card-name { font-size: 10px; }
+.lmm-grid.compact-view .lmm-tags { display: none; }
+.lmm-grid.compact-view .lmm-card-actions { top: 2px; right: 2px; }
+.lmm-grid.compact-view .lmm-check { width: 13px; height: 13px; font-size: 8px; }
+.lmm-grid.compact-view .lmm-card-note { display: none; }
 
-                .lmm-grid.list-view .lmm-card { padding: 6px 10px; flex-direction: row; align-items: center; }
-                .lmm-grid.list-view .lmm-card-info { display: flex; align-items: center; gap: 8px; flex-direction: row; }
-                .lmm-grid.list-view .lmm-card-name { margin-bottom: 0; font-size: 12px; }
-                .lmm-grid.list-view .lmm-tags { margin-left: auto; }
-                .lmm-grid.list-view .lmm-card.dragging { opacity: 0.5; border-color: var(--lmm-primary); background: var(--lmm-bg3); }
+.lmm-grid.list-view .lmm-card { padding: 6px 10px; flex-direction: row; align-items: center; }
+.lmm-grid.list-view .lmm-card-info { display: flex; align-items: center; gap: 8px; flex-direction: row; }
+.lmm-grid.list-view .lmm-card-name { margin-bottom: 0; font-size: 12px; }
+.lmm-grid.list-view .lmm-tags { margin-left: auto; }
+.lmm-grid.list-view .lmm-card.dragging { opacity: 0.5; border-color: var(--lmm-primary); background: var(--lmm-bg3); }
 
-                .lmm-drag-handle { cursor: grab; color: var(--lmm-text2); font-size: 12px; margin-right: 4px; }
-                .lmm-check { width: 15px; height: 15px; border: 2px solid var(--lmm-border); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; margin-top: 2px; }
-                .lmm-check.on { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
-                .lmm-card-info { flex: 1; min-width: 0; }
-                .lmm-card-name { font-weight: 500; font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
-                .lmm-card-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-                .lmm-card-note { font-size: 10px; color: var(--lmm-text2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
-                .lmm-tags { display: flex; flex-wrap: wrap; gap: 2px; }
-                .lmm-tag { padding: 1px 4px; border-radius: 3px; font-size: 9px; background: var(--lmm-bg3); color: var(--lmm-text2); }
-                .lmm-tag.org { background: #e0e7ff; color: #4338ca; }
-                .lmm-tag.mode { background: #fef3c7; color: #92400e; }
-                .lmm-tag.new { background: #dcfce7; color: #166534; }
-                .lmm-tag.imgtype { background: #fce7f3; color: #9d174d; }
-                .lmm-tag.vision { background: #e0f2fe; color: #0369a1; }
-                .lmm-tag.group { background: #f0fdf4; color: #15803d; }
-                @media (prefers-color-scheme: dark) {
-                    .lmm-tag.org { background: #3730a3; color: #c7d2fe; }
-                    .lmm-tag.mode { background: #78350f; color: #fef3c7; }
-                    .lmm-tag.new { background: #166534; color: #bbf7d0; }
-                    .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
-                    .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
-                    .lmm-tag.group { background: #14532d; color: #bbf7d0; }
-                }
-                .lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
-                .lmm-card:hover .lmm-card-actions { opacity: 1; }
-                .lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
-                .lmm-card-btn:hover { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-card-btn.starred { color: var(--lmm-warning); }
+.lmm-drag-handle { cursor: grab; color: var(--lmm-text2); font-size: 12px; margin-right: 4px; }
+.lmm-check { width: 15px; height: 15px; border: 2px solid var(--lmm-border); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; margin-top: 2px; }
+.lmm-check.on { background: var(--lmm-primary); border-color: var(--lmm-primary); color: #fff; }
+.lmm-card-info { flex: 1; min-width: 0; }
+.lmm-card-name { font-weight: 500; font-size: 11px; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+.lmm-card-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lmm-card-note { font-size: 10px; color: var(--lmm-text2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
+.lmm-tags { display: flex; flex-wrap: wrap; gap: 2px; }
+.lmm-tag { padding: 1px 4px; border-radius: 3px; font-size: 9px; background: var(--lmm-bg3); color: var(--lmm-text2); }
+.lmm-tag.org { background: #e0e7ff; color: #4338ca; }
+.lmm-tag.mode { background: #fef3c7; color: #92400e; }
+.lmm-tag.new { background: #dcfce7; color: #166534; }
+.lmm-tag.imgtype { background: #fce7f3; color: #9d174d; }
+.lmm-tag.vision { background: #e0f2fe; color: #0369a1; }
+.lmm-tag.group { background: #f0fdf4; color: #15803d; }
+@media (prefers-color-scheme: dark) {
+    .lmm-tag.org { background: #3730a3; color: #c7d2fe; }
+    .lmm-tag.mode { background: #78350f; color: #fef3c7; }
+    .lmm-tag.new { background: #166534; color: #bbf7d0; }
+    .lmm-tag.imgtype { background: #831843; color: #fbcfe8; }
+    .lmm-tag.vision { background: #0c4a6e; color: #bae6fd; }
+    .lmm-tag.group { background: #14532d; color: #bbf7d0; }
+}
+.lmm-card-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
+.lmm-card:hover .lmm-card-actions { opacity: 1; }
+.lmm-card-btn { font-size: 12px; background: var(--lmm-bg2); border: 1px solid var(--lmm-border); border-radius: 4px; padding: 2px 5px; cursor: pointer; transition: all 0.15s; }
+.lmm-card-btn:hover { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-card-btn.starred { color: var(--lmm-warning); }
 
-                .lmm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 0 0 12px 12px; font-size: 11px; color: var(--lmm-text2); flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
-                .lmm-stats { display: flex; gap: 12px; }
-                .lmm-stat b { color: var(--lmm-text); }
-                .lmm-empty { text-align: center; padding: 30px 20px; color: var(--lmm-text2); }
-                .lmm-empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
-                .lmm-toast { position: fixed; top: 60px; right: 12px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--lmm-bg); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 100001; animation: lmm-in 0.25s ease; border-left: 3px solid var(--lmm-primary); font-size: 13px; max-width: 350px; }
-                .lmm-toast-success { border-left-color: var(--lmm-success); }
-                .lmm-toast-warning { border-left-color: var(--lmm-warning); }
-                @keyframes lmm-in { from { transform: translateX(100%); opacity: 0; } }
-                .lmm-toast-x { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--lmm-text2); }
-                .lmm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); background: var(--lmm-bg); border-radius: 10px; padding: 16px; z-index: 100002; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.2s; }
-                .lmm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-                .lmm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100001; opacity: 0; visibility: hidden; transition: all 0.2s; }
-                .lmm-modal-overlay.open { opacity: 1; visibility: visible; }
-                .lmm-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-                .lmm-modal-body { margin-bottom: 14px; }
-                .lmm-modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
-                .lmm-form-group { margin-bottom: 12px; }
-                .lmm-form-label { display: block; font-size: 11px; font-weight: 500; margin-bottom: 4px; color: var(--lmm-text2); }
-                .lmm-form-input, .lmm-form-select { width: 100%; padding: 7px 10px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 13px; background: var(--lmm-bg); color: var(--lmm-text); box-sizing: border-box; }
-                .lmm-form-row { display: flex; gap: 8px; align-items: center; }
-                .lmm-form-row .lmm-form-input { flex: 1; }
-                .lmm-checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
-                .lmm-checkbox-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
-                .lmm-checkbox-item:hover { border-color: var(--lmm-primary); }
-                .lmm-checkbox-item.checked { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
-                .lmm-scan-list { max-height: 300px; overflow-y: auto; margin: 10px 0; }
-                .lmm-scan-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--lmm-border); font-size: 12px; }
-                .lmm-scan-item:last-child { border-bottom: none; }
-                .lmm-group-list { max-height: 200px; overflow-y: auto; margin: 8px 0; }
-                .lmm-group-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; margin-bottom: 4px; font-size: 12px; }
-                .lmm-group-item:hover { background: var(--lmm-bg3); }
-                .lmm-group-item .name { flex: 1; }
-                .lmm-group-item .actions { display: flex; gap: 4px; }
-                .lmm-group-item .actions button { padding: 2px 6px; font-size: 10px; }
-                .lmm-switch { position: relative; width: 40px; height: 22px; background: var(--lmm-border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
-                .lmm-switch.on { background: var(--lmm-primary); }
-                .lmm-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
-                .lmm-switch.on::after { transform: translateX(18px); }
-                .lmm-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--lmm-border); }
-                .lmm-setting-row:last-child { border-bottom: none; }
-                .lmm-setting-info { flex: 1; }
-                .lmm-setting-title { font-weight: 500; margin-bottom: 2px; }
-                .lmm-setting-desc { font-size: 11px; color: var(--lmm-text2); }
-                .lmm-detail-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
-                .lmm-detail-row:last-child { border-bottom: none; }
-                .lmm-detail-label { width: 80px; font-size: 11px; color: var(--lmm-text2); flex-shrink: 0; }
-                .lmm-detail-value { flex: 1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
-                .lmm-detail-value input { max-width: 60px; }
+.lmm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid var(--lmm-border); background: var(--lmm-bg2); border-radius: 0 0 12px 12px; font-size: 11px; color: var(--lmm-text2); flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+.lmm-stats { display: flex; gap: 12px; }
+.lmm-stat b { color: var(--lmm-text); }
+.lmm-empty { text-align: center; padding: 30px 20px; color: var(--lmm-text2); }
+.lmm-empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+.lmm-toast { position: fixed; top: 60px; right: 12px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--lmm-bg); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 100001; animation: lmm-in 0.25s ease; border-left: 3px solid var(--lmm-primary); font-size: 13px; max-width: 350px; }
+.lmm-toast-success { border-left-color: var(--lmm-success); }
+.lmm-toast-warning { border-left-color: var(--lmm-warning); }
+@keyframes lmm-in { from { transform: translateX(100%); opacity: 0; } }
+    .lmm-toast-x { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--lmm-text2); }
+.lmm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); background: var(--lmm-bg); border-radius: 10px; padding: 16px; z-index: 100002; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.2s; }
+.lmm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+.lmm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100001; opacity: 0; visibility: hidden; transition: all 0.2s; }
+.lmm-modal-overlay.open { opacity: 1; visibility: visible; }
+.lmm-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.lmm-modal-body { margin-bottom: 14px; }
+.lmm-modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
+.lmm-form-group { margin-bottom: 12px; }
+.lmm-form-label { display: block; font-size: 11px; font-weight: 500; margin-bottom: 4px; color: var(--lmm-text2); }
+.lmm-form-input, .lmm-form-select { width: 100%; padding: 7px 10px; border: 1px solid var(--lmm-border); border-radius: 6px; font-size: 13px; background: var(--lmm-bg); color: var(--lmm-text); box-sizing: border-box; }
+.lmm-form-row { display: flex; gap: 8px; align-items: center; }
+.lmm-form-row .lmm-form-input { flex: 1; }
+.lmm-checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.lmm-checkbox-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
+.lmm-checkbox-item:hover { border-color: var(--lmm-primary); }
+.lmm-checkbox-item.checked { background: var(--lmm-primary); color: #fff; border-color: var(--lmm-primary); }
+.lmm-scan-list { max-height: 300px; overflow-y: auto; margin: 10px 0; }
+.lmm-scan-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--lmm-border); font-size: 12px; }
+.lmm-scan-item:last-child { border-bottom: none; }
+.lmm-group-list { max-height: 200px; overflow-y: auto; margin: 8px 0; }
+.lmm-group-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--lmm-border); border-radius: 5px; margin-bottom: 4px; font-size: 12px; }
+.lmm-group-item:hover { background: var(--lmm-bg3); }
+.lmm-group-item .name { flex: 1; }
+.lmm-group-item .actions { display: flex; gap: 4px; }
+.lmm-group-item .actions button { padding: 2px 6px; font-size: 10px; }
+.lmm-switch { position: relative; width: 40px; height: 22px; background: var(--lmm-border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
+.lmm-switch.on { background: var(--lmm-primary); }
+.lmm-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+.lmm-switch.on::after { transform: translateX(18px); }
+.lmm-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--lmm-border); }
+.lmm-setting-row:last-child { border-bottom: none; }
+.lmm-setting-info { flex: 1; }
+.lmm-setting-title { font-weight: 500; margin-bottom: 2px; }
+.lmm-setting-desc { font-size: 11px; color: var(--lmm-text2); }
+.lmm-detail-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
+.lmm-detail-row:last-child { border-bottom: none; }
+.lmm-detail-label { width: 80px; font-size: 11px; color: var(--lmm-text2); flex-shrink: 0; }
+.lmm-detail-value { flex: 1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+.lmm-detail-value input { max-width: 60px; }
 
-                @media (max-width: 600px) {
-                    .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
-                    .lmm-sidebar { display: none; }
-                    .lmm-grid { grid-template-columns: 1fr; }
-                }
-                .lmm-diff-section { padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
-                .lmm-diff-section:last-child { border-bottom: none; }
-                .lmm-diff-category { display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer; font-size: 13px; }
-                .lmm-diff-details { padding: 4px 0 4px 24px; font-size: 11px; color: var(--lmm-text2); line-height: 1.6; }
-                .lmm-sidebar-separator { text-align: center; padding: 4px 8px; font-size: 10px; color: var(--lmm-text2); border-top: 1px dashed var(--lmm-border); border-bottom: 1px dashed var(--lmm-border); margin: 4px 0; user-select: none; }
-                .lmm-sidebar-separator.drag-over { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
-            `);
+@media (max-width: 600px) {
+    .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
+    .lmm-sidebar { display: none; }
+    .lmm-grid { grid-template-columns: 1fr; }
+}
+.lmm-diff-section { padding: 8px 0; border-bottom: 1px solid var(--lmm-border); }
+.lmm-diff-section:last-child { border-bottom: none; }
+.lmm-diff-category { display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer; font-size: 13px; }
+.lmm-diff-details { padding: 4px 0 4px 24px; font-size: 11px; color: var(--lmm-text2); line-height: 1.6; }
+.lmm-sidebar-separator { text-align: center; padding: 4px 8px; font-size: 10px; color: var(--lmm-text2); border-top: 1px dashed var(--lmm-border); border-bottom: 1px dashed var(--lmm-border); margin: 4px 0; user-select: none; }
+.lmm-sidebar-separator.drag-over { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
+.lmm-org-icon { width: 16px; height: 16px; vertical-align: middle; object-fit: contain; display: inline-block; }
+.lmm-sidebar-item .lmm-org-icon { width: 14px; height: 14px; }
+.lmm-card-name .lmm-org-icon { width: 14px; height: 14px; }
+`);
         }
 
         createFab() {
@@ -3523,6 +3530,7 @@
 
         open() {
             this.isOpen = true;
+            this.loadVisibleLogos();
             this.panel.classList.add('open');
             this.overlay.classList.add('open');
             this.updateI18n();
@@ -3817,7 +3825,7 @@
             const list = this.$('#lmm-org-list');
             const sidebarMode = this.getSidebarMode();
             const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
-            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${c.icon}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
+            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${this.getOrgLogoHtml(c.name, c.icon)}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
 
             let html;
             if (this.isSortMode) {
@@ -4182,6 +4190,86 @@
         closeGroupSelectModal() {
             this.groupSelectModalOverlay.classList.remove('open');
             this.groupSelectModal.classList.remove('open');
+        }
+
+        saveLogoCache() {
+            GM_setValue(LOGO_CACHE_KEY, JSON.stringify(this.logoCache));
+        }
+
+        getOrgLogoHtml(company, fallbackIcon = '❔') {
+            const rule = COMPANY_RULES.find(r => r.company === company);
+            if (rule) {
+                const cached = this.logoCache[company];
+                if (cached) {
+                    return `<img src="${cached}" class="lmm-org-icon" alt="${this.esc(company)}">`;
+                }
+                return rule.icon;
+            }
+            return fallbackIcon;
+        }
+
+        async loadLogo(orgName) {
+            if (orgName in this.logoCache) return this.logoCache[orgName];
+            const encodedName = encodeURIComponent(orgName);
+
+            // Try SVG
+            try {
+                const res = await this.gmFetch({ method: 'GET', url: `${LOGO_BASE_URL}${encodedName}.svg` });
+                if (res.ok) {
+                    const text = await res.text();
+                    const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(text)));
+                    this.logoCache[orgName] = dataUrl;
+                    this.saveLogoCache();
+                    return dataUrl;
+                }
+            } catch (e) {}
+
+            // Try PNG
+            try {
+                const dataUrl = await this.fetchBlobAsDataUrl(`${LOGO_BASE_URL}${encodedName}.png`);
+                this.logoCache[orgName] = dataUrl;
+                this.saveLogoCache();
+                return dataUrl;
+            } catch (e) {}
+
+            this.logoCache[orgName] = null;
+            this.saveLogoCache();
+            return null;
+        }
+
+        fetchBlobAsDataUrl(url) {
+            return new Promise((resolve, reject) => {
+                GM_xmlhttpRequest({
+                    method: 'GET',
+                    url: url,
+                    responseType: 'blob',
+                    onload: (response) => {
+                        if (response.status >= 200 && response.status < 300) {
+                            const reader = new FileReader();
+                            reader.onload = () => resolve(reader.result);
+                            reader.onerror = () => reject(new Error('FileReader error'));
+                            reader.readAsDataURL(response.response);
+                        } else {
+                            reject(new Error(`HTTP ${response.status}`));
+                        }
+                    },
+                    onerror: () => reject(new Error('Network error')),
+                    ontimeout: () => reject(new Error('Timeout'))
+                });
+            });
+        }
+
+        async loadVisibleLogos() {
+            const models = this.dm.getAllModels();
+            const orgs = new Set(models.map(m => m.company).filter(Boolean));
+            const builtInOrgs = [...orgs].filter(org => COMPANY_RULES.some(r => r.company === org));
+            const uncached = builtInOrgs.filter(org => !(org in this.logoCache));
+            if (uncached.length === 0) return;
+            await Promise.allSettled(uncached.map(org => this.loadLogo(org)));
+            if (this.isOpen) {
+                this.updateSidebar();
+                this.refresh();
+            }
         }
 
         createDiffModal() {
@@ -4568,76 +4656,76 @@
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
                     <button class="lmm-btn lmm-btn-primary" id="lmm-apply">✓ ${this.t('apply')}</button>
                 `;
-                batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
-                batch.querySelector('#lmm-apply').onclick = () => {
-                    this.scanner.applyFilters();
-                    this.scanner.toast(this.t('applied'), 'success');
-                };
-            }
+            batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
+            batch.querySelector('#lmm-apply').onclick = () => {
+                this.scanner.applyFilters();
+                this.scanner.toast(this.t('applied'), 'success');
+            };
+        }
         }
 
-esc(s) {
-    if (!s) return '';
-    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-}
+        esc(s) {
+            if (!s) return '';
+            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+        }
 
-getModeIcon(modes) {
-    if (!Array.isArray(modes) || modes.length === 0) return '❓';
-    const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-    if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
-    return icons[modes[0]] || '❓';
-}
+        getModeIcon(modes) {
+            if (!Array.isArray(modes) || modes.length === 0) return '❓';
+            const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+            if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
+            return icons[modes[0]] || '❓';
+        }
 
-refresh() {
-    const grid = this.$('#lmm-grid');
-    const models = this.getFiltered();
-    const sidebarMode = this.getSidebarMode();
+        refresh() {
+            const grid = this.$('#lmm-grid');
+            const models = this.getFiltered();
+            const sidebarMode = this.getSidebarMode();
 
-    this.updateGridView();
-    this.renderBatchButtons();
+            this.updateGridView();
+            this.renderBatchButtons();
 
-    if (models.length === 0) {
-        const isCustomGroup = this.currentMode.startsWith('group_');
-        const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
-        grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
-    } else {
-        grid.innerHTML = models.map(m => {
-            const vis = m.visible !== false;
-            const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
-            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+            if (models.length === 0) {
+                const isCustomGroup = this.currentMode.startsWith('group_');
+                const hint = isCustomGroup ? '' : `<br><br>${this.t('noMatchHint')}`;
+                grid.innerHTML = `<div class="lmm-empty" style="grid-column:1/-1"><div class="lmm-empty-icon">📭</div><div>${this.t('noMatch')}${hint}</div></div>`;
+            } else {
+                grid.innerHTML = models.map(m => {
+                    const vis = m.visible !== false;
+                    const dragHandle = this.isModelSortMode ? '<span class="lmm-drag-handle">⠿</span>' : '';
+                    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
 
-            const imgTypeLabels = {
-                universal: { icon: '🔄' },
-                t2i: { icon: '✨' },
-                i2i: { icon: '🖼️' }
-            };
-            const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
-            ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
-            const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
-            const fileUploadTag = m.fileUpload ? `<span class="lmm-tag vision">📄</span>` : '';
-            const modelGroups = this.dm.getModelGroups(m.name);
-            const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
+                    const imgTypeLabels = {
+                        universal: { icon: '🔄' },
+                        t2i: { icon: '✨' },
+                        i2i: { icon: '🖼️' }
+                    };
+                    const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
+                    ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
+                    const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
+                    const fileUploadTag = m.fileUpload ? `<span class="lmm-tag vision">📄</span>` : '';
+                    const modelGroups = this.dm.getModelGroups(m.name);
+                    const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
 
-            const isSelected = this.selectedModels.has(m.name);
-            const showCheck = this.isMultiSelectMode;
-            const cardClasses = [
-                'lmm-card',
-                vis ? 'visible' : 'hidden',
-                m.isNew ? 'new' : '',
-                m.starred ? 'starred' : '',
-                isSelected ? 'selected' : ''
-            ].filter(Boolean).join(' ');
+                    const isSelected = this.selectedModels.has(m.name);
+                    const showCheck = this.isMultiSelectMode;
+                    const cardClasses = [
+                        'lmm-card',
+                        vis ? 'visible' : 'hidden',
+                        m.isNew ? 'new' : '',
+                        m.starred ? 'starred' : '',
+                        isSelected ? 'selected' : ''
+                    ].filter(Boolean).join(' ');
 
-            // 备注显示（仅 grid 和 list 视图）
-            const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
+                    // 备注显示（仅 grid 和 list 视图）
+                    const noteHtml = m.note ? `<div class="lmm-card-note" title="${this.esc(m.note)}">${this.esc(m.note)}</div>` : '';
 
-            return `
+                    return `
                         <div class="${cardClasses}" data-name="${this.esc(m.name)}">
                             ${dragHandle}
                             ${showCheck ? `<div class="lmm-check ${isSelected ? 'on' : ''}">${isSelected ? '✓' : ''}</div>` : ''}
                             <div class="lmm-card-info">
                                 <div class="lmm-card-name">
-                                    <span>${m.icon || '❔'}</span>
+                                    <span>${this.getOrgLogoHtml(m.company, m.icon)}</span>
                                     <span class="n" title="${this.esc(m.name)}">${this.esc(m.name)}</span>
                                 </div>
                                 <div class="lmm-tags">
@@ -4714,99 +4802,100 @@ refresh() {
             this.updateOrgFilter();
         }
 
-updateStats() {
-    const modeModels = this.getModelsInCurrentMode();
-    const v = modeModels.filter(m => m.visible !== false).length;
-    this.$('#lmm-v').textContent = v;
-    this.$('#lmm-h').textContent = modeModels.length - v;
-    this.$('#lmm-t').textContent = modeModels.length;
-}
+        updateStats() {
+            const modeModels = this.getModelsInCurrentMode();
+            const v = modeModels.filter(m => m.visible !== false).length;
+            this.$('#lmm-v').textContent = v;
+            this.$('#lmm-h').textContent = modeModels.length - v;
+            this.$('#lmm-t').textContent = modeModels.length;
+        }
 
-// 计算模型在当前模式下的排序位置
-getModelRank(name) {
-    if (this.currentMode !== 'visible') return null;
-    const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
-    const customOrder = this.dm.getModelOrder(this.visibleSubMode);
+        // 计算模型在当前模式下的排序位置
+        getModelRank(name) {
+            if (this.currentMode !== 'visible') return null;
+            const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
+            const customOrder = this.dm.getModelOrder(this.visibleSubMode);
 
-    if (customOrder.length > 0) {
-        const sorted = [...models].sort((a, b) => {
-            let ai = customOrder.indexOf(a.name);
-            let bi = customOrder.indexOf(b.name);
-            if (ai === -1) ai = 9999;
-            if (bi === -1) bi = 9999;
-            return ai - bi;
-        });
-        const idx = sorted.findIndex(m => m.name === name);
-        return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-    }
-
-    const sidebarMode = this.getSidebarMode();
-    const orgOrder = this.dm.getOrgOrder(sidebarMode);
-    const sorted = [...models].sort((a, b) => {
-        const ai = orgOrder.indexOf(a.company);
-        const bi = orgOrder.indexOf(b.company);
-        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-    });
-    const idx = sorted.findIndex(m => m.name === name);
-    return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-}
-
-openEditModal(name) {
-    const m = this.dm.getModel(name);
-    if (!m) return;
-    this.editingModel = name;
-
-    const body = this.editModal.querySelector('#lmm-edit-body');
-    const allGroups = this.dm.getGroupNames();
-    const modelGroups = this.dm.getModelGroups(name);
-    const modes = Array.isArray(m.modes) ? m.modes : ['text'];
-    const isVisible = m.visible !== false;
-
-    // 计算排序位置
-    let rankInfo = '';
-    if (isVisible) {
-        modes.forEach(mode => {
-            const visibleModels = this.dm.getAllModels().filter(
-                md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
-            );
-            const customOrder = this.dm.getModelOrder(mode);
-            const orgOrder = this.dm.getOrgOrder(mode);
-
-            let sorted;
             if (customOrder.length > 0) {
-                sorted = [...visibleModels].sort((a, b) => {
+                const sorted = [...models].sort((a, b) => {
                     let ai = customOrder.indexOf(a.name);
                     let bi = customOrder.indexOf(b.name);
                     if (ai === -1) ai = 9999;
                     if (bi === -1) bi = 9999;
                     return ai - bi;
                 });
-            } else {
-                sorted = [...visibleModels].sort((a, b) => {
-                    const ai = orgOrder.indexOf(a.company);
-                    const bi = orgOrder.indexOf(b.company);
-                    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+                const idx = sorted.findIndex(m => m.name === name);
+                return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+            }
+
+            const sidebarMode = this.getSidebarMode();
+            const orgOrder = this.dm.getOrgOrder(sidebarMode);
+            const sorted = [...models].sort((a, b) => {
+                const ai = orgOrder.indexOf(a.company);
+                const bi = orgOrder.indexOf(b.company);
+                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+            });
+            const idx = sorted.findIndex(m => m.name === name);
+            return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
+        }
+
+        openEditModal(name) {
+            const m = this.dm.getModel(name);
+            if (!m) return;
+            this.editingModel = name;
+
+            const body = this.editModal.querySelector('#lmm-edit-body');
+            const allGroups = this.dm.getGroupNames();
+            const modelGroups = this.dm.getModelGroups(name);
+            const modes = Array.isArray(m.modes) ? m.modes : ['text'];
+            const isVisible = m.visible !== false;
+            const isBuiltInOrg = COMPANY_RULES.some(r => r.company === m.company);
+
+            // 计算排序位置
+            let rankInfo = '';
+            if (isVisible) {
+                modes.forEach(mode => {
+                    const visibleModels = this.dm.getAllModels().filter(
+                        md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
+                    );
+                    const customOrder = this.dm.getModelOrder(mode);
+                    const orgOrder = this.dm.getOrgOrder(mode);
+
+                    let sorted;
+                    if (customOrder.length > 0) {
+                        sorted = [...visibleModels].sort((a, b) => {
+                            let ai = customOrder.indexOf(a.name);
+                            let bi = customOrder.indexOf(b.name);
+                            if (ai === -1) ai = 9999;
+                            if (bi === -1) bi = 9999;
+                            return ai - bi;
+                        });
+                    } else {
+                        sorted = [...visibleModels].sort((a, b) => {
+                            const ai = orgOrder.indexOf(a.company);
+                            const bi = orgOrder.indexOf(b.company);
+                            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
+                        });
+                    }
+
+                    const idx = sorted.findIndex(md => md.name === name);
+                    if (idx !== -1) {
+                        const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+                        rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
+                    }
                 });
             }
 
-            const idx = sorted.findIndex(md => md.name === name);
-            if (idx !== -1) {
-                const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-                rankInfo += `<span style="margin-right:8px">${modeIcons[mode] || ''} ${this.t('rankOf').replace('{0}', idx + 1).replace('{1}', sorted.length)}</span>`;
+            // Vision 显示
+            let visionDisplay = '';
+            if (typeof m.vision === 'string') {
+                const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
+                visionDisplay = visionLabels[m.vision] || m.vision;
+            } else {
+                visionDisplay = m.vision ? this.t('on') : this.t('off');
             }
-        });
-    }
 
-    // Vision 显示
-    let visionDisplay = '';
-    if (typeof m.vision === 'string') {
-        const visionLabels = { universal: this.t('universal'), t2i: this.t('t2iOnly'), i2i: this.t('i2iOnly') };
-        visionDisplay = visionLabels[m.vision] || m.vision;
-    } else {
-        visionDisplay = m.vision ? this.t('on') : this.t('off');
-    }
-
-    body.innerHTML = `
+            body.innerHTML = `
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('modelName')}</span>
                     <span class="lmm-detail-value"><strong>${this.esc(name)}</strong></span>
@@ -4828,7 +4917,9 @@ openEditModal(name) {
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('iconEdit')}</span>
                     <span class="lmm-detail-value">
-                        <input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">
+                        ${isBuiltInOrg
+                ? this.getOrgLogoHtml(m.company, m.icon)
+            : `<input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">`}
                     </span>
                 </div>
                 <div class="lmm-detail-row">
@@ -4903,106 +4994,114 @@ openEditModal(name) {
             this.editModal.classList.add('open');
         }
 
-closeEditModal() {
-    this.editModalOverlay.classList.remove('open');
-    this.editModal.classList.remove('open');
-    this.editingModel = null;
-}
-
-saveEdit() {
-    if (!this.editingModel) return;
-
-    const body = this.editModal.querySelector('#lmm-edit-body');
-    const company = body.querySelector('#lmm-edit-org').value.trim();
-    const icon = body.querySelector('#lmm-edit-icon').value.trim();
-    const note = body.querySelector('#lmm-edit-note').value.trim();
-    const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
-
-    const allGroups = this.dm.getGroupNames();
-    const selectedGroups = [];
-    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
-        selectedGroups.push(item.dataset.group);
-    });
-
-    allGroups.forEach(g => {
-        if (selectedGroups.includes(g)) {
-            this.dm.addToGroup(g, this.editingModel);
-        } else {
-            this.dm.removeFromGroup(g, this.editingModel);
+        closeEditModal() {
+            this.editModalOverlay.classList.remove('open');
+            this.editModal.classList.remove('open');
+            this.editingModel = null;
         }
-    });
 
-    this.dm.updateModel(this.editingModel, {
-        company: company || 'Other',
-        companyManual: company !== '',
-        icon: icon || this.dm.getModel(this.editingModel).icon,
-        note: note,
-        starred: starred
-    });
+        saveEdit() {
+            if (!this.editingModel) return;
 
-    this.closeEditModal();
-    this.refresh();
-    this.updateSidebar();
-    this.updateTopbar();
-    this.scanner.toast(this.t('saved'), 'success');
-    this.triggerSyncOnChange();
-}
+            const body = this.editModal.querySelector('#lmm-edit-body');
+            const company = body.querySelector('#lmm-edit-org').value.trim();
+            const isBuiltInOrg = COMPANY_RULES.some(r => r.company === (company || 'Other'));
+            let icon;
+            if (isBuiltInOrg) {
+                const rule = COMPANY_RULES.find(r => r.company === (company || 'Other'));
+                icon = rule ? rule.icon : '❔';
+            } else {
+                const iconInput = body.querySelector('#lmm-edit-icon');
+                icon = iconInput ? iconInput.value.trim() : '';
+            }
+            const note = body.querySelector('#lmm-edit-note').value.trim();
+            const starred = body.querySelector('#lmm-edit-starred').classList.contains('on');
 
-resetEdit() {
-    if (!this.editingModel) return;
-    this.dm.reanalyze(this.editingModel);
-    this.closeEditModal();
-    this.refresh();
-    this.updateSidebar();
-    this.updateTopbar();
-    this.scanner.toast(this.t('restored'), 'success');
-    this.triggerSyncOnChange();
-}
+            const allGroups = this.dm.getGroupNames();
+            const selectedGroups = [];
+            body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item.checked').forEach(item => {
+                selectedGroups.push(item.dataset.group);
+            });
 
-openGroupModal() {
-    this.renderGroupList();
-    this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
-    this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
-    this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
-    this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
-    this.groupModalOverlay.classList.add('open');
-    this.groupModal.classList.add('open');
-}
+            allGroups.forEach(g => {
+                if (selectedGroups.includes(g)) {
+                    this.dm.addToGroup(g, this.editingModel);
+                } else {
+                    this.dm.removeFromGroup(g, this.editingModel);
+                }
+            });
 
-closeGroupModal() {
-    this.groupModalOverlay.classList.remove('open');
-    this.groupModal.classList.remove('open');
-}
+            this.dm.updateModel(this.editingModel, {
+                company: company || 'Other',
+                companyManual: company !== '',
+                icon: icon || this.dm.getModel(this.editingModel).icon,
+                note: note,
+                starred: starred
+            });
 
-createGroup() {
-    const input = this.groupModal.querySelector('#lmm-group-new-name');
-    const name = input.value.trim();
-    if (!name) {
-        this.scanner.toast(this.t('enterGroupName'), 'warning');
-        return;
-    }
-    if (this.dm.createGroup(name)) {
-        input.value = '';
-        this.renderGroupList();
-        this.updateTopbar();
-        this.scanner.toast(this.t('groupCreated'), 'success');
-        this.triggerSyncOnChange();
-    } else {
-        this.scanner.toast(this.t('groupExists'), 'warning');
-    }
-}
+            this.closeEditModal();
+            this.refresh();
+            this.updateSidebar();
+            this.updateTopbar();
+            this.scanner.toast(this.t('saved'), 'success');
+            this.triggerSyncOnChange();
+        }
 
-renderGroupList() {
-    const list = this.groupModal.querySelector('#lmm-group-list');
-    const groups = this.dm.getGroups();
-    const names = Object.keys(groups);
+        resetEdit() {
+            if (!this.editingModel) return;
+            this.dm.reanalyze(this.editingModel);
+            this.closeEditModal();
+            this.refresh();
+            this.updateSidebar();
+            this.updateTopbar();
+            this.scanner.toast(this.t('restored'), 'success');
+            this.triggerSyncOnChange();
+        }
 
-    if (names.length === 0) {
-        list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
-        return;
-    }
+        openGroupModal() {
+            this.renderGroupList();
+            this.groupModal.querySelector('[data-i18n="groupManage"]').textContent = this.t('groupManage');
+            this.groupModal.querySelector('#lmm-group-new-name').placeholder = this.t('newGroupName');
+            this.groupModal.querySelector('#lmm-group-create').textContent = this.t('create');
+            this.groupModal.querySelector('#lmm-group-close').textContent = this.t('close');
+            this.groupModalOverlay.classList.add('open');
+            this.groupModal.classList.add('open');
+        }
 
-    list.innerHTML = names.map(name => `
+        closeGroupModal() {
+            this.groupModalOverlay.classList.remove('open');
+            this.groupModal.classList.remove('open');
+        }
+
+        createGroup() {
+            const input = this.groupModal.querySelector('#lmm-group-new-name');
+            const name = input.value.trim();
+            if (!name) {
+                this.scanner.toast(this.t('enterGroupName'), 'warning');
+                return;
+            }
+            if (this.dm.createGroup(name)) {
+                input.value = '';
+                this.renderGroupList();
+                this.updateTopbar();
+                this.scanner.toast(this.t('groupCreated'), 'success');
+                this.triggerSyncOnChange();
+            } else {
+                this.scanner.toast(this.t('groupExists'), 'warning');
+            }
+        }
+
+        renderGroupList() {
+            const list = this.groupModal.querySelector('#lmm-group-list');
+            const groups = this.dm.getGroups();
+            const names = Object.keys(groups);
+
+            if (names.length === 0) {
+                list.innerHTML = `<div style="color:var(--lmm-text2);text-align:center;padding:20px">${this.t('noGroups')}</div>`;
+                return;
+            }
+
+            list.innerHTML = names.map(name => `
                 <div class="lmm-group-item" data-group="${this.esc(name)}">
                     <span class="name">📁 ${this.esc(name)}</span>
                     <span style="color:var(--lmm-text2);font-size:10px">${groups[name].length} ${this.t('models')}</span>
@@ -5052,60 +5151,60 @@ renderGroupList() {
             });
         }
 
-openSettingsModal() {
-    const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
-    langSelect.value = this.dm.getLanguage();
+        openSettingsModal() {
+            const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
+            langSelect.value = this.dm.getLanguage();
 
-    const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
-    alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
+            const alertSwitch = this.settingsModal.querySelector('#lmm-setting-alert');
+            alertSwitch.classList.toggle('on', this.dm.data.settings.showNewAlert);
 
-    const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
-    lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
+            const lockFabSwitch = this.settingsModal.querySelector('#lmm-setting-lock-fab');
+            lockFabSwitch.classList.toggle('on', this.dm.data.settings.lockFabPosition);
 
-    const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
-    autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
-    this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
+            const autoSyncSwitch = this.settingsModal.querySelector('#lmm-setting-auto-sync');
+            autoSyncSwitch.classList.toggle('on', this.dm.data.settings.autoSync);
+            this.settingsModal.querySelector('#lmm-auto-sync-options').style.display = this.dm.data.settings.autoSync ? 'block' : 'none';
 
-    const syncMode = this.dm.data.settings.autoSyncMode || 'change';
-    this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
-        radio.checked = radio.value === syncMode;
-    });
-    this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
+            const syncMode = this.dm.data.settings.autoSyncMode || 'change';
+            this.settingsModal.querySelectorAll('input[name="lmm-sync-mode"]').forEach(radio => {
+                radio.checked = radio.value === syncMode;
+            });
+            this.settingsModal.querySelector('#lmm-sync-interval').value = this.dm.data.settings.autoSyncInterval || 5;
 
-    this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
-    this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
+            this.settingsModal.querySelector('#lmm-setting-gist-token').value = this.dm.data.settings.gistToken || '';
+            this.settingsModal.querySelector('#lmm-setting-gist-id').value = this.dm.data.settings.gistId || '';
 
-    this.updateSettingsModalI18n();
-    const localDate = this.dm.data.settings.lastRecommendedDate;
-    this.settingsModal.querySelector('#lmm-rec-local-date').textContent = localDate || this.t('notImported');
-    this.settingsModal.querySelector('#lmm-rec-remote-date').textContent = this.remoteDate || '-';
-    const adminSection = this.settingsModal.querySelector('#lmm-admin-section');
-    if (adminSection) adminSection.style.display = this.adminMode ? '' : 'none';
-    this.settingsModalOverlay.classList.add('open');
-    this.settingsModal.classList.add('open');
-}
+            this.updateSettingsModalI18n();
+            const localDate = this.dm.data.settings.lastRecommendedDate;
+            this.settingsModal.querySelector('#lmm-rec-local-date').textContent = localDate || this.t('notImported');
+            this.settingsModal.querySelector('#lmm-rec-remote-date').textContent = this.remoteDate || '-';
+            const adminSection = this.settingsModal.querySelector('#lmm-admin-section');
+            if (adminSection) adminSection.style.display = this.adminMode ? '' : 'none';
+            this.settingsModalOverlay.classList.add('open');
+            this.settingsModal.classList.add('open');
+        }
 
-closeSettingsModal() {
-    this.settingsModalOverlay.classList.remove('open');
-    this.settingsModal.classList.remove('open');
-    this.adminMode = false;
-}
-}
+        closeSettingsModal() {
+            this.settingsModalOverlay.classList.remove('open');
+            this.settingsModal.classList.remove('open');
+            this.adminMode = false;
+        }
+    }
 
-// ==================== 初始化 ====================
-function init() {
-    console.log(`[Arena Manager] v${VERSION} 启动`);
-    const dm = new DataManager();
-    const scanner = new Scanner(dm);
-    const ui = new UI(dm, scanner);
-    ui.init();
-    scanner.startObserving();
-    setTimeout(() => scanner.scan(), 2000);
-}
+    // ==================== 初始化 ====================
+    function init() {
+        console.log(`[Arena Manager] v${VERSION} 启动`);
+        const dm = new DataManager();
+        const scanner = new Scanner(dm);
+        const ui = new UI(dm, scanner);
+        ui.init();
+        scanner.startObserving();
+        setTimeout(() => scanner.scan(), 2000);
+    }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
