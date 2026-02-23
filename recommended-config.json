@@ -31,7 +31,7 @@
       "fileUpload": true
     },
     "gemini-3-pro": {
-      "visible": false,
+      "visible": true,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
