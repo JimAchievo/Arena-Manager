@@ -31,7 +31,7 @@
       "fileUpload": true
     },
     "gemini-3-pro": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -1973,7 +1973,7 @@
       "fileUpload": false
     },
     "gemini-3-pro-image-preview-2k (nano-banana-pro)": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -2057,7 +2057,7 @@
       "fileUpload": false
     },
     "seedream-4.5": {
-      "visible": true,
+      "visible": false,
       "company": "Bytedance",
       "icon": "🎵",
       "companyManual": false,
@@ -2879,6 +2879,20 @@
       "starred": false,
       "isNew": false,
       "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "seedream-5.0-lite": {
+      "visible": true,
+      "company": "Bytedance",
+      "icon": "🎵",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
       "note": "",
       "fileUpload": false
     }
