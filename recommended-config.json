@@ -31,7 +31,7 @@
       "fileUpload": true
     },
     "gemini-3-pro": {
-      "visible": false,
+      "visible": true,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -1973,7 +1973,7 @@
       "fileUpload": false
     },
     "gemini-3-pro-image-preview-2k (nano-banana-pro)": {
-      "visible": false,
+      "visible": true,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -2893,6 +2893,90 @@
       "starred": false,
       "isNew": false,
       "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-27b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-35b-a3b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-122b-a10b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-27b-code": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-35b-a3b-code": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-122b-a10b-code": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
       "note": "",
       "fileUpload": false
     }
