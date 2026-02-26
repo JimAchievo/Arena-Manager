@@ -57,7 +57,7 @@
       "isNew": false,
       "vision": true,
       "note": "",
-      "fileUpload": false
+      "fileUpload": true
     },
     "gemini-3-flash": {
       "visible": false,
@@ -75,7 +75,7 @@
       "fileUpload": true
     },
     "grok-4.1-thinking": {
-      "visible": true,
+      "visible": false,
       "company": "xAI",
       "icon": "⚫",
       "companyManual": false,
@@ -161,7 +161,7 @@
       "isNew": false,
       "vision": false,
       "note": "",
-      "fileUpload": false
+      "fileUpload": true
     },
     "glm-5": {
       "visible": true,
@@ -1011,20 +1011,6 @@
       "note": "",
       "fileUpload": false
     },
-    "gemini-2.5-flash-lite-preview-06-17-thinking": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
     "claude-3-5-sonnet-20241022": {
       "visible": false,
       "company": "Anthropic",
@@ -1614,7 +1600,7 @@
       "isNew": false,
       "vision": true,
       "note": "",
-      "fileUpload": false
+      "fileUpload": true
     },
     "gpt-5-high-new-system-prompt": {
       "visible": false,
@@ -1847,7 +1833,7 @@
       "fileUpload": false
     },
     "gpt-5.2-codex": {
-      "visible": true,
+      "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
       "companyManual": false,
@@ -2970,6 +2956,35 @@
       "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4.20-beta1": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.3-codex": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
       "companyManual": false,
       "modes": [
         "code"
