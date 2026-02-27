@@ -31,7 +31,7 @@
       "fileUpload": true
     },
     "gemini-3-pro": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -236,20 +236,6 @@
       "vision": true,
       "note": "",
       "fileUpload": true
-    },
-    "ernie-5.0-preview-1203": {
-      "visible": false,
-      "company": "Baidu",
-      "icon": "🔴",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
     },
     "claude-opus-4-1-20250805-thinking-16k": {
       "visible": false,
@@ -2673,7 +2659,7 @@
       "fileUpload": false
     },
     "grok-4-1-fast-search": {
-      "visible": true,
+      "visible": false,
       "company": "xAI",
       "icon": "⚫",
       "companyManual": false,
@@ -2992,6 +2978,35 @@
       "starred": false,
       "isNew": false,
       "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.5-flash": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3.1-flash-image-preview (nano-banana-2) [web-search]": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
       "note": "",
       "fileUpload": false
     }
