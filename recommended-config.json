@@ -2477,7 +2477,7 @@
       "fileUpload": false
     },
     "grok-imagine-image-pro": {
-      "visible": true,
+      "visible": false,
       "company": "xAI",
       "icon": "⚫",
       "companyManual": false,
@@ -3007,6 +3007,63 @@
       "starred": false,
       "isNew": false,
       "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.3-chat-latest": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3.1-flash-lite-preview": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-imagine-image (20260207)": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "i2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-imagine-image-pro (20260207)": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "i2i",
       "note": "",
       "fileUpload": false
     }
