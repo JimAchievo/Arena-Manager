@@ -3063,7 +3063,7 @@
         "code"
       ],
       "starred": false,
-      "isNew": true,
+      "isNew": false,
       "vision": true,
       "note": "",
       "fileUpload": false
@@ -3078,7 +3078,7 @@
         "code"
       ],
       "starred": false,
-      "isNew": true,
+      "isNew": false,
       "vision": false,
       "note": "",
       "fileUpload": false
@@ -3106,7 +3106,7 @@
         "image"
       ],
       "starred": false,
-      "isNew": true,
+      "isNew": false,
       "vision": "universal",
       "note": "",
       "fileUpload": false
@@ -3134,7 +3134,7 @@
         "search"
       ],
       "starred": false,
-      "isNew": true,
+      "isNew": false,
       "vision": false,
       "note": "",
       "fileUpload": false
