@@ -2589,7 +2589,7 @@
       "fileUpload": false
     },
     "gemini-3-pro-grounding": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -3151,6 +3151,49 @@
       "starred": false,
       "isNew": false,
       "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "runway-gen4": {
+      "visible": true,
+      "company": "Other",
+      "icon": "❔",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3.1-pro-grounding": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4.20-multi-agent-beta-0309": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "search",
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
       "note": "",
       "fileUpload": false
     }
