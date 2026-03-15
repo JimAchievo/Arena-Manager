@@ -105,22 +105,32 @@
 <summary>点击展开完整列表</summary>
 
 ### 📝 Text
-**主要组织**：Google, xAI, Anthropic, OpenAI, Baidu, Moonshot, Z.ai, Alibaba, DeepSeek, Mistral, MiniMax, Bytedance
-**更多组织**：Meituan, Amazon, Xiaomi, Tencent, Microsoft AI, Prime Intellect, Cohere, Nvidia, Ant Group, StepFun, Meta, Allen AI, Inception AI, IBM, 01 AI, NexusFlow
+**主要组织**：
+Anthropic, xAI, Google, OpenAI, Bytedance, Z.ai, Moonshot, Baidu, Alibaba, DeepSeek, Mistral, Amazon, MiniMax, Inception AI
+
+**更多组织**：
+Meituan, Tencent, Xiaomi, Microsoft AI, StepFun, Arcee AI, Nvidia, Prime Intellect, Cohere, Ant Group, Meta, Ai2, 01 AI, NexusFlow, IBM
 
 ### 🔍 Search
-**全部组织**：Google, OpenAI, xAI, Anthropic, Perplexity, Diffbot
+**全部组织**：
+Google, Anthropic, xAI, OpenAI, Perplexity, Diffbot
 
-### 🎨 Image
-**主要组织**：OpenAI, Google, Black Forest Labs, Tencent, Bytedance, Alibaba, xAI, Z.ai  
-**更多组织**：Shengshu, Pruna, Microsoft AI, Ideogram, Luma AI, Recraft, Leonardo AI, Reve
+### 🖼️ Image
+**主要组织**：
+Google, OpenAI, Reve, xAI, Black Forest Labs, Tencent, Bytedance, Alibaba, Shengshu, Runway
+
+**更多组织**：
+Recraft, Microsoft AI, Ideogram, Pruna, Luma AI, Leonardo AI, Z.ai
 
 ### 💻 Code
-**主要组织**：Anthropic, OpenAI, Google, Moonshot, Z.ai, MiniMax, DeepSeek, Bytedance
-**更多组织**：Xiaomi, Alibaba, KwaiKAT, xAI, Mistral
+**主要组织**：
+Anthropic, OpenAI, Google, Z.ai, Moonshot, MiniMax, Alibaba, DeepSeek
 
-### 🎬 Video
-*暂无专属组织（预留分类）*
+**更多组织**：
+Xiaomi, KwaiKAT, xAI, Mistral, Bytedance, Inception AI
+
+### 🎥 Video
+**暂无专属组织（预留分类）**
 
 </details>
 
@@ -130,7 +140,7 @@
 
 ## 📝 更新日志
 
-### v5.0.0 (2026-07-03)
+### v5.0.0 (2026-03-15)
 
 #### 🎉 重要变更
 - **🧹 数据管理重构**：「重置所有数据」拆分为两个选项
