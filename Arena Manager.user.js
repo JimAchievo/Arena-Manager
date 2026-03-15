@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      4.7.4
+// @version      5.0.0
 // @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
 // @author       Arena Manager Team
 // @match        https://arena.ai/*
@@ -21,7 +21,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '4.7.4';
+    const VERSION = '5.0.0';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -63,7 +63,6 @@
                 invert: '反选',
                 revert: '还原',
                 exitMulti: '退出多选',
-                apply: '应用',
                 byOrg: '按组织',
                 sort: '排序',
                 done: '完成',
@@ -117,14 +116,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '留空则自动创建',
                 syncNow: '立即同步',
-                resetData: '重置所有数据',
-                resetDataDesc: '清除所有设置和模型数据',
-                resetConfirm: '确定要重置所有数据吗？此操作不可撤销！',
                 exported: '已导出',
                 importSuccess: '导入成功',
                 importFailed: '导入失败',
                 marksCleared: '已清除标记',
-                applied: '已应用',
                 saved: '已保存',
                 restored: '已恢复默认',
                 deleted: '已删除',
@@ -138,7 +133,6 @@
                 newModelsFound: '发现 {0} 个新模型',
                 defaultOrderRestored: '已恢复默认排序',
                 orgOrderRestored: '已恢复默认组织顺序',
-                dataReset: '数据已重置',
                 addedToGroup: '已添加至分组',
                 selectGroup: '选择分组',
                 inputNewName: '输入新名称',
@@ -157,6 +151,14 @@
                 invalidToken: 'Token 无效或权限不足',
                 gistNotFound: 'Gist 不存在',
                 syncError: '同步错误',
+                deleteModelData: '删除所有模型数据',
+                deleteModelDataDesc: '清除所有模型数据、排序和分组，保留设置',
+                deleteModelDataConfirm: '确定要删除所有模型数据吗？此操作不可撤销！',
+                modelDataDeleted: '模型数据已删除',
+                deleteAllData: '删除所有数据',
+                deleteAllDataDesc: '清除所有设置、模型数据和缓存',
+                deleteAllDataConfirm: '确定要删除所有数据吗？此操作不可撤销！',
+                allDataDeleted: '所有数据已删除',
                 recommendedConfig: '推荐模型配置',
                 useRecommended: '使用推荐配置',
                 checkUpdate: '检查更新',
@@ -243,7 +245,6 @@
                 invert: 'Invert',
                 revert: 'Revert',
                 exitMulti: 'Exit',
-                apply: 'Apply',
                 byOrg: 'By Organization',
                 sort: 'Sort',
                 done: 'Done',
@@ -297,14 +298,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Leave empty to auto create',
                 syncNow: 'Sync Now',
-                resetData: 'Reset All Data',
-                resetDataDesc: 'Clear all settings and model data',
-                resetConfirm: 'Reset all data? This cannot be undone!',
                 exported: 'Exported',
                 importSuccess: 'Import successful',
                 importFailed: 'Import failed',
                 marksCleared: 'Marks cleared',
-                applied: 'Applied',
                 saved: 'Saved',
                 restored: 'Restored to default',
                 deleted: 'Deleted',
@@ -318,7 +315,6 @@
                 newModelsFound: '{0} new models found',
                 defaultOrderRestored: 'Default order restored',
                 orgOrderRestored: 'Default organization order restored',
-                dataReset: 'Data reset',
                 addedToGroup: 'Added to group',
                 selectGroup: 'Select Group',
                 inputNewName: 'Enter new name',
@@ -337,6 +333,14 @@
                 invalidToken: 'Invalid token or insufficient permissions',
                 gistNotFound: 'Gist not found',
                 syncError: 'Sync error',
+                deleteModelData: 'Delete Model Data',
+                deleteModelDataDesc: 'Clear all model data, sorting and groups, keep settings',
+                deleteModelDataConfirm: 'Delete all model data? This cannot be undone!',
+                modelDataDeleted: 'Model data deleted',
+                deleteAllData: 'Delete All Data',
+                deleteAllDataDesc: 'Clear all settings, model data and cache',
+                deleteAllDataConfirm: 'Delete all data? This cannot be undone!',
+                allDataDeleted: 'All data deleted',
                 recommendedConfig: 'Recommended Config',
                 useRecommended: 'Use Recommended',
                 checkUpdate: 'Check Update',
@@ -423,7 +427,6 @@
                 invert: '反選',
                 revert: '還原',
                 exitMulti: '退出多選',
-                apply: '套用',
                 byOrg: '按組織',
                 sort: '排序',
                 done: '完成',
@@ -477,14 +480,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '留空則自動創建',
                 syncNow: '立即同步',
-                resetData: '重置所有資料',
-                resetDataDesc: '清除所有設定和模型資料',
-                resetConfirm: '確定要重置所有資料嗎？此操作不可撤銷！',
                 exported: '已匯出',
                 importSuccess: '匯入成功',
                 importFailed: '匯入失敗',
                 marksCleared: '已清除標記',
-                applied: '已套用',
                 saved: '已儲存',
                 restored: '已恢復預設',
                 deleted: '已刪除',
@@ -498,7 +497,6 @@
                 newModelsFound: '發現 {0} 個新模型',
                 defaultOrderRestored: '已恢復預設排序',
                 orgOrderRestored: '已恢復預設組織順序',
-                dataReset: '資料已重置',
                 addedToGroup: '已添加至分組',
                 selectGroup: '選擇分組',
                 inputNewName: '輸入新名稱',
@@ -517,6 +515,14 @@
                 invalidToken: 'Token 無效或權限不足',
                 gistNotFound: 'Gist 不存在',
                 syncError: '同步錯誤',
+                deleteModelData: '刪除所有模型資料',
+                deleteModelDataDesc: '清除所有模型資料、排序和分組，保留設定',
+                deleteModelDataConfirm: '確定要刪除所有模型資料嗎？此操作不可撤銷！',
+                modelDataDeleted: '模型資料已刪除',
+                deleteAllData: '刪除所有資料',
+                deleteAllDataDesc: '清除所有設定、模型資料和快取',
+                deleteAllDataConfirm: '確定要刪除所有資料嗎？此操作不可撤銷！',
+                allDataDeleted: '所有資料已刪除',
                 recommendedConfig: '推薦模型配置',
                 useRecommended: '使用推薦配置',
                 checkUpdate: '檢查更新',
@@ -603,7 +609,6 @@
                 invert: '反転',
                 revert: '元に戻す',
                 exitMulti: '終了',
-                apply: '適用',
                 byOrg: '組織別',
                 sort: '並び替え',
                 done: '完了',
@@ -657,14 +662,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '空白で自動作成',
                 syncNow: '今すぐ同期',
-                resetData: 'すべてのデータをリセット',
-                resetDataDesc: 'すべての設定とモデルデータを消去',
-                resetConfirm: 'すべてのデータをリセットしますか？この操作は元に戻せません！',
                 exported: 'エクスポート完了',
                 importSuccess: 'インポート成功',
                 importFailed: 'インポート失敗',
                 marksCleared: 'マーク消去完了',
-                applied: '適用完了',
                 saved: '保存完了',
                 restored: 'デフォルトに戻しました',
                 deleted: '削除完了',
@@ -678,7 +679,6 @@
                 newModelsFound: '{0} 個の新しいモデルを発見',
                 defaultOrderRestored: 'デフォルト順序に戻しました',
                 orgOrderRestored: 'デフォルト組織順序に戻しました',
-                dataReset: 'データをリセットしました',
                 addedToGroup: 'グループに追加しました',
                 selectGroup: 'グループを選択',
                 inputNewName: '新しい名前を入力',
@@ -697,6 +697,14 @@
                 invalidToken: 'Tokenが無効または権限不足',
                 gistNotFound: 'Gistが見つかりません',
                 syncError: '同期エラー',
+                deleteModelData: 'すべてのモデルデータを削除',
+                deleteModelDataDesc: 'すべてのモデルデータ、並び順、グループを削除し、設定は保持',
+                deleteModelDataConfirm: 'すべてのモデルデータを削除しますか？元に戻せません！',
+                modelDataDeleted: 'モデルデータを削除しました',
+                deleteAllData: 'すべてのデータを削除',
+                deleteAllDataDesc: 'すべての設定、モデルデータ、キャッシュを削除',
+                deleteAllDataConfirm: 'すべてのデータを削除しますか？元に戻せません！',
+                allDataDeleted: 'すべてのデータを削除しました',
                 recommendedConfig: 'おすすめ設定',
                 useRecommended: 'おすすめを使用',
                 checkUpdate: '更新を確認',
@@ -783,7 +791,6 @@
                 invert: '반전',
                 revert: '되돌리기',
                 exitMulti: '종료',
-                apply: '적용',
                 byOrg: '조직별',
                 sort: '정렬',
                 done: '완료',
@@ -837,14 +844,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '비워두면 자동 생성',
                 syncNow: '지금 동기화',
-                resetData: '모든 데이터 초기화',
-                resetDataDesc: '모든 설정 및 모델 데이터 삭제',
-                resetConfirm: '모든 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다!',
                 exported: '내보내기 완료',
                 importSuccess: '가져오기 성공',
                 importFailed: '가져오기 실패',
                 marksCleared: '마크 지움',
-                applied: '적용됨',
                 saved: '저장됨',
                 restored: '기본값으로 복원됨',
                 deleted: '삭제됨',
@@ -858,7 +861,6 @@
                 newModelsFound: '{0}개의 새 모델 발견',
                 defaultOrderRestored: '기본 순서로 복원됨',
                 orgOrderRestored: '기본 조직 순서로 복원됨',
-                dataReset: '데이터 초기화됨',
                 addedToGroup: '그룹에 추가됨',
                 selectGroup: '그룹 선택',
                 inputNewName: '새 이름 입력',
@@ -877,6 +879,14 @@
                 invalidToken: '토큰이 유효하지 않거나 권한이 부족합니다',
                 gistNotFound: 'Gist를 찾을 수 없습니다',
                 syncError: '동기화 오류',
+                deleteModelData: '모든 모델 데이터 삭제',
+                deleteModelDataDesc: '모든 모델 데이터, 정렬, 그룹을 삭제하고 설정은 유지',
+                deleteModelDataConfirm: '모든 모델 데이터를 삭제하시겠습니까? 되돌릴 수 없습니다!',
+                modelDataDeleted: '모델 데이터 삭제됨',
+                deleteAllData: '모든 데이터 삭제',
+                deleteAllDataDesc: '모든 설정, 모델 데이터 및 캐시 삭제',
+                deleteAllDataConfirm: '모든 데이터를 삭제하시겠습니까? 되돌릴 수 없습니다!',
+                allDataDeleted: '모든 데이터 삭제됨',
                 recommendedConfig: '추천 설정',
                 useRecommended: '추천 사용',
                 checkUpdate: '업데이트 확인',
@@ -963,7 +973,6 @@
                 invert: 'Invertir',
                 revert: 'Revertir',
                 exitMulti: 'Salir',
-                apply: 'Aplicar',
                 byOrg: 'Por Organización',
                 sort: 'Ordenar',
                 done: 'Hecho',
@@ -1017,14 +1026,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Dejar vacío para crear automáticamente',
                 syncNow: 'Sincronizar Ahora',
-                resetData: 'Restablecer Todos los Datos',
-                resetDataDesc: 'Borrar todos los ajustes y datos de modelos',
-                resetConfirm: '¿Restablecer todos los datos? ¡Esta acción no se puede deshacer!',
                 exported: 'Exportado',
                 importSuccess: 'Importación exitosa',
                 importFailed: 'Importación fallida',
                 marksCleared: 'Marcas limpiadas',
-                applied: 'Aplicado',
                 saved: 'Guardado',
                 restored: 'Restaurado a predeterminado',
                 deleted: 'Eliminado',
@@ -1038,7 +1043,6 @@
                 newModelsFound: '{0} nuevos modelos encontrados',
                 defaultOrderRestored: 'Orden predeterminado restaurado',
                 orgOrderRestored: 'Orden de organización predeterminado restaurado',
-                dataReset: 'Datos restablecidos',
                 addedToGroup: 'Añadido al grupo',
                 selectGroup: 'Seleccionar Grupo',
                 inputNewName: 'Ingrese nuevo nombre',
@@ -1057,6 +1061,14 @@
                 invalidToken: 'Token inválido o permisos insuficientes',
                 gistNotFound: 'Gist no encontrado',
                 syncError: 'Error de sincronización',
+                deleteModelData: 'Eliminar Datos de Modelos',
+                deleteModelDataDesc: 'Borrar todos los datos de modelos, orden y grupos, mantener ajustes',
+                deleteModelDataConfirm: '¿Eliminar todos los datos de modelos? ¡No se puede deshacer!',
+                modelDataDeleted: 'Datos de modelos eliminados',
+                deleteAllData: 'Eliminar Todos los Datos',
+                deleteAllDataDesc: 'Borrar todos los ajustes, datos y caché',
+                deleteAllDataConfirm: '¿Eliminar todos los datos? ¡No se puede deshacer!',
+                allDataDeleted: 'Todos los datos eliminados',
                 recommendedConfig: 'Configuración Recomendada',
                 useRecommended: 'Usar Recomendada',
                 checkUpdate: 'Buscar Actualización',
@@ -1143,7 +1155,6 @@
                 invert: 'Inverser',
                 revert: 'Annuler',
                 exitMulti: 'Quitter',
-                apply: 'Appliquer',
                 byOrg: 'Par Organisation',
                 sort: 'Trier',
                 done: 'Terminé',
@@ -1197,14 +1208,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Laisser vide pour créer automatiquement',
                 syncNow: 'Synchroniser Maintenant',
-                resetData: 'Réinitialiser Toutes les Données',
-                resetDataDesc: 'Effacer tous les paramètres et données de modèles',
-                resetConfirm: 'Réinitialiser toutes les données? Cette action est irréversible!',
                 exported: 'Exporté',
                 importSuccess: 'Importation réussie',
                 importFailed: 'Importation échouée',
                 marksCleared: 'Marques effacées',
-                applied: 'Appliqué',
                 saved: 'Enregistré',
                 restored: 'Restauré par défaut',
                 deleted: 'Supprimé',
@@ -1218,7 +1225,6 @@
                 newModelsFound: '{0} nouveaux modèles trouvés',
                 defaultOrderRestored: 'Ordre par défaut restauré',
                 orgOrderRestored: 'Ordre des organisations par défaut restauré',
-                dataReset: 'Données réinitialisées',
                 addedToGroup: 'Ajouté au groupe',
                 selectGroup: 'Sélectionner un Groupe',
                 inputNewName: 'Entrez un nouveau nom',
@@ -1237,6 +1243,14 @@
                 invalidToken: 'Token invalide ou permissions insuffisantes',
                 gistNotFound: 'Gist non trouvé',
                 syncError: 'Erreur de synchronisation',
+                deleteModelData: 'Supprimer les Données des Modèles',
+                deleteModelDataDesc: 'Effacer toutes les données de modèles, tri et groupes, conserver les paramètres',
+                deleteModelDataConfirm: 'Supprimer toutes les données des modèles ? Irréversible !',
+                modelDataDeleted: 'Données des modèles supprimées',
+                deleteAllData: 'Supprimer Toutes les Données',
+                deleteAllDataDesc: 'Effacer tous les paramètres, données et cache',
+                deleteAllDataConfirm: 'Supprimer toutes les données ? Irréversible !',
+                allDataDeleted: 'Toutes les données supprimées',
                 recommendedConfig: 'Configuration Recommandée',
                 useRecommended: 'Utiliser la Recommandée',
                 checkUpdate: 'Vérifier la Mise à Jour',
@@ -1323,7 +1337,6 @@
                 invert: 'Umkehren',
                 revert: 'Zurücksetzen',
                 exitMulti: 'Beenden',
-                apply: 'Anwenden',
                 byOrg: 'Nach Organisation',
                 sort: 'Sortieren',
                 done: 'Fertig',
@@ -1377,14 +1390,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Leer lassen für automatische Erstellung',
                 syncNow: 'Jetzt Synchronisieren',
-                resetData: 'Alle Daten Zurücksetzen',
-                resetDataDesc: 'Alle Einstellungen und Modelldaten löschen',
-                resetConfirm: 'Alle Daten zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden!',
                 exported: 'Exportiert',
                 importSuccess: 'Import erfolgreich',
                 importFailed: 'Import fehlgeschlagen',
                 marksCleared: 'Markierungen gelöscht',
-                applied: 'Angewendet',
                 saved: 'Gespeichert',
                 restored: 'Auf Standard zurückgesetzt',
                 deleted: 'Gelöscht',
@@ -1398,7 +1407,6 @@
                 newModelsFound: '{0} neue Modelle gefunden',
                 defaultOrderRestored: 'Standardreihenfolge wiederhergestellt',
                 orgOrderRestored: 'Standard-Organisationsreihenfolge wiederhergestellt',
-                dataReset: 'Daten zurückgesetzt',
                 addedToGroup: 'Zur Gruppe hinzugefügt',
                 selectGroup: 'Gruppe Auswählen',
                 inputNewName: 'Neuen Namen eingeben',
@@ -1417,6 +1425,14 @@
                 invalidToken: 'Token ungültig oder unzureichende Berechtigungen',
                 gistNotFound: 'Gist nicht gefunden',
                 syncError: 'Synchronisierungsfehler',
+                deleteModelData: 'Modelldaten Löschen',
+                deleteModelDataDesc: 'Alle Modelldaten, Sortierung und Gruppen löschen, Einstellungen behalten',
+                deleteModelDataConfirm: 'Alle Modelldaten löschen? Nicht rückgängig machbar!',
+                modelDataDeleted: 'Modelldaten gelöscht',
+                deleteAllData: 'Alle Daten Löschen',
+                deleteAllDataDesc: 'Alle Einstellungen, Daten und Cache löschen',
+                deleteAllDataConfirm: 'Alle Daten löschen? Nicht rückgängig machbar!',
+                allDataDeleted: 'Alle Daten gelöscht',
                 recommendedConfig: 'Empfohlene Konfiguration',
                 useRecommended: 'Empfohlene Verwenden',
                 checkUpdate: 'Update Prüfen',
@@ -1503,7 +1519,6 @@
                 invert: 'Инвертировать',
                 revert: 'Отменить',
                 exitMulti: 'Выход',
-                apply: 'Применить',
                 byOrg: 'По организации',
                 sort: 'Сортировка',
                 done: 'Готово',
@@ -1557,14 +1572,10 @@
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Оставьте пустым для автоматического создания',
                 syncNow: 'Синхронизировать сейчас',
-                resetData: 'Сбросить все данные',
-                resetDataDesc: 'Удалить все настройки и данные моделей',
-                resetConfirm: 'Сбросить все данные? Это действие нельзя отменить!',
                 exported: 'Экспортировано',
                 importSuccess: 'Импорт успешен',
                 importFailed: 'Импорт не удался',
                 marksCleared: 'Метки очищены',
-                applied: 'Применено',
                 saved: 'Сохранено',
                 restored: 'Восстановлено по умолчанию',
                 deleted: 'Удалено',
@@ -1578,7 +1589,6 @@
                 newModelsFound: 'Найдено {0} новых моделей',
                 defaultOrderRestored: 'Порядок по умолчанию восстановлен',
                 orgOrderRestored: 'Порядок организаций по умолчанию восстановлен',
-                dataReset: 'Данные сброшены',
                 addedToGroup: 'Добавлено в группу',
                 selectGroup: 'Выбрать группу',
                 inputNewName: 'Введите новое название',
@@ -1597,6 +1607,14 @@
                 invalidToken: 'Недействительный токен или недостаточно прав',
                 gistNotFound: 'Gist не найден',
                 syncError: 'Ошибка синхронизации',
+                deleteModelData: 'Удалить данные моделей',
+                deleteModelDataDesc: 'Удалить все данные моделей, сортировку и группы, сохранить настройки',
+                deleteModelDataConfirm: 'Удалить все данные моделей? Это действие нельзя отменить!',
+                modelDataDeleted: 'Данные моделей удалены',
+                deleteAllData: 'Удалить все данные',
+                deleteAllDataDesc: 'Удалить все настройки, данные и кэш',
+                deleteAllDataConfirm: 'Удалить все данные? Это действие нельзя отменить!',
+                allDataDeleted: 'Все данные удалены',
                 recommendedConfig: 'Рекомендуемая конфигурация',
                 useRecommended: 'Использовать рекомендуемую',
                 checkUpdate: 'Проверить обновление',
@@ -1659,28 +1677,29 @@
         drawerContainer: 'div.relative.px-4',
         modelOptionDrawer: 'button.w-full',
         modelName: 'span.truncate',
-        arenaButtons: '[data-arena-buttons="true"]'
+        arenaButtons: '[data-arena-buttons="true"]',
+        chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2'
     };
 
     const MODE_ORG_CONFIG = {
         text: {
-            tier1: ['Google', 'Anthropic', 'xAI', 'OpenAI', 'Bytedance', 'Z.ai', 'Baidu', 'Moonshot', 'Alibaba', 'DeepSeek', 'Mistral', 'MiniMax', 'Arcee AI'],
-            tier2: ['Meituan', 'Amazon', 'Xiaomi', 'Tencent', 'Microsoft AI', 'Prime Intellect', 'Cohere', 'Nvidia', 'Ant Group', 'StepFun', 'Meta', 'Allen AI', 'Inception AI', 'IBM', '01 AI', 'NexusFlow'],
+            tier1: ['Anthropic', 'xAI', 'Google', 'OpenAI', 'Bytedance', 'Z.ai', 'Moonshot', 'Baidu', 'Alibaba', 'DeepSeek', 'Mistral', 'Amazon', 'MiniMax', 'Inception AI'],
+            tier2: ['Meituan', 'Tencent', 'Xiaomi', 'Microsoft AI', 'StepFun', 'Arcee AI', 'Nvidia', 'Prime Intellect', 'Cohere', 'Ant Group', 'Meta', 'Ai2', '01 AI', 'NexusFlow', 'IBM'],
             useFolder: true
         },
         search: {
-            tier1: ['Google', 'OpenAI', 'xAI', 'Anthropic', 'Perplexity', 'Diffbot'],
+            tier1: ['Google', 'Anthropic', 'xAI', 'OpenAI', 'Perplexity', 'Diffbot'],
             tier2: [],
             useFolder: false
         },
         image: {
-            tier1: ['OpenAI', 'Google', 'xAI', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Alibaba', 'Z.ai'],
-            tier2: ['Shengshu', 'Pruna', 'Microsoft AI', 'Ideogram', 'Luma AI', 'Recraft', 'Leonardo AI', 'Reve'],
+            tier1: ['Google', 'OpenAI', 'Reve', 'xAI', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Alibaba', 'Shengshu', 'Runway'],
+            tier2: ['Recraft', 'Microsoft AI', 'Ideogram', 'Pruna', 'Luma AI', 'Leonardo AI', 'Z.ai'],
             useFolder: true
         },
         code: {
-            tier1: ['Anthropic', 'OpenAI', 'Google', 'Moonshot', 'Z.ai', 'MiniMax', 'DeepSeek', 'Bytedance'],
-            tier2: ['Xiaomi', 'Alibaba', 'KwaiKAT', 'xAI', 'Mistral'],
+            tier1: ['Anthropic', 'OpenAI', 'Google', 'Z.ai', 'Moonshot', 'MiniMax', 'Alibaba', 'DeepSeek'],
+            tier2: ['Xiaomi', 'KwaiKAT', 'xAI', 'Mistral', 'Bytedance', 'Inception AI'],
             useFolder: true
         },
         video: {
@@ -1718,7 +1737,7 @@
         { patterns: [/^step/i], company: 'StepFun', icon: '👣' },
         { patterns: [/^llama/i], company: 'Meta', icon: '🔷' },
         { patterns: [/^nvidia/i, /^nemotron/i], company: 'Nvidia', icon: '💚' },
-        { patterns: [/^olmo/i, /^molmo/i], company: 'Allen AI', icon: '🔬' },
+        { patterns: [/^olmo/i, /^molmo/i], company: 'Ai2', icon: '🔬' },
         { patterns: [/^mercury/i], company: 'Inception AI', icon: '☿️' },
         { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity', icon: '❓' },
         { patterns: [/^diffbot/i], company: 'Diffbot', icon: '🤖' },
@@ -1735,15 +1754,9 @@
         { patterns: [/^yi-/i], company: '01 AI', icon: '0️⃣' },
         { patterns: [/^athene/i], company: 'NexusFlow', icon: '🔗' },
         { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
-        { patterns: [/^trinity/i], company: 'Arcee AI', icon: '🔺' }
+        { patterns: [/^trinity/i], company: 'Arcee AI', icon: '🔺' },
+        { patterns: [/^runway/i], company: 'Runway', icon: 'R' }
     ];
-
-    const ICON_TO_ORG = {
-        'zhipu': 'Z.ai',
-        'zhipu ai': 'Z.ai',
-        'microsoft': 'Microsoft AI',
-        'qwen': 'Alibaba',
-    };
 
     const IMAGE_TYPE_ORDER = { universal: 0, t2i: 1, i2i: 2 };
 
@@ -1808,6 +1821,7 @@
             if (this.data.settings.autoSyncMode === undefined) this.data.settings.autoSyncMode = 'change'; // 'change' | 'interval'
             if (this.data.settings.autoSyncInterval === undefined) this.data.settings.autoSyncInterval = 5; // 分钟
             if (this.data.settings.lockFabPosition === undefined) this.data.settings.lockFabPosition = false;
+            if (!this.data.settings.adminToken) this.data.settings.adminToken = '';
             if (!this.data.settings.lastRecommendedDate) this.data.settings.lastRecommendedDate = '';
             if (!this.data.settings.fabPosition) this.data.settings.fabPosition = { right: 12, top: null, bottom: null };
             if (!this.data.modelOrder) this.data.modelOrder = { text: [], search: [], image: [], code: [], video: [] };
@@ -1875,6 +1889,7 @@
             // 导出时排除 Token
             if (data.settings) {
                 delete data.settings.gistToken;
+                delete data.settings.adminToken;
             }
             // 如果指定了分组，只导出该分组相关数据
             if (groupName && this.data.groups[groupName]) {
@@ -1920,7 +1935,22 @@
             }
         }
 
-        resetAll() { this.data = {}; this.ensureDefaults(); this.save(); }
+        deleteModelData() {
+            this.data.models = {};
+            this.data.modelOrder = { text: [], search: [], image: [], code: [], video: [] };
+            this.data.orgOrder = {};
+            this.data.groups = {};
+            ['text', 'search', 'image', 'code', 'video'].forEach(mode => {
+                this.data.orgOrder[mode] = getDefaultOrgOrder(mode);
+            });
+            this.save();
+        }
+
+        deleteAllData() {
+            GM_setValue(STORAGE_KEY, '{}');
+            GM_setValue(LOGO_CACHE_KEY, '{}');
+            location.reload();
+        }
 
         getLanguage() { return this.data.settings.language || 'zh-CN'; }
         setLanguage(lang) { this.data.settings.language = lang; this.save(); }
@@ -1971,34 +2001,13 @@
             return this.data.groups[groupName] || [];
         }
 
-        analyze(name, iconCompany, strictMode, featureFlags = {}) {
+        analyze(name, strictMode, featureFlags = {}) {
             let company = 'Other', icon = '❔';
             for (const rule of COMPANY_RULES) {
                 if (rule.patterns.some(p => p.test(name))) {
                     company = rule.company;
                     icon = rule.icon;
                     break;
-                }
-            }
-            if (company === 'Other' && iconCompany) {
-                const lowerIcon = iconCompany.toLowerCase();
-                for (const [key, org] of Object.entries(ICON_TO_ORG)) {
-                    if (lowerIcon.includes(key)) {
-                        company = org;
-                        for (const rule of COMPANY_RULES) {
-                            if (rule.company === org) { icon = rule.icon; break; }
-                        }
-                        break;
-                    }
-                }
-                if (company === 'Other') {
-                    for (const rule of COMPANY_RULES) {
-                        if (rule.company.toLowerCase() === lowerIcon) {
-                            company = rule.company;
-                            icon = rule.icon;
-                            break;
-                        }
-                    }
                 }
             }
 
@@ -2024,7 +2033,7 @@
             const model = this.data.models[name];
             if (!model) return;
             const mode = model.modes?.[0] || 'text';
-            const fresh = this.analyze(name, null, mode, {});
+            const fresh = this.analyze(name, mode, {});
             fresh.visible = model.visible;
             fresh.starred = model.starred;
             fresh.isNew = false;
@@ -2042,6 +2051,7 @@
         constructor(dm) {
             this.dm = dm;
             this.scanSession = { active: false, startedAt: null, scannedModels: new Set(), scannedModes: new Set() };
+            this.onMutation = null;
             this.observer = null;
             this.initHistoryHook();
         }
@@ -2049,7 +2059,7 @@
         initHistoryHook() {
             const originalPush = history.pushState;
             const originalReplace = history.replaceState;
-            const onUrlChange = () => { setTimeout(() => { this.scan(); this.applyFilters(); }, 150); };
+            const onUrlChange = () => { setTimeout(() => { this.scan(); this.applyFilters(); if (this.onMutation) this.onMutation(); }, 150); };
             history.pushState = function() { originalPush.apply(this, arguments); onUrlChange(); };
             history.replaceState = function() { originalReplace.apply(this, arguments); onUrlChange(); };
             window.addEventListener('popstate', onUrlChange);
@@ -2080,13 +2090,6 @@
             const name = nameEl?.textContent?.trim();
             if (!name || name.length < 2) return null;
 
-            let iconCompany = null;
-            const imgEl = el.querySelector('img[alt]');
-            if (imgEl) {
-                const alt = imgEl.getAttribute('alt') || '';
-                iconCompany = alt.replace(/\s*icon\s*/i, '').trim() || null;
-            }
-
             const svgPaths = el.querySelectorAll('svg path');
             let hasVision = false;
             let hasRIU = false;
@@ -2116,7 +2119,7 @@
                 fileUpload: hasFileUpload
             };
 
-            return { name, iconCompany, featureFlags };
+            return { name, featureFlags };
         }
 
         scan() {
@@ -2138,7 +2141,7 @@
 
                     let model = this.dm.getModel(info.name);
                     if (!model) {
-                        const data = this.dm.analyze(info.name, info.iconCompany, currentMode, info.featureFlags);
+                        const data = this.dm.analyze(info.name, currentMode, info.featureFlags);
                         this.dm.setModel(info.name, data);
                         newModels.push(info.name);
                     } else {
@@ -2253,6 +2256,7 @@
         startObserving() {
             let timer = null;
             this.observer = new MutationObserver(() => {
+                if (this.onMutation) this.onMutation();
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
                     clearTimeout(timer);
@@ -2295,6 +2299,7 @@
             this.adminClickCount = 0;
             this.adminClickTimer = null;
             this.remoteDate = null;
+            this.pageHasChatUI = true;
         }
 
         t(key) {
@@ -3003,10 +3008,17 @@
                     </div>
                     <div class="lmm-setting-row" style="border-top:2px solid var(--lmm-danger);margin-top:12px;padding-top:12px">
                         <div class="lmm-setting-info">
-                            <div class="lmm-setting-title" style="color:var(--lmm-danger)" data-i18n="resetData"></div>
-                            <div class="lmm-setting-desc" data-i18n="resetDataDesc"></div>
+                            <div class="lmm-setting-title" style="color:var(--lmm-danger)" data-i18n="deleteModelData"></div>
+                            <div class="lmm-setting-desc" data-i18n="deleteModelDataDesc"></div>
                         </div>
-                        <button class="lmm-btn lmm-btn-danger" id="lmm-setting-reset" data-i18n="reset"></button>
+                        <button class="lmm-btn lmm-btn-danger" id="lmm-setting-delete-models" data-i18n="delete"></button>
+                    </div>
+                    <div class="lmm-setting-row">
+                        <div class="lmm-setting-info">
+                            <div class="lmm-setting-title" style="color:var(--lmm-danger)" data-i18n="deleteAllData"></div>
+                            <div class="lmm-setting-desc" data-i18n="deleteAllDataDesc"></div>
+                        </div>
+                        <button class="lmm-btn lmm-btn-danger" id="lmm-setting-delete-all" data-i18n="delete"></button>
                     </div>
                 </div>
                 <div class="lmm-modal-footer">
@@ -3080,15 +3092,23 @@
             modal.querySelector('#lmm-setting-upload').onclick = () => this.gistUpload();
             modal.querySelector('#lmm-setting-download').onclick = () => this.gistDownload();
 
-            modal.querySelector('#lmm-setting-reset').onclick = () => {
+            modal.querySelector('#lmm-setting-delete-models').onclick = () => {
                 this.closeSettingsModal();
-                this.showConfirm(this.t('resetData'), this.t('resetConfirm'), () => {
-                    this.dm.resetAll();
-                    this.scanner.toast(this.t('dataReset'), 'success');
+                this.showConfirm(this.t('deleteModelData'), this.t('deleteModelDataConfirm'), () => {
+                    this.dm.deleteModelData();
+                    this.scanner.toast(this.t('modelDataDeleted'), 'success');
                     this.updateTopbar();
                     this.updateSidebar();
                     this.refresh();
                     this.updateFabBadge();
+                });
+            };
+
+            modal.querySelector('#lmm-setting-delete-all').onclick = () => {
+                this.closeSettingsModal();
+                this.showConfirm(this.t('deleteAllData'), this.t('deleteAllDataConfirm'), () => {
+                    this.scanner.toast(this.t('allDataDeleted'), 'success');
+                    setTimeout(() => this.dm.deleteAllData(), 1500);
                 });
             };
 
@@ -3497,7 +3517,7 @@
             document.addEventListener('keydown', e => {
                 if (e.ctrlKey && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
                     e.preventDefault();
-                    this.toggle();
+                    if (this.pageHasChatUI) this.toggle();
                 }
                 if (e.key === 'Escape') {
                     if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
@@ -3550,6 +3570,7 @@
             this.updateGridView();
             this.panel.classList.remove('open');
             this.overlay.classList.remove('open');
+            this.scanner.applyFilters();
         }
 
         updateGridView() {
@@ -3570,8 +3591,10 @@
                 { key: 'search', icon: '🔍', label: 'Search', count: counts.search },
                 { key: 'image', icon: '🎨', label: 'Image', count: counts.image },
                 { key: 'code', icon: '💻', label: 'Code', count: counts.code },
-                { key: 'video', icon: '🎬', label: 'Video', count: counts.video },
             ];
+            if (counts.video > 0) {
+                items.push({ key: 'video', icon: '🎬', label: 'Video', count: counts.video });
+            }
 
             let html = items.map(it => `<div class="lmm-topbar-item ${this.currentMode === it.key ? 'active' : ''}" data-mode="${it.key}">${it.icon} ${it.label} ${it.count > 0 ? `<span class="cnt">${it.count}</span>` : ''}</div>`).join('');
             html += `<div class="lmm-topbar-sep"></div>`;
@@ -4272,6 +4295,14 @@
             }
         }
 
+        checkPageContext() {
+            const hasChatUI = !!document.querySelector(SELECTORS.chatContainer);
+            if (hasChatUI === this.pageHasChatUI) return;
+            this.pageHasChatUI = hasChatUI;
+            if (this.fab) this.fab.style.display = hasChatUI ? '' : 'none';
+            if (!hasChatUI && this.isOpen) this.close();
+        }
+
         createDiffModal() {
             const modalOverlay = document.createElement('div');
             modalOverlay.className = 'lmm-modal-overlay';
@@ -4550,6 +4581,8 @@
                 this.scanner.toast(this.t('tokenRequired'), 'warning');
                 return;
             }
+            this.dm.data.settings.adminToken = token;
+            this.dm.save();
 
             try {
                 // 获取当前文件 SHA（如果存在）
@@ -4654,14 +4687,9 @@
             } else {
                 batch.innerHTML = `
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
-                    <button class="lmm-btn lmm-btn-primary" id="lmm-apply">✓ ${this.t('apply')}</button>
                 `;
-            batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
-            batch.querySelector('#lmm-apply').onclick = () => {
-                this.scanner.applyFilters();
-                this.scanner.toast(this.t('applied'), 'success');
-            };
-        }
+                batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
+            }
         }
 
         esc(s) {
@@ -5180,6 +5208,7 @@
             this.settingsModal.querySelector('#lmm-rec-remote-date').textContent = this.remoteDate || '-';
             const adminSection = this.settingsModal.querySelector('#lmm-admin-section');
             if (adminSection) adminSection.style.display = this.adminMode ? '' : 'none';
+            this.settingsModal.querySelector('#lmm-admin-token').value = this.dm.data.settings.adminToken || '';
             this.settingsModalOverlay.classList.add('open');
             this.settingsModal.classList.add('open');
         }
@@ -5198,8 +5227,10 @@
         const scanner = new Scanner(dm);
         const ui = new UI(dm, scanner);
         ui.init();
+        scanner.onMutation = () => ui.checkPageContext();
         scanner.startObserving();
-        setTimeout(() => scanner.scan(), 2000);
+        ui.checkPageContext();
+        setTimeout(() => { scanner.scan(); ui.checkPageContext(); }, 2000);
     }
 
     if (document.readyState === 'loading') {
