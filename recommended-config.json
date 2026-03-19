@@ -1,329 +1,5 @@
 {
   "models": {
-    "claude-opus-4-6-search": {
-      "visible": true,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4.20-beta1": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search",
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.2-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-3-flash-grounding": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-3-pro-grounding": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.1-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-sonnet-4-6-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.2-search-non-reasoning": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-1-fast-search": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-fast-search": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-5-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "o3-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-pro-grounding": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-search": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "ppl-sonar-reasoning-pro-high": {
-      "visible": true,
-      "company": "Perplexity",
-      "icon": "❓",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-sonnet-4-5-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-1-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5-search": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-opus-4-search": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.1-search-sp": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-3.1-pro-grounding": {
-      "visible": true,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gpt-5.4-search": {
-      "visible": true,
-      "company": "OpenAI",
-      "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4.20-multi-agent-beta-0309": {
-      "visible": true,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": false,
-      "modes": [
-        "search",
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
     "claude-opus-4-6-thinking": {
       "visible": true,
       "company": "Anthropic",
@@ -335,7 +11,7 @@
       ],
       "starred": false,
       "isNew": false,
-      "vision": false,
+      "vision": true,
       "note": "",
       "fileUpload": true
     },
@@ -350,7 +26,7 @@
       ],
       "starred": false,
       "isNew": false,
-      "vision": false,
+      "vision": true,
       "note": "",
       "fileUpload": true
     },
@@ -602,7 +278,7 @@
       ],
       "starred": false,
       "isNew": false,
-      "vision": false,
+      "vision": true,
       "note": "",
       "fileUpload": true
     },
@@ -938,7 +614,7 @@
       "fileUpload": false
     },
     "mistral-large-3": {
-      "visible": true,
+      "visible": false,
       "company": "Mistral",
       "icon": "🟠",
       "companyManual": false,
@@ -1066,7 +742,7 @@
       "fileUpload": false
     },
     "minimax-m2.5": {
-      "visible": true,
+      "visible": false,
       "company": "MiniMax",
       "icon": "🎯",
       "companyManual": false,
@@ -2027,6 +1703,21 @@
       "note": "",
       "fileUpload": false
     },
+    "grok-4.20-beta1": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
     "grok-4.20-beta-0309-reasoning": {
       "visible": false,
       "company": "xAI",
@@ -2063,6 +1754,21 @@
       "companyManual": false,
       "modes": [
         "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4.20-multi-agent-beta-0309": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "search"
       ],
       "starred": false,
       "isNew": false,
@@ -3195,6 +2901,373 @@
       "vision": "t2i",
       "note": "",
       "fileUpload": false
+    },
+    "claude-opus-4-6-search": {
+      "visible": true,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.2-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3-flash-grounding": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3-pro-grounding": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.1-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-6-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.2-search-non-reasoning": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-1-fast-search": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-fast-search": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-5-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "o3-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-2.5-pro-grounding": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4-search": {
+      "visible": false,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "ppl-sonar-reasoning-pro-high": {
+      "visible": true,
+      "company": "Perplexity",
+      "icon": "❓",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-sonnet-4-5-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-1-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5-search": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "claude-opus-4-search": {
+      "visible": false,
+      "company": "Anthropic",
+      "icon": "🟤",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.1-search-sp": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3.1-pro-grounding": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.4-search": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mistral-small-2603": {
+      "visible": true,
+      "company": "Mistral",
+      "icon": "🟠",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "minimax-m2.7": {
+      "visible": true,
+      "company": "MiniMax",
+      "icon": "🎯",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mimo-v2-pro": {
+      "visible": true,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.4-nano-high": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-5.4-mini-high": {
+      "visible": false,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3213,11 +3286,10 @@
       "Amazon",
       "MiniMax",
       "Inception AI",
+      "Xiaomi",
       "---",
       "Meituan",
       "Tencent",
-      "Xiaomi",
-      "Microsoft AI",
       "StepFun",
       "Arcee AI",
       "Nvidia",
@@ -3226,18 +3298,7 @@
       "Ant Group",
       "Meta",
       "Ai2",
-      "IBM",
-      "Perplexity",
-      "KwaiKAT",
-      "Reve",
-      "Black Forest Labs",
-      "Recraft",
-      "Ideogram",
-      "Pruna",
-      "Luma AI",
-      "Leonardo AI",
-      "Shengshu",
-      "Runway"
+      "IBM"
     ],
     "search": [
       "Google",
