@@ -2398,20 +2398,6 @@
       "note": "",
       "fileUpload": false
     },
-    "mai-image-1": {
-      "visible": false,
-      "company": "Microsoft AI",
-      "icon": "🪟",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
-      "note": "",
-      "fileUpload": false
-    },
     "seedream-3": {
       "visible": false,
       "company": "Bytedance",
@@ -3268,6 +3254,48 @@
       "vision": true,
       "note": "",
       "fileUpload": false
+    },
+    "qwen3.5-max-preview": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mimo-v2-omni": {
+      "visible": true,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "mai-image-2": {
+      "visible": true,
+      "company": "Microsoft AI",
+      "icon": "🪟",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3319,9 +3347,9 @@
       "Alibaba",
       "Shengshu",
       "Runway",
+      "Microsoft AI",
       "---",
       "Recraft",
-      "Microsoft AI",
       "Ideogram",
       "Pruna",
       "Luma AI",
