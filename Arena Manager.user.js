@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
-// @version      5.0.0
-// @description  智能管理 Arena 模型显示 - 搜索增强、自定义分组、多视图模式
-// @author       Arena Manager Team
-// @match        https://arena.ai/*
+// @icon         https://arena.ai/favicon.ico
+// @version      5.1.0
+// @description  智能管理 Arena 模型显示
+// @author       Jim Achievo
+// @match        *://*arena.ai/*
+// @match        *://canaryarena.ai/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
@@ -21,7 +23,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.0.0';
+    const VERSION = '5.1.0';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -1683,8 +1685,8 @@
 
     const MODE_ORG_CONFIG = {
         text: {
-            tier1: ['Anthropic', 'xAI', 'Google', 'OpenAI', 'Bytedance', 'Z.ai', 'Moonshot', 'Baidu', 'Alibaba', 'DeepSeek', 'Mistral', 'Amazon', 'MiniMax', 'Inception AI'],
-            tier2: ['Meituan', 'Tencent', 'Xiaomi', 'Microsoft AI', 'StepFun', 'Arcee AI', 'Nvidia', 'Prime Intellect', 'Cohere', 'Ant Group', 'Meta', 'Ai2', '01 AI', 'NexusFlow', 'IBM'],
+            tier1: ['Anthropic', 'Google', 'xAI', 'OpenAI', 'Alibaba', 'Bytedance', 'Z.ai', 'Moonshot', 'Baidu', 'Xiaomi', 'Amazon', 'DeepSeek', 'Mistral', 'MiniMax'],
+            tier2: ['Meituan', 'Tencent', 'Microsoft AI', 'StepFun', 'Arcee AI', 'Nvidia', 'Prime Intellect', 'Cohere', 'Inception AI', 'Ant Group', 'Meta', 'Ai2', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'IBM', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
             useFolder: true
         },
         search: {
@@ -1693,19 +1695,19 @@
             useFolder: false
         },
         image: {
-            tier1: ['Google', 'OpenAI', 'Reve', 'xAI', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Alibaba', 'Shengshu', 'Runway'],
-            tier2: ['Recraft', 'Microsoft AI', 'Ideogram', 'Pruna', 'Luma AI', 'Leonardo AI', 'Z.ai'],
+            tier1: ['Google', 'OpenAI', 'Microsoft AI', 'Reve', 'xAI', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Alibaba', 'Shengshu'],
+            tier2: ['Recraft', 'Ideogram', 'Luma AI', 'Pruna', 'Runway', 'Leonardo AI', 'Z.ai', 'Stability AI', 'StepFun'],
             useFolder: true
         },
         code: {
-            tier1: ['Anthropic', 'OpenAI', 'Google', 'Z.ai', 'Moonshot', 'MiniMax', 'Alibaba', 'DeepSeek'],
-            tier2: ['Xiaomi', 'KwaiKAT', 'xAI', 'Mistral', 'Bytedance', 'Inception AI'],
+            tier1: ['Anthropic', 'OpenAI', 'Google', 'Z.ai', 'Xiaomi', 'MiniMax', 'Moonshot', 'Alibaba', 'xAI', 'DeepSeek', 'Bytedance'],
+            tier2: ['KwaiKAT', 'Mistral', 'Inception AI'],
             useFolder: true
         },
         video: {
-            tier1: [],
-            tier2: [],
-            useFolder: false
+            tier1: ['Google', 'OpenAI', 'xAI', 'Alibaba', 'Bytedance', 'Pixverse', 'KlingAI', 'Shengshu'],
+            tier2: ['Runway', 'Luma AI', 'MiniMax', 'Pruna', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Genmo AI'],
+            useFolder: true
         }
     };
 
@@ -1715,47 +1717,72 @@
     };
 
     const COMPANY_RULES = [
-        { patterns: [/^gemini/i, /^gemma/i, /^imagen/i], company: 'Google', icon: '🔵' },
-        { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i], company: 'OpenAI', icon: '🟢' },
-        { patterns: [/^claude/i], company: 'Anthropic', icon: '🟤' },
-        { patterns: [/^grok/i], company: 'xAI', icon: '⚫' },
-        { patterns: [/^deepseek/i], company: 'DeepSeek', icon: '🐋' },
-        { patterns: [/^qwen/i, /^qwq/i, /^wan/i], company: 'Alibaba', icon: '🟣' },
-        { patterns: [/^glm/i], company: 'Z.ai', icon: '🔮' },
-        { patterns: [/^kimi/i], company: 'Moonshot', icon: '🌙' },
-        { patterns: [/^ernie/i], company: 'Baidu', icon: '🔴' },
-        { patterns: [/^mistral/i, /^magistral/i, /^devstral/i], company: 'Mistral', icon: '🟠' },
-        { patterns: [/^minimax/i], company: 'MiniMax', icon: '🎯' },
-        { patterns: [/^longcat/i], company: 'Meituan', icon: '🐱' },
-        { patterns: [/^mimo/i], company: 'Xiaomi', icon: '🍊' },
-        { patterns: [/^hunyuan/i], company: 'Tencent', icon: '🐧' },
-        { patterns: [/^nova/i, /^amazon/i], company: 'Amazon', icon: '📦' },
-        { patterns: [/^intellect/i], company: 'Prime Intellect', icon: '🧠' },
-        { patterns: [/^ibm/i, /^granite/i], company: 'IBM', icon: '💠' },
-        { patterns: [/^command/i], company: 'Cohere', icon: '🟡' },
-        { patterns: [/^ling/i, /^ring/i], company: 'Ant Group', icon: '🐜' },
-        { patterns: [/^step/i], company: 'StepFun', icon: '👣' },
-        { patterns: [/^llama/i], company: 'Meta', icon: '🔷' },
-        { patterns: [/^nvidia/i, /^nemotron/i], company: 'Nvidia', icon: '💚' },
-        { patterns: [/^olmo/i, /^molmo/i], company: 'Ai2', icon: '🔬' },
-        { patterns: [/^mercury/i], company: 'Inception AI', icon: '☿️' },
-        { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity', icon: '❓' },
-        { patterns: [/^diffbot/i], company: 'Diffbot', icon: '🤖' },
-        { patterns: [/^seed/i, /^dola/i], company: 'Bytedance', icon: '🎵' },
-        { patterns: [/^flux/i], company: 'Black Forest Labs', icon: '🌊' },
-        { patterns: [/^mai-/i, /^microsoft/i], company: 'Microsoft AI', icon: '🪟' },
-        { patterns: [/^vidu/i], company: 'Shengshu', icon: '🎬' },
-        { patterns: [/^recraft/i], company: 'Recraft', icon: '🎨' },
-        { patterns: [/^photon/i], company: 'Luma AI', icon: '💡' },
-        { patterns: [/^ideogram/i], company: 'Ideogram', icon: '✏️' },
-        { patterns: [/^reve/i], company: 'Reve', icon: '💭' },
-        { patterns: [/^lucid/i], company: 'Leonardo AI', icon: '🖼️' },
-        { patterns: [/^kat/i], company: 'KwaiKAT', icon: '🎥' },
         { patterns: [/^yi-/i], company: '01 AI', icon: '0️⃣' },
-        { patterns: [/^athene/i], company: 'NexusFlow', icon: '🔗' },
-        { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
+        { patterns: [/^olmo/i, /^molmo/i], company: 'Ai2', icon: '🔬' },
+        { patterns: [/^jamba/i], company: 'AI21 Labs', icon: '' },
+        { patterns: [/^qwen/i, /^qwq/i, /^wan/i], company: 'Alibaba', icon: '🟣' },
+        { patterns: [/^nova/i, /^amazon/i], company: 'Amazon', icon: '📦' },
+        { patterns: [/^ling/i, /^ring/i], company: 'Ant Group', icon: '🐜' },
+        { patterns: [/^claude/i], company: 'Anthropic', icon: '🟤' },
         { patterns: [/^trinity/i], company: 'Arcee AI', icon: '🔺' },
-        { patterns: [/^runway/i], company: 'Runway', icon: 'R' }
+        { patterns: [/^ernie/i], company: 'Baidu', icon: '🔴' },
+        { patterns: [/^flux/i], company: 'Black Forest Labs', icon: '🌊' },
+        { patterns: [/^seed/i, /^dola/i], company: 'Bytedance', icon: '🎵' },
+        { patterns: [/^dolphin/i], company: 'Cognitive Computations', icon: '' },
+        { patterns: [/^command/i], company: 'Cohere', icon: '🟡' },
+        { patterns: [/^dbrx/i], company: 'Databricks', icon: '' },
+        { patterns: [/^deepseek/i], company: 'DeepSeek', icon: '🐋' },
+        { patterns: [/^diffbot/i], company: 'Diffbot', icon: '🤖' },
+        { patterns: [/^mochi/i], company: 'Genmo AI', icon: '一' },
+        { patterns: [/^gemini/i, /^gemma/i, /^imagen/i, /^veo/i], company: 'Google', icon: '🔵' },
+        { patterns: [/^zephyr/i], company: 'HuggingFace', icon: '😄' },
+        { patterns: [/^ibm/i, /^granite/i], company: 'IBM', icon: '💠' },
+        { patterns: [/^ideogram/i], company: 'Ideogram', icon: '✏️' },
+        { patterns: [/^mercury/i], company: 'Inception AI', icon: '☿️' },
+        { patterns: [/^internlm/i], company: 'InternLM', icon: '👨‍💼' },
+        { patterns: [/^kandinsky/i], company: 'Kandinsky', icon: 'K' },
+        { patterns: [/^kling/i], company: 'KlingAI', icon: '🔗' },
+        { patterns: [/^kat/i], company: 'KwaiKAT', icon: '🎥' },
+        { patterns: [/^lucid/i], company: 'Leonardo AI', icon: '🖼️' },
+        { patterns: [/^lightricks/i], company: 'ltx', icon: '' },
+        { patterns: [/^photon/i], company: 'Luma AI', icon: '💡' },
+        { patterns: [/^longcat/i], company: 'Meituan', icon: '🐱' },
+        { patterns: [/^llama/i], company: 'Meta', icon: '🔷' },
+        { patterns: [/^mai-/i, /^microsoft/i, /^phi/i], company: 'Microsoft AI', icon: '🪟' },
+        { patterns: [/^minimax/i], company: 'MiniMax', icon: '🎯' },
+        { patterns: [/^mistral/i, /^magistral/i, /^devstral/i], company: 'Mistral', icon: '🟠' },
+        { patterns: [/^kimi/i], company: 'Moonshot', icon: '🌙' },
+        { patterns: [/^mpt/i], company: 'MosaicML', icon: '' },
+        { patterns: [/^athene/i], company: 'NexusFlow', icon: '🔗' },
+        { patterns: [/^openhermes/i], company: 'NousResearch', icon: '' },
+        { patterns: [/^nvidia/i, /^nemotron/i], company: 'Nvidia', icon: '💚' },
+        { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i, /^sora/i], company: 'OpenAI', icon: '🟢' },
+        { patterns: [/^oasst/i], company: 'OpenAssistant', icon: '' },
+        { patterns: [/^openchat/i], company: 'OpenChat', icon: '🧿' },
+        { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity', icon: '❓' },
+        { patterns: [/^pika/i], company: 'Pika', icon: '' },
+        { patterns: [/^pixverse/i], company: 'Pixverse', icon: 'L' },
+        { patterns: [/^intellect/i], company: 'Prime Intellect', icon: '🧠' },
+        { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
+        { patterns: [/^recraft/i], company: 'Recraft', icon: '🎨' },
+        { patterns: [/^reka/i], company: 'Reka AI', icon: '' },
+        { patterns: [/^reve/i], company: 'Reve', icon: '💭' },
+        { patterns: [/^runway/i], company: 'Runway', icon: 'R' },
+        { patterns: [/^RWKV/i], company: 'RWKV', icon: '🦜' },
+        { patterns: [/^vidu/i], company: 'Shengshu', icon: '🎬' },
+        { patterns: [/^snowflake/i], company: 'Snowflake', icon: '❄' },
+        { patterns: [/^stable/i], company: 'Stability AI', icon: 'S' },
+        { patterns: [/^alpaca/i], company: 'Stanford', icon: '' },
+        { patterns: [/^step/i], company: 'StepFun', icon: '👣' },
+        { patterns: [/^Together AI/i], company: 'stripedhyena', icon: '' },
+        { patterns: [/^hunyuan/i], company: 'Tencent', icon: '🐧' },
+        { patterns: [/^falcon/i], company: 'TII', icon: '' },
+        { patterns: [/^starling/i], company: 'UC Berkeley', icon: '' },
+        { patterns: [/^solar/i], company: 'Upstage AI', icon: '' },
+        { patterns: [/^guanaco/i], company: 'UW', icon: '' },
+        { patterns: [/^grok/i], company: 'xAI', icon: '⚫' },
+        { patterns: [/^mimo/i], company: 'Xiaomi', icon: '🍊' },
+        { patterns: [/^glm/i], company: 'Z.ai', icon: '🔮' },
     ];
 
     const IMAGE_TYPE_ORDER = { universal: 0, t2i: 1, i2i: 2 };
@@ -4697,11 +4724,12 @@
             return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
         }
 
-        getModeIcon(modes) {
-            if (!Array.isArray(modes) || modes.length === 0) return '❓';
+        getModeIcons(modes) {
+            if (!Array.isArray(modes) || modes.length === 0) return ['❓'];
             const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-            if (this.currentMode !== 'all' && this.currentMode !== 'visible' && !this.currentMode.startsWith('group_') && icons[this.currentMode]) return icons[this.currentMode];
-            return icons[modes[0]] || '❓';
+            const order = ['text', 'search', 'image', 'code', 'video'];
+            const sorted = order.filter(m => modes.includes(m));
+            return sorted.length > 0 ? sorted.map(m => icons[m]) : ['❓'];
         }
 
         refresh() {
@@ -4758,7 +4786,7 @@
                                 </div>
                                 <div class="lmm-tags">
                                     <span class="lmm-tag org">${this.esc(m.company || 'Other')}</span>
-                                    <span class="lmm-tag mode">${this.getModeIcon(modes)}</span>
+                                    ${this.getModeIcons(modes).map(icon => `<span class="lmm-tag mode">${icon}</span>`).join('')}
                                     ${imgTypeTag}
                                     ${visionTag}
                                     ${fileUploadTag}
@@ -4955,7 +4983,7 @@
                     <span class="lmm-detail-value">
                         ${modes.map(mode => {
                 const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-                return `<span class="lmm-tag mode">${icons[mode] || ''} ${mode}</span>`;
+                return `<span class="lmm-tag mode">${icons[mode] || '❓'} ${mode}</span>`;
             }).join(' ')}
                     </span>
                 </div>
