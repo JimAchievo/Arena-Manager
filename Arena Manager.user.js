@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.1.0
+// @version      5.1.1
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://*arena.ai/*
@@ -23,7 +23,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.1.0';
+    const VERSION = '5.1.1';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -64,6 +64,8 @@
                 deselectAll: '全部取消',
                 invert: '反选',
                 revert: '还原',
+                removeFromGroup: '移出分组',
+                removedFromGroup: '已移出分组',
                 exitMulti: '退出多选',
                 byOrg: '按组织',
                 sort: '排序',
@@ -246,6 +248,8 @@
                 deselectAll: 'Deselect All',
                 invert: 'Invert',
                 revert: 'Revert',
+                removeFromGroup: 'Remove from Group',
+                removedFromGroup: 'Removed from group',
                 exitMulti: 'Exit',
                 byOrg: 'By Organization',
                 sort: 'Sort',
@@ -428,6 +432,8 @@
                 deselectAll: '全部取消',
                 invert: '反選',
                 revert: '還原',
+                removeFromGroup: '移出分組',
+                removedFromGroup: '已移出分組',
                 exitMulti: '退出多選',
                 byOrg: '按組織',
                 sort: '排序',
@@ -610,6 +616,8 @@
                 deselectAll: 'すべて解除',
                 invert: '反転',
                 revert: '元に戻す',
+                removeFromGroup: 'グループから削除',
+                removedFromGroup: 'グループから削除しました',
                 exitMulti: '終了',
                 byOrg: '組織別',
                 sort: '並び替え',
@@ -792,6 +800,8 @@
                 deselectAll: '전체 해제',
                 invert: '반전',
                 revert: '되돌리기',
+                removeFromGroup: '그룹에서 제거',
+                removedFromGroup: '그룹에서 제거됨',
                 exitMulti: '종료',
                 byOrg: '조직별',
                 sort: '정렬',
@@ -974,6 +984,8 @@
                 deselectAll: 'Deseleccionar Todo',
                 invert: 'Invertir',
                 revert: 'Revertir',
+                removeFromGroup: 'Quitar del Grupo',
+                removedFromGroup: 'Quitado del grupo',
                 exitMulti: 'Salir',
                 byOrg: 'Por Organización',
                 sort: 'Ordenar',
@@ -1156,6 +1168,8 @@
                 deselectAll: 'Tout Désélectionner',
                 invert: 'Inverser',
                 revert: 'Annuler',
+                removeFromGroup: 'Retirer du Groupe',
+                removedFromGroup: 'Retiré du groupe',
                 exitMulti: 'Quitter',
                 byOrg: 'Par Organisation',
                 sort: 'Trier',
@@ -1338,6 +1352,8 @@
                 deselectAll: 'Alle Abwählen',
                 invert: 'Umkehren',
                 revert: 'Zurücksetzen',
+                removeFromGroup: 'Aus Gruppe Entfernen',
+                removedFromGroup: 'Aus Gruppe entfernt',
                 exitMulti: 'Beenden',
                 byOrg: 'Nach Organisation',
                 sort: 'Sortieren',
@@ -1520,6 +1536,8 @@
                 deselectAll: 'Снять выбор',
                 invert: 'Инвертировать',
                 revert: 'Отменить',
+                removeFromGroup: 'Убрать из группы',
+                removedFromGroup: 'Убрано из группы',
                 exitMulti: 'Выход',
                 byOrg: 'По организации',
                 sort: 'Сортировка',
@@ -1782,7 +1800,7 @@
         { patterns: [/^guanaco/i], company: 'UW', icon: '' },
         { patterns: [/^grok/i], company: 'xAI', icon: '⚫' },
         { patterns: [/^mimo/i], company: 'Xiaomi', icon: '🍊' },
-        { patterns: [/^glm/i], company: 'Z.ai', icon: '🔮' },
+        { patterns: [/^glm/i], company: 'Z.ai', icon: '🔮' }
     ];
 
     const IMAGE_TYPE_ORDER = { universal: 0, t2i: 1, i2i: 2 };
@@ -4686,13 +4704,28 @@
             this.refresh();
         }
 
+        multiSelectRemoveFromGroup() {
+            if (!this.currentMode.startsWith('group_')) return;
+            const groupName = this.currentMode.substring(6);
+            this.selectedModels.forEach(name => {
+                this.dm.removeFromGroup(groupName, name);
+            });
+            this.selectedModels.clear();
+            this.scanner.toast(this.t('removedFromGroup'), 'success');
+            this.updateTopbar();
+            this.refresh();
+            this.triggerSyncOnChange();
+        }
+
         renderBatchButtons() {
             const batch = this.$('#lmm-batch');
             if (this.isMultiSelectMode) {
+                const isGroupMode = this.currentMode.startsWith('group_');
                 batch.innerHTML = `
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-show">${this.t('show')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-hide">${this.t('hide')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-add-group">${this.t('addToGroup')}</button>
+                    ${isGroupMode ? `<button class="lmm-btn lmm-btn-sm lmm-btn-danger" id="lmm-multi-remove-group">${this.t('removeFromGroup')}</button>` : ''}
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-toggle-all">${this.selectedModels.size > 0 ? this.t('deselectAll') : this.t('selectAll')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-invert">${this.t('invert')}</button>
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-revert">${this.t('revert')}</button>
@@ -4701,6 +4734,9 @@
                 batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
                 batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
                 batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
+                if (isGroupMode) {
+                    batch.querySelector('#lmm-multi-remove-group').onclick = () => this.multiSelectRemoveFromGroup();
+                }
                 batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
                     if (this.selectedModels.size > 0) this.multiDeselectAll();
                     else this.multiSelectAll();
