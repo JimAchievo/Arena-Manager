@@ -1651,7 +1651,7 @@
       "fileUpload": false
     },
     "mistral-small-3.1-24b-instruct-2503": {
-      "visible": true,
+      "visible": false,
       "company": "Mistral",
       "icon": "🟠",
       "companyManual": false,
@@ -1879,7 +1879,7 @@
       "fileUpload": false
     },
     "mistral-small-2603": {
-      "visible": false,
+      "visible": true,
       "company": "Mistral",
       "icon": "🟠",
       "companyManual": false,
@@ -3442,7 +3442,6 @@
       "mimo-v2-pro",
       "amazon.nova-pro-v1:0",
       "deepseek-v3.2-thinking",
-      "mistral-small-3.1-24b-instruct-2503",
       "minimax-m2.7",
       "gemini-3.1-pro-grounding",
       "claude-opus-4-6-search",
@@ -3461,7 +3460,8 @@
       "hunyuan-image-3.0",
       "reve-v1.1",
       "hunyuan-image-3.0-instruct",
-      "kimi-k2.5"
+      "kimi-k2.5",
+      "mistral-small-2603"
     ]
   }
 }
