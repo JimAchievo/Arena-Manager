@@ -1892,21 +1892,6 @@
       "note": "",
       "fileUpload": false
     },
-    "kimi-k2.5-thinking": {
-      "visible": true,
-      "company": "Moonshot",
-      "icon": "🌙",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": true
-    },
     "dola-seed-2.0-preview-text": {
       "visible": false,
       "company": "Bytedance",
@@ -2286,20 +2271,6 @@
       "starred": false,
       "isNew": false,
       "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
-    "mai-image-2": {
-      "visible": true,
-      "company": "Microsoft AI",
-      "icon": "🪟",
-      "companyManual": false,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
       "note": "",
       "fileUpload": false
     },
@@ -3296,6 +3267,21 @@
       "vision": false,
       "note": "",
       "fileUpload": false
+    },
+    "kimi-k2.5": {
+      "visible": true,
+      "company": "Moonshot",
+      "icon": "🌙",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
     }
   },
   "orgOrder": {
@@ -3474,7 +3460,8 @@
       "reve-v1.5",
       "hunyuan-image-3.0",
       "reve-v1.1",
-      "hunyuan-image-3.0-instruct"
+      "hunyuan-image-3.0-instruct",
+      "kimi-k2.5"
     ]
   }
 }
