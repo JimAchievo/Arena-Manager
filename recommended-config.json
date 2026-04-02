@@ -16,7 +16,7 @@
       "fileUpload": true
     },
     "claude-opus-4-6": {
-      "visible": false,
+      "visible": true,
       "company": "Anthropic",
       "icon": "🟤",
       "companyManual": false,
@@ -86,21 +86,6 @@
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": true
-    },
-    "gemini-3-pro": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": true
     },
@@ -1176,20 +1161,6 @@
       "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
-      "companyManual": false,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "gemini-2.5-flash-lite-preview-09-2025-no-thinking": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
       "companyManual": false,
       "modes": [
         "text"
@@ -3044,20 +3015,6 @@
       "note": "",
       "fileUpload": false
     },
-    "gemini-3-pro-grounding": {
-      "visible": false,
-      "company": "Google",
-      "icon": "🔵",
-      "companyManual": false,
-      "modes": [
-        "search"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "gpt-5.1-search": {
       "visible": false,
       "company": "OpenAI",
@@ -3282,6 +3239,20 @@
       "vision": true,
       "note": "",
       "fileUpload": true
+    },
+    "glm-5v-turbo": {
+      "visible": true,
+      "company": "Z.ai",
+      "icon": "🔮",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3461,7 +3432,8 @@
       "reve-v1.1",
       "hunyuan-image-3.0-instruct",
       "kimi-k2.5",
-      "mistral-small-2603"
+      "mistral-small-2603",
+      "glm-5v-turbo"
     ]
   }
 }
