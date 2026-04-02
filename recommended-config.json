@@ -3253,6 +3253,64 @@
       "vision": true,
       "note": "",
       "fileUpload": false
+    },
+    "gemma-4-26b-a4b": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemma-4-31b": {
+      "visible": false,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen3.6-plus-preview": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mai-image-2": {
+      "visible": true,
+      "company": "Microsoft AI",
+      "icon": "🪟",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "t2i",
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3339,17 +3397,18 @@
       "Anthropic",
       "OpenAI",
       "Google",
+      "Alibaba",
       "Z.ai",
       "Xiaomi",
       "MiniMax",
       "Moonshot",
-      "Alibaba",
       "xAI",
       "DeepSeek",
-      "Bytedance",
+      "---",
       "KwaiKAT",
       "Mistral",
-      "Inception AI"
+      "Inception AI",
+      "Bytedance"
     ],
     "video": [
       "Google",
@@ -3429,11 +3488,12 @@
       "mai-image-2",
       "reve-v1.5",
       "hunyuan-image-3.0",
-      "reve-v1.1",
       "hunyuan-image-3.0-instruct",
       "kimi-k2.5",
       "mistral-small-2603",
-      "glm-5v-turbo"
+      "glm-5v-turbo",
+      "qwen3.6-plus-preview",
+      "reve-v1.1"
     ]
   }
 }
