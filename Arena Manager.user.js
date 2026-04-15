@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.1.1
+// @version      5.1.2
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://*arena.ai/*
@@ -23,7 +23,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.1.1';
+    const VERSION = '5.1.2';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -1886,13 +1886,29 @@
         save() { GM_setValue(STORAGE_KEY, JSON.stringify(this.data)); }
         getModel(name) { return this.data.models[name]; }
         setModel(name, data) { this.data.models[name] = { ...this.data.models[name], ...data }; this.save(); }
-        deleteModels(names) { names.forEach(n => delete this.data.models[n]); this.save(); }
+
+        deleteModels(names) {
+            names.forEach(n => {
+                delete this.data.models[n];
+                Object.keys(this.data.groups || {}).forEach(g => {
+                    const idx = this.data.groups[g].indexOf(n);
+                    if (idx !== -1) this.data.groups[g].splice(idx, 1);
+                });
+            });
+            if (this.data.modelOrder) {
+                Object.keys(this.data.modelOrder).forEach(mode => {
+                    this.data.modelOrder[mode] = this.data.modelOrder[mode].filter(n => !names.includes(n));
+                });
+            }
+            this.save();
+        }
+
         getAllModels() { return Object.entries(this.data.models).map(([name, data]) => ({ name, ...data })); }
 
         isVisible(name) { const m = this.data.models[name]; return m ? m.visible !== false : this.data.settings.defaultVisible; }
 
         setVisibility(name, visible) {
-            if (!this.data.models[name]) this.data.models[name] = this.analyze(name, null, 'text', {});
+            if (!this.data.models[name]) this.data.models[name] = this.analyze(name, 'text', {});
             this.data.models[name].visible = visible;
             this.data.models[name].isNew = false;
             this.save();
@@ -1916,10 +1932,9 @@
         getOrgOrder(mode) { return this.data.orgOrder[mode] || getDefaultOrgOrder(mode); }
         setOrgOrder(mode, order) {
             if (!this.data.orgOrder) this.data.orgOrder = {};
-            this.data.orgOrder[mode] = order;
+            this.data.orgOrder[mode] = order.filter(x => x !== '---');
             this.save();
         }
-
         updateModel(name, updates) { if (!this.data.models[name]) return; Object.assign(this.data.models[name], updates); this.save(); }
 
         addModeToModel(name, mode) {
@@ -2046,7 +2061,7 @@
             return this.data.groups[groupName] || [];
         }
 
-        analyze(name, strictMode, featureFlags = {}) {
+        analyze(name, mode, featureFlags = {}) {
             let company = 'Other', icon = '❔';
             for (const rule of COMPANY_RULES) {
                 if (rule.patterns.some(p => p.test(name))) {
@@ -2057,7 +2072,7 @@
             }
 
             let vision = false;
-            if (strictMode === 'image') {
+            if (mode === 'image') {
                 const hasVision = featureFlags.vision || false;
                 const hasRIU = featureFlags.riu || false;
                 if (hasVision && hasRIU) vision = 'i2i';
@@ -2069,7 +2084,7 @@
 
             return {
                 visible: this.data.settings.defaultVisible, company, icon, companyManual: false,
-                modes: [strictMode], starred: false, isNew: true, vision, note: '',
+                modes: [mode], starred: false, isNew: true, vision, note: '',
                 fileUpload: featureFlags.fileUpload || false
             };
         }
@@ -2337,6 +2352,7 @@
             this.isMultiSelectMode = false;
             this.selectedModels = new Set();
             this.multiSelectBackup = new Map();
+            this.multiSelectGroupBackup = null;
             this.autoSyncTimer = null;
             this.pendingSync = false;
             this.logoCache = JSON.parse(GM_getValue(LOGO_CACHE_KEY) || '{}');
@@ -2691,7 +2707,7 @@
                 if (m.isNew) counts.new++;
             });
             Object.keys(groups).forEach(name => {
-                counts[`group_${name}`] = groups[name].length;
+                counts[`group_${name}`] = groups[name].filter(n => this.dm.data.models[n]).length;
             });
             return counts;
         }
@@ -4178,9 +4194,10 @@
             this.isMultiSelectMode = true;
             this.selectedModels.clear();
             this.multiSelectBackup.clear();
-            this.getFiltered().forEach(m => {
-                this.multiSelectBackup.set(m.name, this.dm.isVisible(m.name));
+            this.dm.getAllModels().forEach(m => {
+                this.multiSelectBackup.set(m.name, m.visible !== false);
             });
+            this.multiSelectGroupBackup = JSON.parse(JSON.stringify(this.dm.getGroups()));
             this.refresh();
         }
 
@@ -4188,13 +4205,20 @@
             this.isMultiSelectMode = false;
             this.selectedModels.clear();
             this.multiSelectBackup.clear();
+            this.multiSelectGroupBackup = null;
             this.refresh();
         }
 
         revertMultiSelectChanges() {
             this.multiSelectBackup.forEach((visible, name) => {
-                this.dm.setVisibility(name, visible);
+                if (this.dm.getModel(name)) {
+                    this.dm.setVisibility(name, visible);
+                }
             });
+            if (this.multiSelectGroupBackup) {
+                this.dm.data.groups = JSON.parse(JSON.stringify(this.multiSelectGroupBackup));
+                this.dm.save();
+            }
             this.scanner.applyFilters();
         }
 
@@ -4839,60 +4863,60 @@
                             ` : ''}
                         </div>
                     `;
-                }).join('');
+        }).join('');
 
-                grid.querySelectorAll('.lmm-card').forEach(card => {
-                    const name = card.dataset.name;
+        grid.querySelectorAll('.lmm-card').forEach(card => {
+            const name = card.dataset.name;
 
-                    if (this.isModelSortMode) {
-                        this.bindModelDragEvents(card);
-                    } else if (this.isMultiSelectMode) {
-                        card.onclick = () => {
-                            if (this.selectedModels.has(name)) {
-                                this.selectedModels.delete(name);
-                            } else {
-                                this.selectedModels.add(name);
-                            }
-                            this.refresh();
-                        };
+            if (this.isModelSortMode) {
+                this.bindModelDragEvents(card);
+            } else if (this.isMultiSelectMode) {
+                card.onclick = () => {
+                    if (this.selectedModels.has(name)) {
+                        this.selectedModels.delete(name);
                     } else {
-                        card.onclick = (e) => {
-                            if (e.target.closest('.lmm-card-actions')) return;
-                            const newVis = !this.dm.isVisible(name);
-                            this.dm.setVisibility(name, newVis);
-                            this.refresh();
-                            this.updateStats();
-                            this.updateFabBadge();
-                            this.triggerSyncOnChange();
-                        };
-                        card.ondblclick = () => this.openEditModal(name);
-
-                        const starBtn = card.querySelector('.lmm-star-btn');
-                        if (starBtn) {
-                            starBtn.onclick = (e) => {
-                                e.stopPropagation();
-                                this.dm.toggleStar(name);
-                                this.refresh();
-                                this.updateTopbar();
-                                this.triggerSyncOnChange();
-                            };
-                        }
-
-                        const editBtn = card.querySelector('.lmm-edit-btn');
-                        if (editBtn) {
-                            editBtn.onclick = (e) => {
-                                e.stopPropagation();
-                                this.openEditModal(name);
-                            };
-                        }
+                        this.selectedModels.add(name);
                     }
-                });
-            }
+                    this.refresh();
+                };
+            } else {
+                card.onclick = (e) => {
+                    if (e.target.closest('.lmm-card-actions')) return;
+                    const newVis = !this.dm.isVisible(name);
+                    this.dm.setVisibility(name, newVis);
+                    this.refresh();
+                    this.updateStats();
+                    this.updateFabBadge();
+                    this.triggerSyncOnChange();
+                };
+                card.ondblclick = () => this.openEditModal(name);
 
-            this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
-            this.updateStats();
-            this.updateOrgFilter();
-        }
+                const starBtn = card.querySelector('.lmm-star-btn');
+                if (starBtn) {
+                    starBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.dm.toggleStar(name);
+                        this.refresh();
+                        this.updateTopbar();
+                        this.triggerSyncOnChange();
+                    };
+                }
+
+                const editBtn = card.querySelector('.lmm-edit-btn');
+                if (editBtn) {
+                    editBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.openEditModal(name);
+                    };
+                }
+            }
+        });
+    }
+
+    this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
+    this.updateStats();
+    this.updateOrgFilter();
+}
 
         updateStats() {
             const modeModels = this.getModelsInCurrentMode();
@@ -5010,17 +5034,17 @@
                     <span class="lmm-detail-label">${this.t('iconEdit')}</span>
                     <span class="lmm-detail-value">
                         ${isBuiltInOrg
-                ? this.getOrgLogoHtml(m.company, m.icon)
-            : `<input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">`}
+        ? this.getOrgLogoHtml(m.company, m.icon)
+    : `<input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">`}
                     </span>
                 </div>
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('modes')}</span>
                     <span class="lmm-detail-value">
                         ${modes.map(mode => {
-                const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-                return `<span class="lmm-tag mode">${icons[mode] || '❓'} ${mode}</span>`;
-            }).join(' ')}
+        const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+        return `<span class="lmm-tag mode">${icons[mode] || '❓'} ${mode}</span>`;
+    }).join(' ')}
                     </span>
                 </div>
                 <div class="lmm-detail-row">
@@ -5053,38 +5077,38 @@
                 </div>
             `;
 
-            // 绑定事件
-            const starredSwitch = body.querySelector('#lmm-edit-starred');
-            if (starredSwitch) {
-                starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
+    // 绑定事件
+    const starredSwitch = body.querySelector('#lmm-edit-starred');
+    if (starredSwitch) {
+        starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
+    }
+
+    const resetOrgBtn = body.querySelector('#lmm-reset-org');
+    if (resetOrgBtn) {
+        resetOrgBtn.onclick = () => {
+            // 重新分析组织
+            for (const rule of COMPANY_RULES) {
+                if (rule.patterns.some(p => p.test(name))) {
+                    body.querySelector('#lmm-edit-org').value = rule.company;
+                    break;
+                }
             }
+        };
+    }
 
-            const resetOrgBtn = body.querySelector('#lmm-reset-org');
-            if (resetOrgBtn) {
-                resetOrgBtn.onclick = () => {
-                    // 重新分析组织
-                    for (const rule of COMPANY_RULES) {
-                        if (rule.patterns.some(p => p.test(name))) {
-                            body.querySelector('#lmm-edit-org').value = rule.company;
-                            break;
-                        }
-                    }
-                };
-            }
+    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
+        item.onclick = () => item.classList.toggle('checked');
+    });
 
-            body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
-                item.onclick = () => item.classList.toggle('checked');
-            });
+    // 更新模态框标题和按钮
+    this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
+    this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
+    this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
+    this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
 
-            // 更新模态框标题和按钮
-            this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
-            this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
-            this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
-            this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
-
-            this.editModalOverlay.classList.add('open');
-            this.editModal.classList.add('open');
-        }
+    this.editModalOverlay.classList.add('open');
+    this.editModal.classList.add('open');
+}
 
         closeEditModal() {
             this.editModalOverlay.classList.remove('open');
@@ -5205,43 +5229,43 @@
                 </div>
             `).join('');
 
-            list.querySelectorAll('.lmm-group-item').forEach(item => {
-                const name = item.dataset.group;
+    list.querySelectorAll('.lmm-group-item').forEach(item => {
+        const name = item.dataset.group;
 
-                item.querySelector('.lmm-export-group-btn').onclick = () => {
-                    const data = this.dm.export(name);
-                    const blob = new Blob([data], { type: 'application/json' });
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
-                    a.click();
-                    this.scanner.toast(this.t('groupExported'), 'success');
-                };
+        item.querySelector('.lmm-export-group-btn').onclick = () => {
+            const data = this.dm.export(name);
+            const blob = new Blob([data], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            this.scanner.toast(this.t('groupExported'), 'success');
+        };
 
-                item.querySelector('.lmm-rename-btn').onclick = () => {
-                    const newName = prompt(this.t('inputNewName'), name);
-                    if (newName && newName.trim() && newName !== name) {
-                        if (this.dm.renameGroup(name, newName.trim())) {
-                            this.renderGroupList();
-                            this.updateTopbar();
-                            this.scanner.toast(this.t('renamed'), 'success');
-                            this.triggerSyncOnChange();
-                        } else {
-                            this.scanner.toast(this.t('nameExists'), 'warning');
-                        }
-                    }
-                };
-                item.querySelector('.lmm-delete-btn').onclick = () => {
-                    if (confirm(this.t('confirmDelete').replace('{0}', name))) {
-                        this.dm.deleteGroup(name);
-                        this.renderGroupList();
-                        this.updateTopbar();
-                        this.scanner.toast(this.t('deleted'), 'success');
-                        this.triggerSyncOnChange();
-                    }
-                };
-            });
-        }
+        item.querySelector('.lmm-rename-btn').onclick = () => {
+            const newName = prompt(this.t('inputNewName'), name);
+            if (newName && newName.trim() && newName !== name) {
+                if (this.dm.renameGroup(name, newName.trim())) {
+                    this.renderGroupList();
+                    this.updateTopbar();
+                    this.scanner.toast(this.t('renamed'), 'success');
+                    this.triggerSyncOnChange();
+                } else {
+                    this.scanner.toast(this.t('nameExists'), 'warning');
+                }
+            }
+        };
+        item.querySelector('.lmm-delete-btn').onclick = () => {
+            if (confirm(this.t('confirmDelete').replace('{0}', name))) {
+                this.dm.deleteGroup(name);
+                this.renderGroupList();
+                this.updateTopbar();
+                this.scanner.toast(this.t('deleted'), 'success');
+                this.triggerSyncOnChange();
+            }
+        };
+    });
+}
 
         openSettingsModal() {
             const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
