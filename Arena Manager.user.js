@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.1.2
+// @version      5.1.3
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://*arena.ai/*
@@ -23,7 +23,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.1.2';
+    const VERSION = '5.1.3';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -1703,28 +1703,28 @@
 
     const MODE_ORG_CONFIG = {
         text: {
-            tier1: ['Anthropic', 'Google', 'xAI', 'OpenAI', 'Alibaba', 'Bytedance', 'Z.ai', 'Moonshot', 'Baidu', 'Xiaomi', 'Amazon', 'DeepSeek', 'Mistral', 'MiniMax'],
-            tier2: ['Meituan', 'Tencent', 'Microsoft AI', 'StepFun', 'Arcee AI', 'Nvidia', 'Prime Intellect', 'Cohere', 'Inception AI', 'Ant Group', 'Meta', 'Ai2', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'IBM', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
+            tier1: ['Anthropic', 'Google', 'xAI', 'OpenAI', 'Z.ai', 'Alibaba', 'DeepSeek', 'Bytedance', 'Moonshot', 'Baidu', 'Xiaomi', 'Meituan', 'Amazon', 'Mistral', 'MiniMax', 'Tencent'],
+            tier2: ['Microsoft AI', 'StepFun', 'Arcee AI', 'Nvidia', 'Prime Intellect', 'Cohere', 'Inception AI', 'Ant Group', 'Meta', 'Ai2', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'IBM', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
             useFolder: true
         },
         search: {
-            tier1: ['Google', 'Anthropic', 'xAI', 'OpenAI', 'Perplexity', 'Diffbot'],
+            tier1: ['Anthropic', 'Google', 'OpenAI', 'xAI', 'Perplexity', 'Diffbot'],
             tier2: [],
             useFolder: false
         },
         image: {
-            tier1: ['Google', 'OpenAI', 'Microsoft AI', 'Reve', 'xAI', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Alibaba', 'Shengshu'],
-            tier2: ['Recraft', 'Ideogram', 'Luma AI', 'Pruna', 'Runway', 'Leonardo AI', 'Z.ai', 'Stability AI', 'StepFun'],
+            tier1: ['OpenAI', 'Google', 'Microsoft AI', 'Reve', 'xAI', 'Alibaba', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Shengshu'],
+            tier2: ['Recraft', 'Ideogram', 'KlingAI', 'Pruna', 'Luma AI', 'Runway', 'Leonardo AI', 'Z.ai', 'Stability AI', 'StepFun'],
             useFolder: true
         },
         code: {
-            tier1: ['Anthropic', 'OpenAI', 'Google', 'Z.ai', 'Xiaomi', 'MiniMax', 'Moonshot', 'Alibaba', 'xAI', 'DeepSeek', 'Bytedance'],
-            tier2: ['KwaiKAT', 'Mistral', 'Inception AI'],
+            tier1: ['Anthropic', 'Z.ai', 'Moonshot', 'Alibaba', 'Google', 'OpenAI', 'DeepSeek', 'Xiaomi', 'MiniMax', 'xAI', 'KwaiKAT', 'Bytedance'],
+            tier2: ['Mistral', 'Inception AI', 'Meta'],
             useFolder: true
         },
         video: {
-            tier1: ['Google', 'OpenAI', 'xAI', 'Alibaba', 'Bytedance', 'Pixverse', 'KlingAI', 'Shengshu'],
-            tier2: ['Runway', 'Luma AI', 'MiniMax', 'Pruna', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Genmo AI'],
+            tier1: ['Bytedance', 'Alibaba-ATH', 'Google', 'OpenAI', 'xAI', 'Alibaba', 'Pixverse', 'Runway', 'Shengshu'],
+            tier2: ['KlingAI', 'Luma AI', 'Pruna', 'MiniMax', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Genmo AI'],
             useFolder: true
         }
     };
@@ -1739,6 +1739,7 @@
         { patterns: [/^olmo/i, /^molmo/i], company: 'Ai2', icon: '🔬' },
         { patterns: [/^jamba/i], company: 'AI21 Labs', icon: '' },
         { patterns: [/^qwen/i, /^qwq/i, /^wan/i], company: 'Alibaba', icon: '🟣' },
+        { patterns: [/^happyhorse/i], company: 'Alibaba-ATH', icon: '🐎' },
         { patterns: [/^nova/i, /^amazon/i], company: 'Amazon', icon: '📦' },
         { patterns: [/^ling/i, /^ring/i], company: 'Ant Group', icon: '🐜' },
         { patterns: [/^claude/i], company: 'Anthropic', icon: '🟤' },
@@ -1765,7 +1766,7 @@
         { patterns: [/^lightricks/i], company: 'ltx', icon: '' },
         { patterns: [/^photon/i], company: 'Luma AI', icon: '💡' },
         { patterns: [/^longcat/i], company: 'Meituan', icon: '🐱' },
-        { patterns: [/^llama/i], company: 'Meta', icon: '🔷' },
+        { patterns: [/^llama/i, /^muse/i], company: 'Meta', icon: '🔷' },
         { patterns: [/^mai-/i, /^microsoft/i, /^phi/i], company: 'Microsoft AI', icon: '🪟' },
         { patterns: [/^minimax/i], company: 'MiniMax', icon: '🎯' },
         { patterns: [/^mistral/i, /^magistral/i, /^devstral/i], company: 'Mistral', icon: '🟠' },
@@ -1932,7 +1933,7 @@
         getOrgOrder(mode) { return this.data.orgOrder[mode] || getDefaultOrgOrder(mode); }
         setOrgOrder(mode, order) {
             if (!this.data.orgOrder) this.data.orgOrder = {};
-            this.data.orgOrder[mode] = order.filter(x => x !== '---');
+            this.data.orgOrder[mode] = order;
             this.save();
         }
         updateModel(name, updates) { if (!this.data.models[name]) return; Object.assign(this.data.models[name], updates); this.save(); }
@@ -4259,25 +4260,25 @@
                 </div>
             `).join('');
 
-            list.querySelectorAll('.lmm-group-item').forEach(item => {
-                item.onclick = () => {
-                    const groupName = item.dataset.group;
-                    this.selectedModels.forEach(modelName => {
-                        this.dm.addToGroup(groupName, modelName);
-                    });
-                    this.closeGroupSelectModal();
-                    this.scanner.toast(this.t('addedToGroup'), 'success');
-                    this.updateTopbar();
-                    this.refresh();
-                    this.triggerSyncOnChange();
-                };
+    list.querySelectorAll('.lmm-group-item').forEach(item => {
+        item.onclick = () => {
+            const groupName = item.dataset.group;
+            this.selectedModels.forEach(modelName => {
+                this.dm.addToGroup(groupName, modelName);
             });
+            this.closeGroupSelectModal();
+            this.scanner.toast(this.t('addedToGroup'), 'success');
+            this.updateTopbar();
+            this.refresh();
+            this.triggerSyncOnChange();
+        };
+    });
 
-            this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
-            this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
-            this.groupSelectModalOverlay.classList.add('open');
-            this.groupSelectModal.classList.add('open');
-        }
+    this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
+    this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
+    this.groupSelectModalOverlay.classList.add('open');
+    this.groupSelectModal.classList.add('open');
+}
 
         closeGroupSelectModal() {
             this.groupSelectModalOverlay.classList.remove('open');
@@ -4390,10 +4391,10 @@
             <button class="lmm-btn lmm-btn-primary" id="lmm-diff-apply">✓ <span data-i18n="applySelected"></span></button>
         </div>
     `;
-            document.body.appendChild(modal);
-            this.diffModal = modal;
-            modal.querySelector('#lmm-diff-cancel').onclick = () => this.closeDiffModal();
-        }
+    document.body.appendChild(modal);
+    this.diffModal = modal;
+    modal.querySelector('#lmm-diff-cancel').onclick = () => this.closeDiffModal();
+}
 
         closeDiffModal() {
             this.diffModalOverlay.classList.remove('open');
@@ -4408,20 +4409,20 @@
                     method: 'GET',
                     url: `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits?path=${RECOMMENDED_FILE}&per_page=1`
         });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const commits = await res.json();
-                if (commits.length > 0) {
-                    const d = new Date(commits[0].commit.committer.date);
-                    this.remoteDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-                    dateEl.textContent = this.remoteDate;
-                } else {
-                    dateEl.textContent = '-';
-                }
-            } catch (e) {
-                dateEl.textContent = '❌';
-                console.error('[Arena Manager] Check update error:', e);
-            }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const commits = await res.json();
+        if (commits.length > 0) {
+            const d = new Date(commits[0].commit.committer.date);
+            this.remoteDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+            dateEl.textContent = this.remoteDate;
+        } else {
+            dateEl.textContent = '-';
         }
+    } catch (e) {
+        dateEl.textContent = '❌';
+        console.error('[Arena Manager] Check update error:', e);
+    }
+}
 
         async useRecommendedConfig() {
             try {
@@ -4429,19 +4430,19 @@
                     method: 'GET',
                     url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${RECOMMENDED_FILE}?_=${Date.now()}`
                 });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const remote = JSON.parse(await res.text());
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const remote = JSON.parse(await res.text());
 
-                if (!this.remoteDate) await this.checkRecommendedUpdate();
+        if (!this.remoteDate) await this.checkRecommendedUpdate();
 
-                const diff = this.computeDiff(remote);
-                this.closeSettingsModal();
-                this.showDiffModal(diff, remote);
-            } catch (e) {
-                console.error('[Arena Manager] Download recommended config error:', e);
-                this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
-            }
-        }
+        const diff = this.computeDiff(remote);
+        this.closeSettingsModal();
+        this.showDiffModal(diff, remote);
+    } catch (e) {
+        console.error('[Arena Manager] Download recommended config error:', e);
+        this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+    }
+}
 
         computeDiff(remote) {
             const diff = {
@@ -4755,29 +4756,29 @@
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-revert">${this.t('revert')}</button>
                     <button class="lmm-btn lmm-btn-sm lmm-btn-primary" id="lmm-multi-exit">${this.t('exitMulti')}</button>
                 `;
-                batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
-                batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
-                batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
-                if (isGroupMode) {
-                    batch.querySelector('#lmm-multi-remove-group').onclick = () => this.multiSelectRemoveFromGroup();
-                }
-                batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
-                    if (this.selectedModels.size > 0) this.multiDeselectAll();
-                    else this.multiSelectAll();
-                };
-                batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
-                batch.querySelector('#lmm-multi-revert').onclick = () => {
-                    this.revertMultiSelectChanges();
-                    this.refresh();
-                };
-                batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
-            } else {
-                batch.innerHTML = `
+        batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
+        batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
+        batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
+        if (isGroupMode) {
+            batch.querySelector('#lmm-multi-remove-group').onclick = () => this.multiSelectRemoveFromGroup();
+        }
+        batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
+            if (this.selectedModels.size > 0) this.multiDeselectAll();
+            else this.multiSelectAll();
+        };
+        batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
+        batch.querySelector('#lmm-multi-revert').onclick = () => {
+            this.revertMultiSelectChanges();
+            this.refresh();
+        };
+        batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
+    } else {
+        batch.innerHTML = `
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
                 `;
-                batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
-            }
-        }
+        batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
+    }
+}
 
         esc(s) {
             if (!s) return '';
