@@ -118,21 +118,6 @@
       "note": "",
       "fileUpload": false
     },
-    "deepseek-v3.2-thinking": {
-      "visible": true,
-      "company": "DeepSeek",
-      "icon": "🐋",
-      "companyManual": true,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "mistral-large-3": {
       "visible": true,
       "company": "Mistral",
@@ -500,20 +485,6 @@
       "starred": false,
       "isNew": false,
       "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "muse-spark": {
-      "visible": true,
-      "company": "Meta",
-      "icon": "🔷",
-      "companyManual": true,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
       "note": "",
       "fileUpload": false
     },
@@ -1001,21 +972,6 @@
       "companyManual": true,
       "modes": [
         "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "deepseek-v3.2": {
-      "visible": false,
-      "company": "DeepSeek",
-      "icon": "🐋",
-      "companyManual": true,
-      "modes": [
-        "text",
-        "code"
       ],
       "starred": false,
       "isNew": false,
@@ -3138,6 +3094,155 @@
       "vision": false,
       "note": "",
       "fileUpload": false
+    },
+    "gemma-4-31b": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "mimo-v2.5-pro": {
+      "visible": true,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "mimo-v2.5": {
+      "visible": true,
+      "company": "Xiaomi",
+      "icon": "🍊",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": false
+    },
+    "hunyuan-hy3-preview": {
+      "visible": true,
+      "company": "Tencent",
+      "icon": "🐧",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "deepseek-v4-pro-thinking": {
+      "visible": true,
+      "company": "DeepSeek",
+      "icon": "🐋",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "deepseek-v4-flash-thinking": {
+      "visible": true,
+      "company": "DeepSeek",
+      "icon": "🐋",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "kimi-k2.6": {
+      "visible": true,
+      "company": "Moonshot",
+      "icon": "🌙",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "deepseek-v4-flash": {
+      "visible": true,
+      "company": "DeepSeek",
+      "icon": "🐋",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "deepseek-v4-pro": {
+      "visible": true,
+      "company": "DeepSeek",
+      "icon": "🐋",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gpt-image-2 (medium)": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3254,14 +3359,12 @@
       "kimi-k2.5-instant",
       "mimo-v2-flash",
       "mimo-v2-flash (thinking)",
-      "deepseek-v3.2",
       "nova-2-lite",
       "mistral-small-3.1-24b-instruct-2503",
       "longcat-flash-chat-2602-exp",
       "trinity-large-preview"
     ],
     "旗舰": [
-      "muse-spark",
       "grok-4.20-multi-agent-beta-0309",
       "qwen3.6-plus",
       "dola-seed-2.0-preview-vision",
@@ -3270,7 +3373,6 @@
       "kimi-k2.5-thinking",
       "ernie-5.0-0110",
       "mimo-v2-pro",
-      "deepseek-v3.2-thinking",
       "mistral-large-3",
       "mistral-small-3.1-24b-instruct-2503",
       "minimax-m2.7",
