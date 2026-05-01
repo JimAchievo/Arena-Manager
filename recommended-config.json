@@ -16,7 +16,7 @@
       "fileUpload": true
     },
     "grok-4.20-beta-0309-reasoning": {
-      "visible": true,
+      "visible": false,
       "company": "xAI",
       "icon": "⚫",
       "companyManual": true,
@@ -75,7 +75,7 @@
       "fileUpload": false
     },
     "ernie-5.0-0110": {
-      "visible": true,
+      "visible": false,
       "company": "Baidu",
       "icon": "🔴",
       "companyManual": true,
@@ -220,7 +220,7 @@
       "fileUpload": false
     },
     "ernie-5.0-preview-1220": {
-      "visible": true,
+      "visible": false,
       "company": "Baidu",
       "icon": "🔴",
       "companyManual": true,
@@ -234,7 +234,7 @@
       "fileUpload": false
     },
     "grok-4.20-multi-agent-beta-0309": {
-      "visible": true,
+      "visible": false,
       "company": "xAI",
       "icon": "⚫",
       "companyManual": true,
@@ -375,7 +375,7 @@
       "fileUpload": false
     },
     "qwen-image-2.0-pro": {
-      "visible": true,
+      "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
       "companyManual": true,
@@ -459,7 +459,7 @@
       "fileUpload": false
     },
     "qwen3.6-plus": {
-      "visible": true,
+      "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
       "companyManual": true,
@@ -3243,6 +3243,93 @@
       "vision": "universal",
       "note": "",
       "fileUpload": false
+    },
+    "ernie-5.1-preview": {
+      "visible": true,
+      "company": "Baidu",
+      "icon": "🔴",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-4.3": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code",
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "qwen3.6-max-preview": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "laguna-m.1": {
+      "visible": true,
+      "company": "Poolside",
+      "icon": "❔",
+      "companyManual": true,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "laguna-xs.2": {
+      "visible": false,
+      "company": "Poolside",
+      "icon": "❔",
+      "companyManual": true,
+      "modes": [
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "qwen-image-2.0-pro-2026-04-22": {
+      "visible": true,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3365,13 +3452,10 @@
       "trinity-large-preview"
     ],
     "旗舰": [
-      "grok-4.20-multi-agent-beta-0309",
-      "qwen3.6-plus",
       "dola-seed-2.0-preview-vision",
       "glm-5.1",
       "glm-5v-turbo",
       "kimi-k2.5-thinking",
-      "ernie-5.0-0110",
       "mimo-v2-pro",
       "mistral-large-3",
       "mistral-small-3.1-24b-instruct-2503",
@@ -3387,7 +3471,6 @@
       "grok-imagine-image-pro",
       "flux-2-max",
       "seedream-5.0-lite",
-      "qwen-image-2.0-pro",
       "wan2.7-image-pro",
       "vidu-q2-image",
       "mai-image-2",
@@ -3395,7 +3478,12 @@
       "hunyuan-image-3.0",
       "ernie-image",
       "reve-v1.1",
-      "hunyuan-image-3.0-instruct"
+      "hunyuan-image-3.0-instruct",
+      "grok-4.3",
+      "qwen-image-2.0-pro-2026-04-22",
+      "qwen3.6-max-preview",
+      "ernie-5.1-preview",
+      "laguna-m.1"
     ]
   }
 }
