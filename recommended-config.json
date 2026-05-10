@@ -1,7 +1,7 @@
 {
   "models": {
     "gpt-5.2-high": {
-      "visible": true,
+      "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
       "companyManual": true,
@@ -31,7 +31,7 @@
       "fileUpload": true
     },
     "gpt-5.3-chat-latest": {
-      "visible": true,
+      "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
       "companyManual": true,
@@ -89,7 +89,7 @@
       "fileUpload": false
     },
     "mimo-v2-pro": {
-      "visible": true,
+      "visible": false,
       "company": "Xiaomi",
       "icon": "🍊",
       "companyManual": true,
@@ -104,7 +104,7 @@
       "fileUpload": false
     },
     "gemini-3.1-flash-lite-preview": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": true,
@@ -206,7 +206,7 @@
       "fileUpload": true
     },
     "mimo-v2-omni": {
-      "visible": true,
+      "visible": false,
       "company": "Xiaomi",
       "icon": "🍊",
       "companyManual": true,
@@ -263,7 +263,7 @@
       "fileUpload": false
     },
     "gpt-image-1.5-high-fidelity": {
-      "visible": true,
+      "visible": false,
       "company": "OpenAI",
       "icon": "🟢",
       "companyManual": true,
@@ -277,7 +277,7 @@
       "fileUpload": false
     },
     "gemini-3-pro-image-preview-2k (nano-banana-pro)": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": true,
@@ -403,7 +403,7 @@
       "fileUpload": false
     },
     "grok-imagine-image-pro": {
-      "visible": true,
+      "visible": false,
       "company": "xAI",
       "icon": "⚫",
       "companyManual": true,
@@ -469,7 +469,7 @@
       ],
       "starred": false,
       "isNew": false,
-      "vision": false,
+      "vision": true,
       "note": "",
       "fileUpload": false
     },
@@ -503,7 +503,7 @@
       "fileUpload": false
     },
     "kimi-k2.5-thinking": {
-      "visible": true,
+      "visible": false,
       "company": "Moonshot",
       "icon": "🌙",
       "companyManual": true,
@@ -645,7 +645,7 @@
       "fileUpload": false
     },
     "qwen3.6-plus-preview": {
-      "visible": true,
+      "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
       "companyManual": true,
@@ -1968,21 +1968,6 @@
       "note": "",
       "fileUpload": false
     },
-    "seed-1.8": {
-      "visible": false,
-      "company": "Bytedance",
-      "icon": "🎵",
-      "companyManual": true,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
     "grok-4-1-fast-non-reasoning": {
       "visible": false,
       "company": "xAI",
@@ -3096,7 +3081,7 @@
       "fileUpload": false
     },
     "gemma-4-31b": {
-      "visible": true,
+      "visible": false,
       "company": "Google",
       "icon": "🔵",
       "companyManual": false,
@@ -3171,7 +3156,7 @@
       "fileUpload": false
     },
     "deepseek-v4-flash-thinking": {
-      "visible": true,
+      "visible": false,
       "company": "DeepSeek",
       "icon": "🐋",
       "companyManual": false,
@@ -3201,7 +3186,7 @@
       "fileUpload": true
     },
     "deepseek-v4-flash": {
-      "visible": true,
+      "visible": false,
       "company": "DeepSeek",
       "icon": "🐋",
       "companyManual": false,
@@ -3330,6 +3315,121 @@
       "vision": "universal",
       "note": "",
       "fileUpload": false
+    },
+    "granite-4.1-8b": {
+      "visible": true,
+      "company": "IBM",
+      "icon": "💠",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "gemini-3.1-pro-preview": {
+      "visible": true,
+      "company": "Google",
+      "icon": "🔵",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "gpt-5.5-instant": {
+      "visible": true,
+      "company": "OpenAI",
+      "icon": "🟢",
+      "companyManual": false,
+      "modes": [
+        "text"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": true,
+      "note": "",
+      "fileUpload": true
+    },
+    "qwen3.6-27b": {
+      "visible": false,
+      "company": "Alibaba",
+      "icon": "🟣",
+      "companyManual": false,
+      "modes": [
+        "text",
+        "code"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
+    },
+    "grok-imagine-image-quality": {
+      "visible": true,
+      "company": "xAI",
+      "icon": "⚫",
+      "companyManual": false,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "uni-1.1-max": {
+      "visible": true,
+      "company": "Luma AI",
+      "icon": "💡",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "uni-1.1": {
+      "visible": false,
+      "company": "Luma AI",
+      "icon": "💡",
+      "companyManual": true,
+      "modes": [
+        "image"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": "universal",
+      "note": "",
+      "fileUpload": false
+    },
+    "ernie-5.1": {
+      "visible": true,
+      "company": "Baidu",
+      "icon": "🔴",
+      "companyManual": false,
+      "modes": [
+        "search"
+      ],
+      "starred": false,
+      "isNew": false,
+      "vision": false,
+      "note": "",
+      "fileUpload": false
     }
   },
   "orgOrder": {
@@ -3455,36 +3555,24 @@
       "claude-sonnet-4-6",
       "gemini-3.1-flash-lite-preview",
       "grok-4.20-beta1",
-      "gpt-5.4-mini-high",
-      "gpt-5.4-nano-high",
       "qwen3.5-flash",
       "glm-4.7-flash",
-      "kimi-k2.5-instant",
       "mimo-v2-flash",
       "mimo-v2-flash (thinking)",
-      "nova-2-lite",
       "mistral-small-3.1-24b-instruct-2503",
       "longcat-flash-chat-2602-exp",
-      "trinity-large-preview"
+      "trinity-large-preview",
+      "gpt-5.5-instant",
+      "deepseek-v4-pro"
     ],
     "旗舰": [
       "dola-seed-2.0-preview-vision",
       "glm-5.1",
       "glm-5v-turbo",
-      "kimi-k2.5-thinking",
-      "mimo-v2-pro",
-      "mistral-large-3",
-      "mistral-small-3.1-24b-instruct-2503",
       "minimax-m2.7",
       "longcat-flash-chat-2602-exp",
-      "trinity-large-thinking",
-      "mimo-v2-omni",
       "amazon.nova-pro-v1:0",
-      "trinity-large-preview",
-      "gemini-3-pro-image-preview-2k (nano-banana-pro)",
       "gemini-3.1-flash-image-preview (nano-banana-2) [web-search]",
-      "gpt-image-1.5-high-fidelity",
-      "grok-imagine-image-pro",
       "flux-2-max",
       "seedream-5.0-lite",
       "wan2.7-image-pro",
@@ -3499,7 +3587,15 @@
       "qwen-image-2.0-pro-2026-04-22",
       "qwen3.6-max-preview",
       "ernie-5.1-preview",
-      "laguna-m.1"
+      "laguna-m.1",
+      "gemini-3.1-pro-preview",
+      "gpt-5.5-instant",
+      "deepseek-v4-pro-thinking",
+      "kimi-k2.6",
+      "ppl-sonar-reasoning-pro-high",
+      "ernie-5.1",
+      "gpt-image-2 (medium)",
+      "grok-imagine-image-quality"
     ]
   }
 }
