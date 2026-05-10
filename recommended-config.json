@@ -3440,8 +3440,8 @@
       "xAI",
       "Baidu",
       "Z.ai",
-      "Alibaba",
       "Xiaomi",
+      "Alibaba",
       "DeepSeek",
       "Moonshot",
       "Bytedance",
@@ -3477,17 +3477,18 @@
     ],
     "search": [
       "Anthropic",
-      "Google",
       "OpenAI",
+      "Google",
       "xAI",
       "Perplexity"
     ],
     "image": [
       "OpenAI",
       "Google",
+      "xAI",
+      "Luma AI",
       "Microsoft AI",
       "Reve",
-      "xAI",
       "Alibaba",
       "Black Forest Labs",
       "Tencent",
@@ -3498,7 +3499,6 @@
       "Ideogram",
       "KlingAI",
       "Pruna",
-      "Luma AI",
       "Runway",
       "Leonardo AI",
       "Baidu"
@@ -3515,13 +3515,13 @@
       "MiniMax",
       "xAI",
       "KwaiKAT",
-      "Bytedance",
       "---",
       "Mistral",
       "Inception AI",
       "Arcee AI",
       "Tencent",
-      "Poolside"
+      "Poolside",
+      "IBM"
     ],
     "video": [
       "Google",
