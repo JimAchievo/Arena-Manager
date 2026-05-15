@@ -402,20 +402,6 @@
       "note": "",
       "fileUpload": false
     },
-    "grok-imagine-image-pro": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": true,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "universal",
-      "note": "",
-      "fileUpload": false
-    },
     "glm-5v-turbo": {
       "visible": true,
       "company": "Z.ai",
@@ -921,21 +907,6 @@
       "note": "",
       "fileUpload": false
     },
-    "grok-4-1-fast-reasoning": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": true,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": true
-    },
     "kimi-k2-thinking-turbo": {
       "visible": false,
       "company": "Moonshot",
@@ -1105,20 +1076,6 @@
       "note": "",
       "fileUpload": false
     },
-    "grok-4-0709": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": true,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
     "minimax-m2.5": {
       "visible": false,
       "company": "MiniMax",
@@ -1145,21 +1102,6 @@
       "starred": false,
       "isNew": false,
       "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-fast-reasoning": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": true,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
       "note": "",
       "fileUpload": false
     },
@@ -1419,20 +1361,6 @@
       "note": "",
       "fileUpload": false
     },
-    "claude-3-7-sonnet-20250219-thinking-32k": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": true,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "mistral-medium-2505": {
       "visible": false,
       "company": "Mistral",
@@ -1494,34 +1422,6 @@
       "visible": false,
       "company": "Alibaba",
       "icon": "🟣",
-      "companyManual": true,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-3-5-sonnet-20241022": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
-      "companyManual": true,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "claude-3-7-sonnet-20250219": {
-      "visible": false,
-      "company": "Anthropic",
-      "icon": "🟤",
       "companyManual": true,
       "modes": [
         "text"
@@ -1958,20 +1858,6 @@
       "visible": false,
       "company": "Ant Group",
       "icon": "🐜",
-      "companyManual": true,
-      "modes": [
-        "text"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
-    "grok-4-1-fast-non-reasoning": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
       "companyManual": true,
       "modes": [
         "text"
@@ -2481,20 +2367,6 @@
       "visible": false,
       "company": "Leonardo AI",
       "icon": "🖼️",
-      "companyManual": true,
-      "modes": [
-        "image"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": "t2i",
-      "note": "",
-      "fileUpload": false
-    },
-    "dall-e-3": {
-      "visible": false,
-      "company": "OpenAI",
-      "icon": "🟢",
       "companyManual": true,
       "modes": [
         "image"
@@ -3038,20 +2910,6 @@
       "note": "",
       "fileUpload": false
     },
-    "grok-code-fast-1": {
-      "visible": false,
-      "company": "xAI",
-      "icon": "⚫",
-      "companyManual": true,
-      "modes": [
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
-      "note": "",
-      "fileUpload": false
-    },
     "devstral-medium-2507": {
       "visible": false,
       "company": "Mistral",
@@ -3122,21 +2980,6 @@
       "starred": false,
       "isNew": false,
       "vision": true,
-      "note": "",
-      "fileUpload": false
-    },
-    "hunyuan-hy3-preview": {
-      "visible": true,
-      "company": "Tencent",
-      "icon": "🐧",
-      "companyManual": false,
-      "modes": [
-        "text",
-        "code"
-      ],
-      "starred": false,
-      "isNew": false,
-      "vision": false,
       "note": "",
       "fileUpload": false
     },
