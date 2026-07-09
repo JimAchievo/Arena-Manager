@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.1.3
+// @version      5.2.0
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://*arena.ai/*
@@ -23,11 +23,13 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.1.3';
+    const VERSION = '5.2.0';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
+    const ORG_CONFIG_FILE = 'org-config.json';
     const LOGO_CACHE_KEY = 'arena_manager_logos';
+    const ICON_ORG_MAP_KEY = 'arena_manager_icon_org_map';
     const LOGO_BASE_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/Organization%20Logos/`;
 
     // ==================== 1. 国际化系统 ====================
@@ -1701,30 +1703,30 @@
         chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2'
     };
 
-    const MODE_ORG_CONFIG = {
+    let MODE_ORG_CONFIG = {
         text: {
-            tier1: ['Anthropic', 'Google', 'xAI', 'OpenAI', 'Z.ai', 'Alibaba', 'DeepSeek', 'Bytedance', 'Moonshot', 'Baidu', 'Xiaomi', 'Meituan', 'Amazon', 'Mistral', 'MiniMax', 'Tencent'],
-            tier2: ['Microsoft AI', 'StepFun', 'Arcee AI', 'Nvidia', 'Prime Intellect', 'Cohere', 'Inception AI', 'Ant Group', 'Meta', 'Ai2', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'IBM', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
+            tier1: ['Anthropic', 'Meta', 'Google', 'OpenAI', 'Alibaba', 'SpaceXAI', 'Z.ai', 'Baidu', 'Xiaomi', 'Moonshot', 'DeepSeek', 'Bytedance', 'MiniMax', 'Meituan', 'Amazon', 'Mistral', 'Nvidia', 'Tencent'],
+            tier2: ['StepFun', 'Arcee AI', 'Cohere', 'Inception AI', 'Ant Group', 'Ai2', 'IBM', 'Microsoft AI', 'Prime Intellect', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
             useFolder: true
         },
         search: {
-            tier1: ['Anthropic', 'Google', 'OpenAI', 'xAI', 'Perplexity', 'Diffbot'],
+            tier1: ['Anthropic', 'OpenAI', 'Baidu', 'Google', 'SpaceXAI', 'Perplexity AI', 'Diffbot'],
             tier2: [],
             useFolder: false
         },
         image: {
-            tier1: ['OpenAI', 'Google', 'Microsoft AI', 'Reve', 'xAI', 'Alibaba', 'Black Forest Labs', 'Tencent', 'Bytedance', 'Shengshu'],
-            tier2: ['Recraft', 'Ideogram', 'KlingAI', 'Pruna', 'Luma AI', 'Runway', 'Leonardo AI', 'Z.ai', 'Stability AI', 'StepFun'],
+            tier1: ['OpenAI', 'Meta', 'Reve', 'Google', 'Microsoft AI', 'SpaceXAI', 'Ideogram', 'Alibaba', 'Luma AI', 'Recraft', 'Black Forest Labs', 'Tencent', 'Bytedance', 'HiDream', 'Krea', 'Nvidia', 'Shengshu'],
+            tier2: ['KlingAI', 'Pruna', 'Runway', 'Leonardo AI', 'Z.ai', 'Stability AI', 'StepFun'],
             useFolder: true
         },
         code: {
-            tier1: ['Anthropic', 'Z.ai', 'Moonshot', 'Alibaba', 'Google', 'OpenAI', 'DeepSeek', 'Xiaomi', 'MiniMax', 'xAI', 'KwaiKAT', 'Bytedance'],
-            tier2: ['Mistral', 'Inception AI', 'Meta'],
+            tier1: ['Anthropic', 'Z.ai', 'Bytedance', 'Alibaba', 'Moonshot', 'Google', 'MiniMax', 'OpenAI', 'Xiaomi', 'DeepSeek', 'SpaceXAI', 'Tencent', 'Poolside'],
+            tier2: ['Mistral', 'KwaiKAT', 'Arcee AI', 'IBM', 'Inception AI', 'Meta'],
             useFolder: true
         },
         video: {
-            tier1: ['Bytedance', 'Alibaba-ATH', 'Google', 'OpenAI', 'xAI', 'Alibaba', 'Pixverse', 'Runway', 'Shengshu'],
-            tier2: ['KlingAI', 'Luma AI', 'Pruna', 'MiniMax', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Genmo AI'],
+            tier1: ['Google', 'Bytedance','Meta', 'Alibaba-ATH', 'OpenAI', 'SpaceXAI', 'Alibaba', 'Pixverse', 'Runway', 'Shengshu'],
+            tier2: ['KlingAI', 'Pruna', 'Luma AI', 'MiniMax', 'Kandinsky', 'Tencent', 'lightricks', 'Pika', 'Genmo AI'],
             useFolder: true
         }
     };
@@ -1734,11 +1736,11 @@
         return [...config.tier1, ...config.tier2];
     };
 
-    const COMPANY_RULES = [
+    let COMPANY_RULES = [
         { patterns: [/^yi-/i], company: '01 AI', icon: '0️⃣' },
         { patterns: [/^olmo/i, /^molmo/i], company: 'Ai2', icon: '🔬' },
         { patterns: [/^jamba/i], company: 'AI21 Labs', icon: '' },
-        { patterns: [/^qwen/i, /^qwq/i, /^wan/i], company: 'Alibaba', icon: '🟣' },
+        { patterns: [/^qwen/i, /^qwq/i, /^wan/i, /^zen/i], company: 'Alibaba', icon: '🟣' },
         { patterns: [/^happyhorse/i], company: 'Alibaba-ATH', icon: '🐎' },
         { patterns: [/^nova/i, /^amazon/i], company: 'Amazon', icon: '📦' },
         { patterns: [/^ling/i, /^ring/i], company: 'Ant Group', icon: '🐜' },
@@ -1754,6 +1756,7 @@
         { patterns: [/^diffbot/i], company: 'Diffbot', icon: '🤖' },
         { patterns: [/^mochi/i], company: 'Genmo AI', icon: '一' },
         { patterns: [/^gemini/i, /^gemma/i, /^imagen/i, /^veo/i], company: 'Google', icon: '🔵' },
+        { patterns: [/^hidream/i], company: 'HiDream', icon: '🟦' },
         { patterns: [/^zephyr/i], company: 'HuggingFace', icon: '😄' },
         { patterns: [/^ibm/i, /^granite/i], company: 'IBM', icon: '💠' },
         { patterns: [/^ideogram/i], company: 'Ideogram', icon: '✏️' },
@@ -1761,6 +1764,7 @@
         { patterns: [/^internlm/i], company: 'InternLM', icon: '👨‍💼' },
         { patterns: [/^kandinsky/i], company: 'Kandinsky', icon: 'K' },
         { patterns: [/^kling/i], company: 'KlingAI', icon: '🔗' },
+       { patterns: [/^krea/i], company: 'Krea', icon: 'K' },
         { patterns: [/^kat/i], company: 'KwaiKAT', icon: '🎥' },
         { patterns: [/^lucid/i], company: 'Leonardo AI', icon: '🖼️' },
         { patterns: [/^lightricks/i], company: 'ltx', icon: '' },
@@ -1778,9 +1782,10 @@
         { patterns: [/^gpt/i, /^o3/i, /^o4/i, /^chatgpt/i, /^dall-e/i, /^sora/i], company: 'OpenAI', icon: '🟢' },
         { patterns: [/^oasst/i], company: 'OpenAssistant', icon: '' },
         { patterns: [/^openchat/i], company: 'OpenChat', icon: '🧿' },
-        { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity', icon: '❓' },
+        { patterns: [/^ppl/i, /^perplexity/i, /^sonar/i], company: 'Perplexity AI', icon: '❓' },
         { patterns: [/^pika/i], company: 'Pika', icon: '' },
         { patterns: [/^pixverse/i], company: 'Pixverse', icon: 'L' },
+        { patterns: [/^laguna/i], company: 'Poolside', icon: '🌂' },
         { patterns: [/^intellect/i], company: 'Prime Intellect', icon: '🧠' },
         { patterns: [/^p-image/i], company: 'Pruna', icon: '🍑' },
         { patterns: [/^recraft/i], company: 'Recraft', icon: '🎨' },
@@ -1799,7 +1804,7 @@
         { patterns: [/^starling/i], company: 'UC Berkeley', icon: '' },
         { patterns: [/^solar/i], company: 'Upstage AI', icon: '' },
         { patterns: [/^guanaco/i], company: 'UW', icon: '' },
-        { patterns: [/^grok/i], company: 'xAI', icon: '⚫' },
+        { patterns: [/^grok/i], company: 'SpaceXAI', icon: '⚫' },
         { patterns: [/^mimo/i], company: 'Xiaomi', icon: '🍊' },
         { patterns: [/^glm/i], company: 'Z.ai', icon: '🔮' }
     ];
@@ -1858,6 +1863,7 @@
             if (!this.data.models) this.data.models = {};
             if (!this.data.orgOrder) this.data.orgOrder = {};
             if (!this.data.settings) this.data.settings = {};
+            if (!this.data.iconOrgMap) this.data.iconOrgMap = JSON.parse(GM_getValue(ICON_ORG_MAP_KEY) || '{}');
             if (this.data.settings.showNewAlert === undefined) this.data.settings.showNewAlert = true;
             if (this.data.settings.defaultVisible === undefined) this.data.settings.defaultVisible = true;
             if (!this.data.settings.language) this.data.settings.language = 'zh-CN';
@@ -2062,14 +2068,23 @@
             return this.data.groups[groupName] || [];
         }
 
-        analyze(name, mode, featureFlags = {}) {
+        analyze(name, mode, featureFlags = {}, svgFingerprint = '') {
             let company = 'Other', icon = '❔';
+
+            // 1. 优先尝试前后缀匹配
             for (const rule of COMPANY_RULES) {
                 if (rule.patterns.some(p => p.test(name))) {
                     company = rule.company;
                     icon = rule.icon;
                     break;
                 }
+            }
+
+            // 2. 若前后缀未匹配到，尝试图标指纹匹配
+            if (company === 'Other' && svgFingerprint && this.data.iconOrgMap[svgFingerprint]) {
+                company = this.data.iconOrgMap[svgFingerprint];
+                const rule = COMPANY_RULES.find(r => r.company === company);
+                icon = rule ? rule.icon : '❔';
             }
 
             let vision = false;
@@ -2104,6 +2119,41 @@
             fresh.fileUpload = model.fileUpload || false;
             this.data.models[name] = fresh;
             this.save();
+        }
+
+        async loadRemoteConfig() {
+            try {
+                const res = await new Promise((resolve, reject) => {
+                    GM_xmlhttpRequest({
+                        method: 'GET',
+                        url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${ORG_CONFIG_FILE}?_=${Date.now()}`,
+                        onload: r => resolve(r),
+                        onerror: e => reject(e),
+                        ontimeout: e => reject(e)
+                    });
+                });
+                if (res.status >= 200 && res.status < 300) {
+                    const remoteConfig = JSON.parse(res.responseText);
+                    if (remoteConfig.MODE_ORG_CONFIG) MODE_ORG_CONFIG = remoteConfig.MODE_ORG_CONFIG;
+                    if (remoteConfig.COMPANY_RULES) {
+                        COMPANY_RULES = remoteConfig.COMPANY_RULES.map(r => ({
+                            patterns: r.patterns.map(p => {
+                                if (typeof p === 'string') {
+                                    const match = p.match(/^\/(.*?)\/([gimuy]*)$/);
+                                    if (match) return new RegExp(match[1], match[2]);
+                                    return new RegExp(p);
+                                }
+                                return p;
+                            }),
+                            company: r.company,
+                            icon: r.icon
+                        }));
+                    }
+                    console.log('[Arena Manager] 远程配置加载成功');
+                }
+            } catch (e) {
+                console.warn('[Arena Manager] 远程配置加载失败，使用内置配置', e);
+            }
         }
     }
 
@@ -2157,21 +2207,32 @@
             let hasGeneration = false;
             let hasFileUpload = false;
 
+            // 提取特性标签特征
             svgPaths.forEach(path => {
                 const d = path.getAttribute('d') || '';
-                if (d.includes('M2 14C2 16.2')) {
-                    hasVision = true;
-                }
-                if (d.includes('M13 21H3.6') || d.includes('19 19V16')) {
-                    hasRIU = true;
-                }
-                if (d.includes('M21 3.6V20.4')) {
-                    hasGeneration = true;
-                }
-                if (d.includes('M15 2H6')) {
-                    hasFileUpload = true;
-                }
+                if (d.includes('M2 14C2 16.2')) hasVision = true;
+                if (d.includes('M13 21H3.6') || d.includes('19 19V16')) hasRIU = true;
+                if (d.includes('M21 3.6V20.4')) hasGeneration = true;
+                if (d.includes('M15 2H6')) hasFileUpload = true;
             });
+
+            // 精准提取第一个 SVG 作为组织 Logo 并生成指纹
+            const firstSvg = el.querySelector('svg');
+            let svgFingerprint = '';
+            let svgHtml = '';
+            if (firstSvg) {
+                svgHtml = firstSvg.outerHTML;
+                const logoPaths = firstSvg.querySelectorAll('path');
+                let ds = [];
+                logoPaths.forEach(p => {
+                    const d = p.getAttribute('d');
+                    if (d) ds.push(d);
+                });
+                if (ds.length > 0) {
+                    ds.sort();
+                    svgFingerprint = ds.join('|');
+                }
+            }
 
             const featureFlags = {
                 vision: hasVision,
@@ -2180,7 +2241,7 @@
                 fileUpload: hasFileUpload
             };
 
-            return { name, featureFlags };
+            return { name, featureFlags, svgFingerprint, svgHtml };
         }
 
         scan() {
@@ -2189,6 +2250,7 @@
 
             const currentMode = ModeDetector.detect();
             const newModels = [];
+            console.log('[Arena Manager] 扫描触发，当前模式:', currentMode);
 
             containers.forEach(({ options, mode: layoutMode }) => {
                 options.forEach(el => {
@@ -2202,11 +2264,42 @@
 
                     let model = this.dm.getModel(info.name);
                     if (!model) {
-                        const data = this.dm.analyze(info.name, currentMode, info.featureFlags);
+                        const data = this.dm.analyze(info.name, currentMode, info.featureFlags, info.svgFingerprint);
+                        data.svgHtml = info.svgHtml;
                         this.dm.setModel(info.name, data);
+
+                        // 学习图标指纹
+                        if (data.company !== 'Other' && info.svgFingerprint) {
+                            this.dm.data.iconOrgMap[info.svgFingerprint] = data.company;
+                            GM_setValue(ICON_ORG_MAP_KEY, JSON.stringify(this.dm.data.iconOrgMap));
+                        }
                         newModels.push(info.name);
                     } else {
                         this.dm.addModeToModel(info.name, currentMode);
+
+                        // 更新 svgHtml
+                        if (info.svgHtml && model.svgHtml !== info.svgHtml) {
+                            this.dm.updateModel(info.name, { svgHtml: info.svgHtml });
+                        }
+
+                        // 学习并修正组织
+                        if (info.svgFingerprint) {
+                            // 如果模型已有明确组织，学习其指纹
+                            if (model.company && model.company !== 'Other') {
+                                if (!this.dm.data.iconOrgMap[info.svgFingerprint] || this.dm.data.iconOrgMap[info.svgFingerprint] !== model.company) {
+                                    this.dm.data.iconOrgMap[info.svgFingerprint] = model.company;
+                                    GM_setValue(ICON_ORG_MAP_KEY, JSON.stringify(this.dm.data.iconOrgMap));
+                                }
+                            }
+                            // 若模型是 Other 但指纹库里已知组织，则修正
+                            else if (this.dm.data.iconOrgMap[info.svgFingerprint]) {
+                                const newCompany = this.dm.data.iconOrgMap[info.svgFingerprint];
+                                const rule = COMPANY_RULES.find(r => r.company === newCompany);
+                                const newIcon = rule ? rule.icon : '❔';
+                                this.dm.updateModel(info.name, { company: newCompany, icon: newIcon });
+                            }
+                        }
+
                         if (currentMode === 'image' && typeof model.vision === 'boolean') {
                             const hasVision = info.featureFlags.vision;
                             const hasRIU = info.featureFlags.riu;
@@ -2321,7 +2414,11 @@
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
                     clearTimeout(timer);
-                    timer = setTimeout(() => { this.scan(); this.applyFilters(); }, 50);
+                    timer = setTimeout(() => {
+                        this.scan();
+                        this.applyFilters();
+                        if (this.onScanComplete) this.onScanComplete();
+                    }, 50);
                 }
             });
             this.observer.observe(document.body, { childList: true, subtree: true });
@@ -2603,6 +2700,11 @@
                 .lmm-org-icon { width: 16px; height: 16px; vertical-align: middle; object-fit: contain; display: inline-block; }
                 .lmm-sidebar-item .lmm-org-icon { width: 14px; height: 14px; }
                 .lmm-card-name .lmm-org-icon { width: 14px; height: 14px; }
+
+                .lmm-dynamic-svg { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; }
+                .lmm-dynamic-svg svg { width: 100%; height: 100%; }
+                .lmm-sidebar-item .lmm-dynamic-svg { width: 14px; height: 14px; }
+                .lmm-card-name .lmm-dynamic-svg { width: 14px; height: 14px; }
             `);
         }
 
@@ -3785,8 +3887,9 @@
             const orgs = {};
             modeModels.forEach(m => {
                 const c = m.company || 'Other';
-                if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔' };
+                if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔', svgHtml: m.svgHtml || '' };
                 orgs[c].cnt++;
+                if (!orgs[c].svgHtml && m.svgHtml) orgs[c].svgHtml = m.svgHtml;
             });
 
             const allOrgItems = [];
@@ -3794,7 +3897,29 @@
                 if (name !== 'Other') allOrgItems.push({ name, ...data });
             });
 
-            const cleanOrder = orgOrder.filter(x => x !== '---');
+            // 检查并追加未收录的新组织到 orgOrder
+            const currentOrgOrder = this.dm.getOrgOrder(sidebarMode);
+            let newOrgsFound = false;
+            const knownOrgs = new Set(currentOrgOrder.filter(o => o !== '---'));
+            allOrgItems.forEach(item => {
+                if (!knownOrgs.has(item.name)) {
+                    newOrgsFound = true;
+                    knownOrgs.add(item.name);
+                }
+            });
+            if (newOrgsFound) {
+                let newOrder = [...currentOrgOrder];
+                const sepIdx = newOrder.indexOf('---');
+                const newOrgsToAdd = allOrgItems.filter(item => !currentOrgOrder.includes(item.name)).map(i => i.name);
+                if (sepIdx !== -1) {
+                    newOrder.splice(sepIdx + 1, 0, ...newOrgsToAdd);
+                } else {
+                    newOrder.push(...newOrgsToAdd);
+                }
+                this.dm.setOrgOrder(sidebarMode, newOrder);
+            }
+
+            const cleanOrder = currentOrgOrder.filter(x => x !== '---');
             allOrgItems.sort((a, b) => {
                 const ai = cleanOrder.indexOf(a.name);
                 const bi = cleanOrder.indexOf(b.name);
@@ -3910,7 +4035,7 @@
             const list = this.$('#lmm-org-list');
             const sidebarMode = this.getSidebarMode();
             const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
-            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${this.getOrgLogoHtml(c.name, c.icon)}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
+            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${this.getOrgLogoHtml(c.name, c.icon, c.svgHtml)}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
 
             let html;
             if (this.isSortMode) {
@@ -4037,14 +4162,16 @@
                 if (from && to && from !== to) {
                     const sidebarMode = this.getSidebarMode();
                     const order = this.dm.getOrgOrder(sidebarMode);
-                    const fromIdx = order.indexOf(from);
-                    if (fromIdx !== -1) {
-                        order.splice(fromIdx, 1);
-                        const toIdx = order.indexOf(to);
-                        order.splice(toIdx === -1 ? order.length : toIdx, 0, from);
-                        this.dm.setOrgOrder(sidebarMode, order);
-                        this.updateSidebar();
+                    let fromIdx = order.indexOf(from);
+                    if (fromIdx === -1) {
+                        order.push(from);
+                        fromIdx = order.length - 1;
                     }
+                    order.splice(fromIdx, 1);
+                    const toIdx = order.indexOf(to);
+                    order.splice(toIdx === -1 ? order.length : toIdx, 0, from);
+                    this.dm.setOrgOrder(sidebarMode, order);
+                    this.updateSidebar();
                 }
             };
         }
@@ -4260,25 +4387,25 @@
                 </div>
             `).join('');
 
-    list.querySelectorAll('.lmm-group-item').forEach(item => {
-        item.onclick = () => {
-            const groupName = item.dataset.group;
-            this.selectedModels.forEach(modelName => {
-                this.dm.addToGroup(groupName, modelName);
+            list.querySelectorAll('.lmm-group-item').forEach(item => {
+                item.onclick = () => {
+                    const groupName = item.dataset.group;
+                    this.selectedModels.forEach(modelName => {
+                        this.dm.addToGroup(groupName, modelName);
+                    });
+                    this.closeGroupSelectModal();
+                    this.scanner.toast(this.t('addedToGroup'), 'success');
+                    this.updateTopbar();
+                    this.refresh();
+                    this.triggerSyncOnChange();
+                };
             });
-            this.closeGroupSelectModal();
-            this.scanner.toast(this.t('addedToGroup'), 'success');
-            this.updateTopbar();
-            this.refresh();
-            this.triggerSyncOnChange();
-        };
-    });
 
-    this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
-    this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
-    this.groupSelectModalOverlay.classList.add('open');
-    this.groupSelectModal.classList.add('open');
-}
+            this.groupSelectModal.querySelector('[data-i18n="selectGroup"]').textContent = this.t('selectGroup');
+            this.groupSelectModal.querySelector('#lmm-group-select-close').textContent = this.t('cancel');
+            this.groupSelectModalOverlay.classList.add('open');
+            this.groupSelectModal.classList.add('open');
+        }
 
         closeGroupSelectModal() {
             this.groupSelectModalOverlay.classList.remove('open');
@@ -4289,7 +4416,10 @@
             GM_setValue(LOGO_CACHE_KEY, JSON.stringify(this.logoCache));
         }
 
-        getOrgLogoHtml(company, fallbackIcon = '❔') {
+        getOrgLogoHtml(company, fallbackIcon = '❔', svgHtml = '') {
+            if (svgHtml) {
+                return `<span class="lmm-dynamic-svg">${svgHtml}</span>`;
+            }
             const rule = COMPANY_RULES.find(r => r.company === company);
             if (rule) {
                 const cached = this.logoCache[company];
@@ -4391,10 +4521,10 @@
             <button class="lmm-btn lmm-btn-primary" id="lmm-diff-apply">✓ <span data-i18n="applySelected"></span></button>
         </div>
     `;
-    document.body.appendChild(modal);
-    this.diffModal = modal;
-    modal.querySelector('#lmm-diff-cancel').onclick = () => this.closeDiffModal();
-}
+            document.body.appendChild(modal);
+            this.diffModal = modal;
+            modal.querySelector('#lmm-diff-cancel').onclick = () => this.closeDiffModal();
+        }
 
         closeDiffModal() {
             this.diffModalOverlay.classList.remove('open');
@@ -4409,20 +4539,20 @@
                     method: 'GET',
                     url: `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits?path=${RECOMMENDED_FILE}&per_page=1`
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const commits = await res.json();
-        if (commits.length > 0) {
-            const d = new Date(commits[0].commit.committer.date);
-            this.remoteDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-            dateEl.textContent = this.remoteDate;
-        } else {
-            dateEl.textContent = '-';
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const commits = await res.json();
+                if (commits.length > 0) {
+                    const d = new Date(commits[0].commit.committer.date);
+                    this.remoteDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                    dateEl.textContent = this.remoteDate;
+                } else {
+                    dateEl.textContent = '-';
+                }
+            } catch (e) {
+                dateEl.textContent = '❌';
+                console.error('[Arena Manager] Check update error:', e);
+            }
         }
-    } catch (e) {
-        dateEl.textContent = '❌';
-        console.error('[Arena Manager] Check update error:', e);
-    }
-}
 
         async useRecommendedConfig() {
             try {
@@ -4430,19 +4560,19 @@
                     method: 'GET',
                     url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${RECOMMENDED_FILE}?_=${Date.now()}`
                 });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const remote = JSON.parse(await res.text());
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const remote = JSON.parse(await res.text());
 
-        if (!this.remoteDate) await this.checkRecommendedUpdate();
+                if (!this.remoteDate) await this.checkRecommendedUpdate();
 
-        const diff = this.computeDiff(remote);
-        this.closeSettingsModal();
-        this.showDiffModal(diff, remote);
-    } catch (e) {
-        console.error('[Arena Manager] Download recommended config error:', e);
-        this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
-    }
-}
+                const diff = this.computeDiff(remote);
+                this.closeSettingsModal();
+                this.showDiffModal(diff, remote);
+            } catch (e) {
+                console.error('[Arena Manager] Download recommended config error:', e);
+                this.scanner.toast(`${this.t('syncError')}: ${e.message}`, 'warning');
+            }
+        }
 
         computeDiff(remote) {
             const diff = {
@@ -4756,29 +4886,29 @@
                     <button class="lmm-btn lmm-btn-sm" id="lmm-multi-revert">${this.t('revert')}</button>
                     <button class="lmm-btn lmm-btn-sm lmm-btn-primary" id="lmm-multi-exit">${this.t('exitMulti')}</button>
                 `;
-        batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
-        batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
-        batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
-        if (isGroupMode) {
-            batch.querySelector('#lmm-multi-remove-group').onclick = () => this.multiSelectRemoveFromGroup();
-        }
-        batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
-            if (this.selectedModels.size > 0) this.multiDeselectAll();
-            else this.multiSelectAll();
-        };
-        batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
-        batch.querySelector('#lmm-multi-revert').onclick = () => {
-            this.revertMultiSelectChanges();
-            this.refresh();
-        };
-        batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
-    } else {
-        batch.innerHTML = `
+                batch.querySelector('#lmm-multi-show').onclick = () => this.multiSelectShow();
+                batch.querySelector('#lmm-multi-hide').onclick = () => this.multiSelectHide();
+                batch.querySelector('#lmm-multi-add-group').onclick = () => this.multiSelectAddToGroup();
+                if (isGroupMode) {
+                    batch.querySelector('#lmm-multi-remove-group').onclick = () => this.multiSelectRemoveFromGroup();
+                }
+                batch.querySelector('#lmm-multi-toggle-all').onclick = () => {
+                    if (this.selectedModels.size > 0) this.multiDeselectAll();
+                    else this.multiSelectAll();
+                };
+                batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
+                batch.querySelector('#lmm-multi-revert').onclick = () => {
+                    this.revertMultiSelectChanges();
+                    this.refresh();
+                };
+                batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
+            } else {
+                batch.innerHTML = `
                     <button class="lmm-btn" id="lmm-multi-btn">${this.t('multiSelect')}</button>
                 `;
-        batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
-    }
-}
+                batch.querySelector('#lmm-multi-btn').onclick = () => this.enterMultiSelectMode();
+            }
+        }
 
         esc(s) {
             if (!s) return '';
@@ -4842,7 +4972,7 @@
                             ${showCheck ? `<div class="lmm-check ${isSelected ? 'on' : ''}">${isSelected ? '✓' : ''}</div>` : ''}
                             <div class="lmm-card-info">
                                 <div class="lmm-card-name">
-                                    <span>${this.getOrgLogoHtml(m.company, m.icon)}</span>
+                                    <span>${this.getOrgLogoHtml(m.company, m.icon, m.svgHtml)}</span>
                                     <span class="n" title="${this.esc(m.name)}">${this.esc(m.name)}</span>
                                 </div>
                                 <div class="lmm-tags">
@@ -4864,60 +4994,60 @@
                             ` : ''}
                         </div>
                     `;
-        }).join('');
+                }).join('');
 
-        grid.querySelectorAll('.lmm-card').forEach(card => {
-            const name = card.dataset.name;
+                grid.querySelectorAll('.lmm-card').forEach(card => {
+                    const name = card.dataset.name;
 
-            if (this.isModelSortMode) {
-                this.bindModelDragEvents(card);
-            } else if (this.isMultiSelectMode) {
-                card.onclick = () => {
-                    if (this.selectedModels.has(name)) {
-                        this.selectedModels.delete(name);
+                    if (this.isModelSortMode) {
+                        this.bindModelDragEvents(card);
+                    } else if (this.isMultiSelectMode) {
+                        card.onclick = () => {
+                            if (this.selectedModels.has(name)) {
+                                this.selectedModels.delete(name);
+                            } else {
+                                this.selectedModels.add(name);
+                            }
+                            this.refresh();
+                        };
                     } else {
-                        this.selectedModels.add(name);
+                        card.onclick = (e) => {
+                            if (e.target.closest('.lmm-card-actions')) return;
+                            const newVis = !this.dm.isVisible(name);
+                            this.dm.setVisibility(name, newVis);
+                            this.refresh();
+                            this.updateStats();
+                            this.updateFabBadge();
+                            this.triggerSyncOnChange();
+                        };
+                        card.ondblclick = () => this.openEditModal(name);
+
+                        const starBtn = card.querySelector('.lmm-star-btn');
+                        if (starBtn) {
+                            starBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                this.dm.toggleStar(name);
+                                this.refresh();
+                                this.updateTopbar();
+                                this.triggerSyncOnChange();
+                            };
+                        }
+
+                        const editBtn = card.querySelector('.lmm-edit-btn');
+                        if (editBtn) {
+                            editBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                this.openEditModal(name);
+                            };
+                        }
                     }
-                    this.refresh();
-                };
-            } else {
-                card.onclick = (e) => {
-                    if (e.target.closest('.lmm-card-actions')) return;
-                    const newVis = !this.dm.isVisible(name);
-                    this.dm.setVisibility(name, newVis);
-                    this.refresh();
-                    this.updateStats();
-                    this.updateFabBadge();
-                    this.triggerSyncOnChange();
-                };
-                card.ondblclick = () => this.openEditModal(name);
-
-                const starBtn = card.querySelector('.lmm-star-btn');
-                if (starBtn) {
-                    starBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.dm.toggleStar(name);
-                        this.refresh();
-                        this.updateTopbar();
-                        this.triggerSyncOnChange();
-                    };
-                }
-
-                const editBtn = card.querySelector('.lmm-edit-btn');
-                if (editBtn) {
-                    editBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.openEditModal(name);
-                    };
-                }
+                });
             }
-        });
-    }
 
-    this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
-    this.updateStats();
-    this.updateOrgFilter();
-}
+            this.$('#lmm-count').textContent = `${models.length} ${this.t('models')}`;
+            this.updateStats();
+            this.updateOrgFilter();
+        }
 
         updateStats() {
             const modeModels = this.getModelsInCurrentMode();
@@ -5035,17 +5165,17 @@
                     <span class="lmm-detail-label">${this.t('iconEdit')}</span>
                     <span class="lmm-detail-value">
                         ${isBuiltInOrg
-        ? this.getOrgLogoHtml(m.company, m.icon)
-    : `<input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">`}
+                ? this.getOrgLogoHtml(m.company, m.icon, m.svgHtml)
+            : `<input type="text" class="lmm-form-input" id="lmm-edit-icon" value="${this.esc(m.icon || '')}" placeholder="${this.t('iconPlaceholder')}" style="width:60px;text-align:center" maxlength="2">`}
                     </span>
                 </div>
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('modes')}</span>
                     <span class="lmm-detail-value">
                         ${modes.map(mode => {
-        const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
-        return `<span class="lmm-tag mode">${icons[mode] || '❓'} ${mode}</span>`;
-    }).join(' ')}
+                const icons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
+                return `<span class="lmm-tag mode">${icons[mode] || '❓'} ${mode}</span>`;
+            }).join(' ')}
                     </span>
                 </div>
                 <div class="lmm-detail-row">
@@ -5078,38 +5208,38 @@
                 </div>
             `;
 
-    // 绑定事件
-    const starredSwitch = body.querySelector('#lmm-edit-starred');
-    if (starredSwitch) {
-        starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
-    }
-
-    const resetOrgBtn = body.querySelector('#lmm-reset-org');
-    if (resetOrgBtn) {
-        resetOrgBtn.onclick = () => {
-            // 重新分析组织
-            for (const rule of COMPANY_RULES) {
-                if (rule.patterns.some(p => p.test(name))) {
-                    body.querySelector('#lmm-edit-org').value = rule.company;
-                    break;
-                }
+            // 绑定事件
+            const starredSwitch = body.querySelector('#lmm-edit-starred');
+            if (starredSwitch) {
+                starredSwitch.onclick = () => starredSwitch.classList.toggle('on');
             }
-        };
-    }
 
-    body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
-        item.onclick = () => item.classList.toggle('checked');
-    });
+            const resetOrgBtn = body.querySelector('#lmm-reset-org');
+            if (resetOrgBtn) {
+                resetOrgBtn.onclick = () => {
+                    // 重新分析组织
+                    for (const rule of COMPANY_RULES) {
+                        if (rule.patterns.some(p => p.test(name))) {
+                            body.querySelector('#lmm-edit-org').value = rule.company;
+                            break;
+                        }
+                    }
+                };
+            }
 
-    // 更新模态框标题和按钮
-    this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
-    this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
-    this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
-    this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
+            body.querySelectorAll('#lmm-edit-groups .lmm-checkbox-item').forEach(item => {
+                item.onclick = () => item.classList.toggle('checked');
+            });
 
-    this.editModalOverlay.classList.add('open');
-    this.editModal.classList.add('open');
-}
+            // 更新模态框标题和按钮
+            this.editModal.querySelector('[data-i18n="modelDetails"]').textContent = this.t('modelDetails');
+            this.editModal.querySelector('[data-i18n="restoreDefault"]').textContent = this.t('restoreDefault');
+            this.editModal.querySelector('#lmm-edit-cancel').textContent = this.t('cancel');
+            this.editModal.querySelector('#lmm-edit-save').textContent = this.t('save');
+
+            this.editModalOverlay.classList.add('open');
+            this.editModal.classList.add('open');
+        }
 
         closeEditModal() {
             this.editModalOverlay.classList.remove('open');
@@ -5230,43 +5360,43 @@
                 </div>
             `).join('');
 
-    list.querySelectorAll('.lmm-group-item').forEach(item => {
-        const name = item.dataset.group;
+            list.querySelectorAll('.lmm-group-item').forEach(item => {
+                const name = item.dataset.group;
 
-        item.querySelector('.lmm-export-group-btn').onclick = () => {
-            const data = this.dm.export(name);
-            const blob = new Blob([data], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            this.scanner.toast(this.t('groupExported'), 'success');
-        };
+                item.querySelector('.lmm-export-group-btn').onclick = () => {
+                    const data = this.dm.export(name);
+                    const blob = new Blob([data], { type: 'application/json' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `Arena-group-${name}-${new Date().toISOString().slice(0,10)}.json`;
+                    a.click();
+                    this.scanner.toast(this.t('groupExported'), 'success');
+                };
 
-        item.querySelector('.lmm-rename-btn').onclick = () => {
-            const newName = prompt(this.t('inputNewName'), name);
-            if (newName && newName.trim() && newName !== name) {
-                if (this.dm.renameGroup(name, newName.trim())) {
-                    this.renderGroupList();
-                    this.updateTopbar();
-                    this.scanner.toast(this.t('renamed'), 'success');
-                    this.triggerSyncOnChange();
-                } else {
-                    this.scanner.toast(this.t('nameExists'), 'warning');
-                }
-            }
-        };
-        item.querySelector('.lmm-delete-btn').onclick = () => {
-            if (confirm(this.t('confirmDelete').replace('{0}', name))) {
-                this.dm.deleteGroup(name);
-                this.renderGroupList();
-                this.updateTopbar();
-                this.scanner.toast(this.t('deleted'), 'success');
-                this.triggerSyncOnChange();
-            }
-        };
-    });
-}
+                item.querySelector('.lmm-rename-btn').onclick = () => {
+                    const newName = prompt(this.t('inputNewName'), name);
+                    if (newName && newName.trim() && newName !== name) {
+                        if (this.dm.renameGroup(name, newName.trim())) {
+                            this.renderGroupList();
+                            this.updateTopbar();
+                            this.scanner.toast(this.t('renamed'), 'success');
+                            this.triggerSyncOnChange();
+                        } else {
+                            this.scanner.toast(this.t('nameExists'), 'warning');
+                        }
+                    }
+                };
+                item.querySelector('.lmm-delete-btn').onclick = () => {
+                    if (confirm(this.t('confirmDelete').replace('{0}', name))) {
+                        this.dm.deleteGroup(name);
+                        this.renderGroupList();
+                        this.updateTopbar();
+                        this.scanner.toast(this.t('deleted'), 'success');
+                        this.triggerSyncOnChange();
+                    }
+                };
+            });
+        }
 
         openSettingsModal() {
             const langSelect = this.settingsModal.querySelector('#lmm-setting-lang');
@@ -5317,9 +5447,24 @@
         const ui = new UI(dm, scanner);
         ui.init();
         scanner.onMutation = () => ui.checkPageContext();
+        scanner.onScanComplete = () => {
+            if (ui.isOpen) {
+                ui.updateSidebar();
+                ui.refresh();
+            }
+        };
         scanner.startObserving();
         ui.checkPageContext();
         setTimeout(() => { scanner.scan(); ui.checkPageContext(); }, 2000);
+
+        // 异步加载远程配置并刷新
+        dm.loadRemoteConfig().then(() => {
+            scanner.scan();
+            if (ui.isOpen) {
+                ui.updateSidebar();
+                ui.refresh();
+            }
+        });
     }
 
     if (document.readyState === 'loading') {
