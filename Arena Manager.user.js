@@ -1764,7 +1764,7 @@
         { patterns: [/^internlm/i], company: 'InternLM', icon: '👨‍💼' },
         { patterns: [/^kandinsky/i], company: 'Kandinsky', icon: 'K' },
         { patterns: [/^kling/i], company: 'KlingAI', icon: '🔗' },
-       { patterns: [/^krea/i], company: 'Krea', icon: 'K' },
+        { patterns: [/^krea/i], company: 'Krea', icon: 'K' },
         { patterns: [/^kat/i], company: 'KwaiKAT', icon: '🎥' },
         { patterns: [/^lucid/i], company: 'Leonardo AI', icon: '🖼️' },
         { patterns: [/^lightricks/i], company: 'ltx', icon: '' },
