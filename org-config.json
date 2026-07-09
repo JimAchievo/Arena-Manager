@@ -1,0 +1,21 @@
+{
+  "MODE_ORG_CONFIG": {
+    "text": {
+      "tier1": ["OpenAI", "Anthropic"],
+      "tier2": [],
+      "useFolder": true
+    }
+  },
+  "COMPANY_RULES": [
+    {
+      "patterns": ["/^gpt/i", "/^o3/i"],
+      "company": "OpenAI",
+      "icon": "🟢"
+    },
+    {
+      "patterns": ["/^claude/i"],
+      "company": "Anthropic",
+      "icon": "🟤"
+    }
+  ]
+}
