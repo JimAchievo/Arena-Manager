@@ -2250,7 +2250,6 @@
 
             const currentMode = ModeDetector.detect();
             const newModels = [];
-            console.log('[Arena Manager] 扫描触发，当前模式:', currentMode);
 
             containers.forEach(({ options, mode: layoutMode }) => {
                 options.forEach(el => {
