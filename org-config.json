@@ -1,7 +1,7 @@
 {
   "MODE_ORG_CONFIG": {
     "text": {
-      "tier1": ["OpenAI", "Anthropic"],
+      "tier1": ['Anthropic', 'Google', 'xAI', 'OpenAI', 'Z.ai', 'Alibaba', 'DeepSeek', 'Bytedance', 'Moonshot', 'Baidu', 'Xiaomi', 'Meituan', 'Amazon', 'Mistral', 'MiniMax', 'Tencent'],
       "tier2": [],
       "useFolder": true
     }
