@@ -142,7 +142,7 @@ KlingAI, Pruna, Luma AI, MiniMax, Kandinsky, Tencent, lightricks, Pika, Genmo AI
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/chart?repos=JimAchievo/Arena-Manager&type=date&legend=top-left&sealed_token=SMTP45NsRDI7eU8altWwDHcYUwr5TR7aKHGykZScPH-5XO1Gs8955VVxmVPJ61EV8T5J4B69W07hu6CAVbfpOLOlHrJ0Ks3rbinVKzaQyMoJ1vGIssLGsbr-S6GLi92eB8174Y6S3KT4SS89nSDY8tWN8z3sBR7BoAamGnXNE1SIhKFKrfg8mw)](https://www.star-history.com/?repos=JimAchievo%2FArena-Manager&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/chart?repos=JimAchievo/Arena-Manager&type=date&legend=top-left&sealed_token=lpywp0Ct9S_LqiTDF82tcuu55vhPvtKPwTXi6gLeVFjNW53sHaVD837OtTYBhZAQS6cOIFKzblWLvmtzKx91QpE32YOrCHVzAur5mRmjAuIUPjExuC1hnQ)](https://www.star-history.com/?repos=JimAchievo%2FArena-Manager&type=date&legend=top-left)
 
 ## 📝 更新日志
 
