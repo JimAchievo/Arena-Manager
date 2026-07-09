@@ -16,6 +16,11 @@
       "patterns": ["/^claude/i"],
       "company": "Anthropic",
       "icon": "🟤"
+    },
+    {
+      "patterns": ["/^ernie/i"],
+      "company": "Baidu",
+      "icon": "🔴"
     }
   ]
 }
