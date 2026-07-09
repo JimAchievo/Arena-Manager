@@ -8,10 +8,12 @@
 
 - **🚀 多模式归属系统**：一个模型可以同时属于 Text 和 Code 面板，支持在不同场景下独立管理显隐和排序。
 - **🎯 "所见即所得" 精准扫描**：严格基于页面上下文识别模型类型，不再依赖不可靠的名字猜测，杜绝分类错误。
-- **🏢 智能厂商识别**：内置规则自动识别 **40+ 家**主流 AI 组织（OpenAI, Google, Anthropic, DeepSeek 等），并自动加载官方 Logo。
+- **🏢 智能厂商识别**：内置规则自动识别 **70 家** AI 组织（OpenAI, Google, Anthropic, DeepSeek 等），并自动加载官方 Logo。
 - **🔍 模型特性检测**：自动识别模型的视觉（Vision）和 PDF 上传能力，支持按特性筛选。
+- **🌐 原生图标动态提取**：实时从 Arena 下拉栏提取模型的原生 SVG 图标，无需依赖外部图床，图标显示更精准、同步更及时。
+- **🧠 图标指纹学习**：当遇到无法通过名称识别的新模型时，通过比对原生图标指纹自动推断其所属组织。
 - **📂 智能折叠**：自动收纳非核心组织，保持列表清爽；在模型较少的模式下自动展开。
-- **🔄 自定义排序**：支持拖拽调整组织顺序，把你喜欢的厂商排在最前。
+- **🔄 自定义排序**：支持拖拽调整组织顺序，把你喜欢的厂商排在最前；自动收录新出现的组织参与排序。
 - **📋 模型详情**：查看和编辑模型的组织、图标、备注等信息。
 - **⭐ 推荐配置**：一键导入作者推荐的模型设置，支持差异对比和选择性合并，不会覆盖你的个人偏好。
 - **☁️ 配置本地+云同步**：支持导出/导入 JSON 配置、基于 GitHub Gist 的云同步（含自动同步），多设备轻松同步。
@@ -106,31 +108,35 @@
 
 ### 📝 Text
 **主要组织**：
-Anthropic, xAI, Google, OpenAI, Bytedance, Z.ai, Moonshot, Baidu, Alibaba, DeepSeek, Mistral, Amazon, MiniMax, Inception AI
+Anthropic, Meta, Google, OpenAI, Alibaba, SpaceXAI, Z.ai, Baidu, Xiaomi, Moonshot, DeepSeek, Bytedance, MiniMax, Meituan, Amazon, Mistral, Nvidia, Tencent
 
 **更多组织**：
-Meituan, Tencent, Xiaomi, Microsoft AI, StepFun, Arcee AI, Nvidia, Prime Intellect, Cohere, Ant Group, Meta, Ai2, 01 AI, NexusFlow, IBM
+StepFun, Arcee AI, Cohere, Inception AI, Ant Group, Ai2, IBM, Microsoft AI, Prime Intellect, 01 AI, NexusFlow, AI21 Labs, Reka AI, HuggingFace, Databricks, InternLM, OpenChat, Snowflake, NousResearch, UC Berkeley, Upstage AI, Cognitive Computations, MosaicML, TII, UW, Together AI, Stanford, RWKV, OpenAssistant, Stability AI
 
 ### 🔍 Search
 **全部组织**：
-Google, Anthropic, xAI, OpenAI, Perplexity, Diffbot
+Anthropic, OpenAI, Baidu, Google, SpaceXAI, Perplexity AI, Diffbot
 
 ### 🖼️ Image
 **主要组织**：
-Google, OpenAI, Reve, xAI, Black Forest Labs, Tencent, Bytedance, Alibaba, Shengshu, Runway
+OpenAI, Meta, Reve, Google, Microsoft AI, SpaceXAI, Ideogram, Alibaba, Luma AI, Recraft, Black Forest Labs, Tencent, Bytedance, HiDream, Krea, Nvidia, Shengshu
 
 **更多组织**：
-Recraft, Microsoft AI, Ideogram, Pruna, Luma AI, Leonardo AI, Z.ai
+KlingAI, Pruna, Runway, Leonardo AI, Z.ai, Stability AI, StepFun
 
 ### 💻 Code
 **主要组织**：
-Anthropic, OpenAI, Google, Z.ai, Moonshot, MiniMax, Alibaba, DeepSeek
+Anthropic, Z.ai, Bytedance, Alibaba, Moonshot, Google, MiniMax, OpenAI, Xiaomi, DeepSeek, SpaceXAI, Tencent, Poolside
 
 **更多组织**：
-Xiaomi, KwaiKAT, xAI, Mistral, Bytedance, Inception AI
+Mistral, KwaiKAT, Arcee AI, IBM, Inception AI, Meta
 
 ### 🎥 Video
-**暂无专属组织（预留分类）**
+**主要组织**：
+Google, Bytedance, Meta, Alibaba-ATH, OpenAI, SpaceXAI, Alibaba, Pixverse, Runway, Shengshu
+
+**更多组织**：
+KlingAI, Pruna, Luma AI, MiniMax, Kandinsky, Tencent, lightricks, Pika, Genmo AI
 
 </details>
 
@@ -139,6 +145,16 @@ Xiaomi, KwaiKAT, xAI, Mistral, Bytedance, Inception AI
 [![Star History Chart](https://api.star-history.com/svg?repos=JimAchievo/Arena-Manager&type=date&legend=top-left)](https://www.star-history.com/#JimAchievo/Arena-Manager&type=date&legend=top-left)
 
 ## 📝 更新日志
+
+### v5.2.0 (2026-07-10)
+
+#### 🎉 新增功能
+- **🌐 原生图标动态提取**：实时从 Arena 下拉栏提取模型的原生 SVG 图标并显示在管理面板中，摆脱对 GitHub 图床的强依赖。
+- **🧠 图标指纹学习与盲判**：提取图标特征生成指纹。当已知模型被正确识别时记录其指纹；遇到无法通过名称识别的新模型时，自动通过指纹比对推断其所属组织。
+- **☁️ 组织规则外置**：新增异步加载 `org-config.json`，便于作者动态更新组织前后缀规则和层级排序，无需频繁发版脚本。
+
+#### 🔧 问题修复
+- **修复新组织无法排序**：用户在模型详情中手动新建组织，或 AI 厂商扩大业务范围导致出现在新模式时，该组织现在会被自动追加到左栏组织列表末尾并支持拖拽排序。
 
 ### v5.1.2 (2026-04-15)
 
@@ -318,7 +334,7 @@ Xiaomi, KwaiKAT, xAI, Mistral, Bytedance, Inception AI
 
 2. **数据结构简化**
    - 移除 `categories` 和 `categoriesManual` 字段
-   - `vision` 字段合并：非 Image 模型为 `true/false`，Image 模型为 `'universal'/'t2i'/'i2i'`
+   - `vision` 字段合并：非 Image 模型为 `true/false`，Image 模式为 `'universal'/'t2i'/'i2i'`
    - 移除时间戳字段，精简存储
 
 3. **编辑模型精简**
