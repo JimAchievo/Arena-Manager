@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.2.0
+// @version      5.2.1
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://*arena.ai/*
@@ -23,11 +23,11 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.2.0';
+    const VERSION = '5.2.1';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
-    const ORG_CONFIG_FILE = 'org-config.json';
+    const COMPANY_RULES_FILE = 'company-rules.json';
     const LOGO_CACHE_KEY = 'arena_manager_logos';
     const ICON_ORG_MAP_KEY = 'arena_manager_icon_org_map';
     const LOGO_BASE_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/Organization%20Logos/`;
@@ -2126,7 +2126,7 @@
                 const res = await new Promise((resolve, reject) => {
                     GM_xmlhttpRequest({
                         method: 'GET',
-                        url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${ORG_CONFIG_FILE}?_=${Date.now()}`,
+                        url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${COMPANY_RULES_FILE}?_=${Date.now()}`,
                         onload: r => resolve(r),
                         onerror: e => reject(e),
                         ontimeout: e => reject(e)
@@ -2134,7 +2134,6 @@
                 });
                 if (res.status >= 200 && res.status < 300) {
                     const remoteConfig = JSON.parse(res.responseText);
-                    if (remoteConfig.MODE_ORG_CONFIG) MODE_ORG_CONFIG = remoteConfig.MODE_ORG_CONFIG;
                     if (remoteConfig.COMPANY_RULES) {
                         COMPANY_RULES = remoteConfig.COMPANY_RULES.map(r => ({
                             patterns: r.patterns.map(p => {
@@ -2148,8 +2147,8 @@
                             company: r.company,
                             icon: r.icon
                         }));
+                        console.log('[Arena Manager] 远程配置加载成功');
                     }
-                    console.log('[Arena Manager] 远程配置加载成功');
                 }
             } catch (e) {
                 console.warn('[Arena Manager] 远程配置加载失败，使用内置配置', e);
@@ -2561,7 +2560,7 @@
                 .lmm-sidebar-item .icon { display: inline-flex; width: 1.4em; justify-content: center; flex-shrink: 0; }
                 .lmm-sidebar-item .cnt { margin-left: auto; font-size: 10px; background: var(--lmm-bg); padding: 1px 5px; border-radius: 6px; color: var(--lmm-text2); }
                 .lmm-sidebar-item.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
-                .lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); }
+                .lmm-sidebar-item.sort-mode { cursor: grab; background: var(--lmm-bg3); color: var(--lmm-text); }
                 .lmm-sidebar-item.sort-mode:active { cursor: grabbing; }
                 .lmm-sidebar-item.dragging { opacity: 0.5; background: var(--lmm-primary); color: #fff; }
                 .lmm-sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; margin: 6px 0 4px; gap: 4px; }
@@ -2697,6 +2696,10 @@
                 .lmm-sidebar-separator { text-align: center; padding: 4px 8px; font-size: 10px; color: var(--lmm-text2); border-top: 1px dashed var(--lmm-border); border-bottom: 1px dashed var(--lmm-border); margin: 4px 0; user-select: none; }
                 .lmm-sidebar-separator.drag-over { background: var(--lmm-bg3); border-color: var(--lmm-primary); }
                 .lmm-org-icon { width: 16px; height: 16px; vertical-align: middle; object-fit: contain; display: inline-block; }
+                .lmm-sidebar-item.active .lmm-org-icon,
+                .lmm-sidebar-item.active .lmm-dynamic-svg {
+                    background: rgba(255,255,255,0.9); border-radius: 3px; padding: 1px; box-sizing: content-box;
+                }
                 .lmm-sidebar-item .lmm-org-icon { width: 14px; height: 14px; }
                 .lmm-card-name .lmm-org-icon { width: 14px; height: 14px; }
 
@@ -3928,20 +3931,16 @@
             let tier1, tier2;
             const sepPos = orgOrder.indexOf('---');
             if (config.useFolder) {
+                let tier1Names;
                 if (sepPos !== -1) {
-                    const tier1Names = orgOrder.slice(0, sepPos);
-                    tier1 = allOrgItems.filter(c => tier1Names.includes(c.name));
-                    tier2 = allOrgItems.filter(c => !tier1Names.includes(c.name));
+                    // 如果用户手动调整过排序，按分隔符切分
+                    tier1Names = orgOrder.slice(0, sepPos);
                 } else {
-                    const splitAt = config.tier1.length;
-                    if (allOrgItems.length > splitAt) {
-                        tier1 = allOrgItems.slice(0, splitAt);
-                        tier2 = allOrgItems.slice(splitAt);
-                    } else {
-                        tier1 = allOrgItems;
-                        tier2 = [];
-                    }
+                    // 初始状态下没有分隔符，按默认配置的 tier1 组织名切分
+                    tier1Names = config.tier1;
                 }
+                tier1 = allOrgItems.filter(c => tier1Names.includes(c.name));
+                tier2 = allOrgItems.filter(c => !tier1Names.includes(c.name));
             } else {
                 tier1 = allOrgItems;
                 tier2 = [];
@@ -4034,7 +4033,16 @@
             const list = this.$('#lmm-org-list');
             const sidebarMode = this.getSidebarMode();
             const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
-            const renderItem = (c, inFolder = false) => `<div class="lmm-sidebar-item ${this.isSortMode ? 'sort-mode' : ''} ${this.filter.org === c.name ? 'active' : ''}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${this.getOrgLogoHtml(c.name, c.icon, c.svgHtml)}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
+            const renderItem = (c, inFolder = false) => {
+                // 排序模式下不显示选中态，保持所有项平权
+                const classes = ['lmm-sidebar-item'];
+                if (this.isSortMode) {
+                    classes.push('sort-mode');
+                } else if (this.filter.org === c.name) {
+                    classes.push('active');
+                }
+                return `<div class="${classes.join(' ')}" data-org="${this.esc(c.name)}" data-in-folder="${inFolder}" ${this.isSortMode ? 'draggable="true"' : ''}>${this.isSortMode ? '<span class="lmm-drag-handle">⠿</span>' : ''}<span class="icon">${this.getOrgLogoHtml(c.name, c.icon, c.svgHtml)}</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis">${this.esc(c.name)}</span><span class="cnt">${c.cnt}</span></div>`;
+            };
 
             let html;
             if (this.isSortMode) {
