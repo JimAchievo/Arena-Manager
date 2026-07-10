@@ -1,31 +1,4 @@
 {
-  "MODE_ORG_CONFIG": {
-    "text": {
-      "tier1": ["Anthropic", "Meta", "Google", "OpenAI", "Alibaba", "SpaceXAI", "Z.ai", "Baidu", "Xiaomi", "Moonshot", "DeepSeek", "Bytedance", "MiniMax", "Meituan", "Amazon", "Mistral", "Nvidia", "Tencent"],
-      "tier2": ["StepFun", "Arcee AI", "Cohere", "Inception AI", "Ant Group", "Ai2", "IBM", "Microsoft AI", "Prime Intellect", "01 AI", "NexusFlow", "AI21 Labs", "Reka AI", "HuggingFace", "Databricks", "InternLM", "OpenChat", "Snowflake", "NousResearch", "UC Berkeley", "Upstage AI", "Cognitive Computations", "MosaicML", "TII", "UW", "Together AI", "Stanford", "RWKV", "OpenAssistant", "Stability AI"],
-      "useFolder": true
-    },
-    "search": {
-      "tier1": ["Anthropic", "OpenAI", "Baidu", "Google", "SpaceXAI", "Perplexity AI", "Diffbot"],
-      "tier2": [],
-      "useFolder": false
-    },
-    "image": {
-      "tier1": ["OpenAI", "Meta", "Reve", "Google", "Microsoft AI", "SpaceXAI", "Ideogram", "Alibaba", "Luma AI", "Recraft", "Black Forest Labs", "Tencent", "Bytedance", "HiDream", "Krea", "Nvidia", "Shengshu"],
-      "tier2": ["KlingAI", "Pruna", "Runway", "Leonardo AI", "Z.ai", "Stability AI", "StepFun"],
-      "useFolder": true
-    },
-    "code": {
-      "tier1": ["Anthropic", "Z.ai", "Bytedance", "Alibaba", "Moonshot", "Google", "MiniMax", "OpenAI", "Xiaomi", "DeepSeek", "SpaceXAI", "Tencent", "Poolside"],
-      "tier2": ["Mistral", "KwaiKAT", "Arcee AI", "IBM", "Inception AI", "Meta"],
-      "useFolder": true
-    },
-    "video": {
-      "tier1": ["Google", "Bytedance", "Meta", "Alibaba-ATH", "OpenAI", "SpaceXAI", "Alibaba", "Pixverse", "Runway", "Shengshu"],
-      "tier2": ["KlingAI", "Pruna", "Luma AI", "MiniMax", "Kandinsky", "Tencent", "lightricks", "Pika", "Genmo AI"],
-      "useFolder": true
-    }
-  },
   "COMPANY_RULES": [
     { "patterns": ["/^yi-/i"], "company": "01 AI", "icon": "0️⃣" },
     { "patterns": ["/^olmo/i", "/^molmo/i"], "company": "Ai2", "icon": "🔬" },
