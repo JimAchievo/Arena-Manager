@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.2.1
+// @version      5.2.2
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://*arena.ai/*
@@ -23,7 +23,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.2.1';
+    const VERSION = '5.2.2';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -1700,7 +1700,7 @@
         modelOptionDrawer: 'button.w-full',
         modelName: 'span.truncate',
         arenaButtons: '[data-arena-buttons="true"]',
-        chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2'
+        chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2, button[role="combobox"][aria-label="Mode"], button[aria-label^="Modality:"]'
     };
 
     let MODE_ORG_CONFIG = {
@@ -1820,6 +1820,16 @@
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
         static detect() {
+            // 新版入口将原有模式按钮合并为 Modality 选择器。
+            const modalityButton = document.querySelector('button[aria-label^="Modality:"]');
+            if (modalityButton) {
+                const label = (modalityButton.getAttribute('aria-label') || '').toLowerCase();
+                if (label.includes('search')) return 'search';
+                if (label.includes('image')) return 'image';
+                if (label.includes('video')) return 'video';
+                if (label.includes('code')) return 'code';
+                if (label.includes('auto') || label.includes('text')) return 'text';
+            }
             const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
                 const buttons = btnContainer.querySelectorAll('button');
@@ -2495,7 +2505,7 @@
                     }
                 }
 
-                .lmm-fab { position: fixed; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--lmm-primary), var(--lmm-primary-dark)); color: #fff; border: none; cursor: pointer; z-index: 99990; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 10px rgba(99,102,241,0.3); transition: transform 0.15s; user-select: none; }
+                .lmm-fab { touch-action: none; -webkit-user-select: none; position: fixed; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--lmm-primary), var(--lmm-primary-dark)); color: #fff; border: none; cursor: pointer; z-index: 99990; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 10px rgba(99,102,241,0.3); transition: transform 0.15s; user-select: none; }
                 .lmm-fab:hover { transform: scale(1.08); }
                 .lmm-fab.dragging { cursor: grabbing; transform: scale(1.1); opacity: 0.9; }
                 .lmm-fab.has-new::after { content: ''; position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: var(--lmm-danger); border-radius: 50%; border: 2px solid var(--lmm-bg); }
@@ -2729,6 +2739,11 @@
             }
 
             fab.onclick = (e) => {
+                // 触屏点击已在 pointerup 中处理，忽略随后产生的兼容点击事件。
+                if (fab.dataset.touchHandled && e.detail !== 0) {
+                    delete fab.dataset.touchHandled;
+                    return;
+                }
                 if (!fab.dataset.dragged) this.toggle();
                 delete fab.dataset.dragged;
             };
@@ -2742,55 +2757,55 @@
         }
 
         bindFabDrag(fab) {
-            let startX, startY, startRight, startTop, isDragging = false;
+            let drag = null;
 
-            fab.onmousedown = (e) => {
-                if (this.dm.data.settings.lockFabPosition) return;
-                e.preventDefault();
-                startX = e.clientX;
-                startY = e.clientY;
+            fab.addEventListener('pointerdown', (e) => {
+                if (this.dm.data.settings.lockFabPosition || !e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
                 const rect = fab.getBoundingClientRect();
-                startRight = window.innerWidth - rect.right;
-                startTop = rect.top;
-                isDragging = false;
+                drag = { id: e.pointerId, x: e.clientX, y: e.clientY,
+                    right: window.innerWidth - rect.right, top: rect.top,
+                    width: rect.width, height: rect.height, moved: false };
+                fab.setPointerCapture(e.pointerId);
+            });
 
-                const onMove = (e) => {
-                    const dx = e.clientX - startX;
-                    const dy = e.clientY - startY;
-                    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-                        isDragging = true;
-                        fab.classList.add('dragging');
-                        fab.dataset.dragged = 'true';
-                    }
-                    if (isDragging) {
-                        const newRight = Math.max(0, Math.min(window.innerWidth - 50, startRight - dx));
-                        const newTop = Math.max(0, Math.min(window.innerHeight - 50, startTop + dy));
-                        fab.style.right = newRight + 'px';
-                        fab.style.top = newTop + 'px';
-                        fab.style.bottom = 'auto';
-                        fab.style.transform = 'none';
-                    }
-                };
+            fab.addEventListener('pointermove', (e) => {
+                if (!drag || e.pointerId !== drag.id) return;
+                const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+                if (!drag.moved && Math.hypot(dx, dy) > 5) {
+                    drag.moved = true;
+                    fab.dataset.dragged = 'true';
+                    fab.classList.add('dragging');
+                }
+                if (!drag.moved) return;
+                fab.style.right = Math.max(0, Math.min(window.innerWidth - drag.width, drag.right - dx)) + 'px';
+                fab.style.top = Math.max(0, Math.min(window.innerHeight - drag.height, drag.top + dy)) + 'px';
+                fab.style.bottom = 'auto';
+                fab.style.transform = 'none';
+            });
 
-                const onUp = () => {
-                    document.removeEventListener('mousemove', onMove);
-                    document.removeEventListener('mouseup', onUp);
-                    fab.classList.remove('dragging');
-                    if (isDragging) {
-                        // 保存位置
-                        const rect = fab.getBoundingClientRect();
-                        this.dm.data.settings.fabPosition = {
-                            right: window.innerWidth - rect.right,
-                            top: rect.top,
-                            bottom: null
-                        };
-                        this.dm.save();
-                    }
-                };
-
-                document.addEventListener('mousemove', onMove);
-                document.addEventListener('mouseup', onUp);
+            const finish = (e) => {
+                if (!drag || e.pointerId !== drag.id) return;
+                const moved = drag.moved;
+                drag = null;
+                fab.classList.remove('dragging');
+                if (!moved && e.pointerType === 'touch' && e.type === 'pointerup') {
+                    fab.dataset.touchHandled = 'true';
+                    this.toggle();
+                    setTimeout(() => { delete fab.dataset.touchHandled; }, 800);
+                }
+                if (moved) {
+                    this.dm.data.settings.fabPosition = {
+                        right: parseFloat(fab.style.right),
+                        top: parseFloat(fab.style.top),
+                        bottom: null
+                    };
+                    this.dm.save();
+                    // click 通常在 pointerup 后触发；如果浏览器未触发 click，也要清除标记。
+                    setTimeout(() => { delete fab.dataset.dragged; }, 0);
+                }
             };
+            fab.addEventListener('pointerup', finish);
+            fab.addEventListener('pointercancel', finish);
         }
 
         updateFabBadge() {
