@@ -1819,7 +1819,25 @@
 
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
-        static detect() {
+        static detect(container) {
+            // 优先读取当前模型选择器中选中的分类，而非页面上的其他控件。
+            if (container) {
+                const labels = { text: 'text', search: 'search', image: 'image', code: 'code',
+                    '文本': 'text', '文字': 'text', '搜索': 'search', '搜尋': 'search',
+                    '图像': 'image', '图片': 'image', '圖像': 'image', '圖片': 'image',
+                    '代码': 'code', '編程': 'code', '编程': 'code', '程式碼': 'code' };
+                for (let root = container; root && root !== document.body; root = root.parentElement) {
+                    const tabs = [...root.querySelectorAll('button[aria-label]')].filter(btn =>
+                        labels[(btn.getAttribute('aria-label') || '').trim().toLowerCase()]);
+                    if (tabs.length >= 2) {
+                        const active = tabs.find(btn => btn.getAttribute('aria-pressed') === 'true' ||
+                            btn.getAttribute('data-state') === 'active' ||
+                            btn.classList.contains('bg-surface-primary') ||
+                            (btn.classList.contains('bg-surface-tertiary') && btn.classList.contains('border-border-medium')));
+                        return active ? labels[active.getAttribute('aria-label').trim().toLowerCase()] : null;
+                    }
+                }
+            }
             // 新版入口将原有模式按钮合并为 Modality 选择器。
             const modalityButton = document.querySelector('button[aria-label^="Modality:"]');
             if (modalityButton) {
@@ -1828,7 +1846,8 @@
                 if (label.includes('image')) return 'image';
                 if (label.includes('video')) return 'video';
                 if (label.includes('code')) return 'code';
-                if (label.includes('auto') || label.includes('text')) return 'text';
+                if (label.includes('auto')) return container ? null : 'text';
+                if (label.includes('text')) return 'text';
             }
             const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
@@ -2187,9 +2206,11 @@
 
         getAllContainers() {
             const result = [];
+            const isNewUI = !!document.querySelector('button[aria-label^="Modality:"], button[role="combobox"][aria-label="Mode"]');
             const dropdownContainers = document.querySelectorAll('[cmdk-group-items]');
             dropdownContainers.forEach(container => {
-                const options = container.querySelectorAll('[cmdk-item][role="option"]');
+                // 新版只把带模型标识的选项视作模型，避免把模式菜单误扫进来。
+                const options = container.querySelectorAll(isNewUI ? '[cmdk-item][role="option"][data-model-id]' : '[cmdk-item][role="option"]');
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'dropdown' });
                 }
@@ -2197,7 +2218,7 @@
             if (result.length > 0) return result;
             const drawerContainers = document.querySelectorAll('div.relative.px-4');
             drawerContainers.forEach(container => {
-                const options = container.querySelectorAll('button.w-full');
+                const options = container.querySelectorAll(isNewUI ? 'button[data-model-id]' : 'button.w-full');
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'drawer' });
                 }
@@ -2257,10 +2278,12 @@
             const containers = this.getAllContainers();
             if (containers.length === 0) return;
 
-            const currentMode = ModeDetector.detect();
             const newModels = [];
 
-            containers.forEach(({ options, mode: layoutMode }) => {
+            containers.forEach(({ container, options, mode: layoutMode }) => {
+                const currentMode = ModeDetector.detect(container);
+                // 自动模式下若没有明确的分类，不猜测模型归属。
+                if (!currentMode) return;
                 options.forEach(el => {
                     const info = this.extractInfo(el, layoutMode);
                     if (!info) return;
@@ -2360,12 +2383,11 @@
             const containers = this.getAllContainers();
             if (containers.length === 0) return;
 
-            const currentMode = ModeDetector.detect();
-            const orgOrder = this.dm.getOrgOrder(currentMode);
-            const customOrder = this.dm.getModelOrder(currentMode);
-            const hasCustomOrder = customOrder && customOrder.length > 0;
-
             containers.forEach(({ container, options, mode: layoutMode }) => {
+                const currentMode = ModeDetector.detect(container);
+                const orgOrder = currentMode ? this.dm.getOrgOrder(currentMode) : [];
+                const customOrder = currentMode ? this.dm.getModelOrder(currentMode) : [];
+                const hasCustomOrder = customOrder && customOrder.length > 0;
                 const parent = options[0]?.parentElement;
                 if (parent) {
                     parent.style.display = 'flex';
@@ -2381,7 +2403,8 @@
                     const visible = this.dm.isVisible(info.name);
                     el.style.display = visible ? '' : 'none';
 
-                    if (visible) {
+                    if (visible && !currentMode) el.style.order = '';
+                    if (visible && currentMode) {
                         let order = 0;
                         if (model.starred) {
                             order = -99999 + (info.name.charCodeAt(0) || 0) * 0.001;
@@ -2417,7 +2440,11 @@
 
         startObserving() {
             let timer = null;
-            this.observer = new MutationObserver(() => {
+            this.observer = new MutationObserver((mutations) => {
+                // 新版分类切换可能只改变按钮属性，不一定增删列表节点。
+                if (!mutations.some(m => m.type === 'childList' ||
+                    (m.type === 'attributes' && m.target.matches?.('button[aria-label]') &&
+                    /^(?:text|search|image|code|文本|文字|搜索|搜尋|图像|图片|圖像|圖片|代码|編程|编程|程式碼|modality:.*)$/i.test(m.target.getAttribute('aria-label') || '')))) return;
                 if (this.onMutation) this.onMutation();
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
@@ -2429,7 +2456,7 @@
                     }, 50);
                 }
             });
-            this.observer.observe(document.body, { childList: true, subtree: true });
+            this.observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'aria-label', 'aria-pressed', 'data-state'] });
         }
 
         stopObserving() {
