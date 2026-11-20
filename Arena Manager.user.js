@@ -1820,25 +1820,21 @@
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
         static detect(container) {
-            // 优先读取当前模型选择器中选中的分类，而非页面上的其他控件。
+            // 优先读取模型选择器中选中的分类。
             if (container) {
-                const labels = { text: 'text', search: 'search', image: 'image', code: 'code',
-                    '文本': 'text', '文字': 'text', '搜索': 'search', '搜尋': 'search',
-                    '图像': 'image', '图片': 'image', '圖像': 'image', '圖片': 'image',
-                    '代码': 'code', '編程': 'code', '编程': 'code', '程式碼': 'code' };
+                const modes = { text: 'text', search: 'search', image: 'image', code: 'code' };
                 for (let root = container; root && root !== document.body; root = root.parentElement) {
-                    const tabs = [...root.querySelectorAll('button[aria-label]')].filter(btn =>
-                        labels[(btn.getAttribute('aria-label') || '').trim().toLowerCase()]);
+                    const tabs = [...root.querySelectorAll('button[aria-label]')].filter(button =>
+                        Object.prototype.hasOwnProperty.call(modes, (button.getAttribute('aria-label') || '').trim().toLowerCase()));
                     if (tabs.length >= 2) {
-                        const active = tabs.find(btn => btn.getAttribute('aria-pressed') === 'true' ||
-                            btn.getAttribute('data-state') === 'active' ||
-                            btn.classList.contains('bg-surface-primary') ||
-                            (btn.classList.contains('bg-surface-tertiary') && btn.classList.contains('border-border-medium')));
-                        return active ? labels[active.getAttribute('aria-label').trim().toLowerCase()] : null;
+                        const selected = tabs.find(button => button.getAttribute('aria-pressed') === 'true' ||
+                            button.getAttribute('data-state') === 'active' ||
+                            button.classList.contains('bg-surface-primary') ||
+                            (button.classList.contains('bg-surface-tertiary') && button.classList.contains('border-border-medium')));
+                        return selected ? modes[selected.getAttribute('aria-label').trim().toLowerCase()] : null;
                     }
                 }
             }
-            // 新版入口将原有模式按钮合并为 Modality 选择器。
             const modalityButton = document.querySelector('button[aria-label^="Modality:"]');
             if (modalityButton) {
                 const label = (modalityButton.getAttribute('aria-label') || '').toLowerCase();
@@ -1846,8 +1842,9 @@
                 if (label.includes('image')) return 'image';
                 if (label.includes('video')) return 'video';
                 if (label.includes('code')) return 'code';
-                if (label.includes('auto')) return container ? null : 'text';
                 if (label.includes('text')) return 'text';
+                // 自动模式不能确定模型分类，等待用户选定具体分类。
+                if (label.includes('auto')) return container ? null : 'text';
             }
             const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
@@ -2209,7 +2206,6 @@
             const isNewUI = !!document.querySelector('button[aria-label^="Modality:"], button[role="combobox"][aria-label="Mode"]');
             const dropdownContainers = document.querySelectorAll('[cmdk-group-items]');
             dropdownContainers.forEach(container => {
-                // 新版只把带模型标识的选项视作模型，避免把模式菜单误扫进来。
                 const options = container.querySelectorAll(isNewUI ? '[cmdk-item][role="option"][data-model-id]' : '[cmdk-item][role="option"]');
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'dropdown' });
@@ -2282,7 +2278,6 @@
 
             containers.forEach(({ container, options, mode: layoutMode }) => {
                 const currentMode = ModeDetector.detect(container);
-                // 自动模式下若没有明确的分类，不猜测模型归属。
                 if (!currentMode) return;
                 options.forEach(el => {
                     const info = this.extractInfo(el, layoutMode);
@@ -2441,10 +2436,10 @@
         startObserving() {
             let timer = null;
             this.observer = new MutationObserver((mutations) => {
-                // 新版分类切换可能只改变按钮属性，不一定增删列表节点。
+                // 分类切换可能只改变按钮属性。
                 if (!mutations.some(m => m.type === 'childList' ||
                     (m.type === 'attributes' && m.target.matches?.('button[aria-label]') &&
-                    /^(?:text|search|image|code|文本|文字|搜索|搜尋|图像|图片|圖像|圖片|代码|編程|编程|程式碼|modality:.*)$/i.test(m.target.getAttribute('aria-label') || '')))) return;
+                    /^(?:text|search|image|code|modality:.*)$/i.test(m.target.getAttribute('aria-label') || '')))) return;
                 if (this.onMutation) this.onMutation();
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
@@ -2785,7 +2780,6 @@
 
         bindFabDrag(fab) {
             let drag = null;
-
             fab.addEventListener('pointerdown', (e) => {
                 if (this.dm.data.settings.lockFabPosition || !e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
                 const rect = fab.getBoundingClientRect();
@@ -2794,7 +2788,6 @@
                     width: rect.width, height: rect.height, moved: false };
                 fab.setPointerCapture(e.pointerId);
             });
-
             fab.addEventListener('pointermove', (e) => {
                 if (!drag || e.pointerId !== drag.id) return;
                 const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -2809,7 +2802,6 @@
                 fab.style.bottom = 'auto';
                 fab.style.transform = 'none';
             });
-
             const finish = (e) => {
                 if (!drag || e.pointerId !== drag.id) return;
                 const moved = drag.moved;
@@ -2827,7 +2819,7 @@
                         bottom: null
                     };
                     this.dm.save();
-                    // click 通常在 pointerup 后触发；如果浏览器未触发 click，也要清除标记。
+                    // 浏览器可能不触发拖动后的点击事件，也要清除标记。
                     setTimeout(() => { delete fab.dataset.dragged; }, 0);
                 }
             };
