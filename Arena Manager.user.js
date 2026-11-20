@@ -1700,7 +1700,7 @@
         modelOptionDrawer: 'button.w-full',
         modelName: 'span.truncate',
         arenaButtons: '[data-arena-buttons="true"]',
-        chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2, button[role="combobox"][aria-label="Mode"], button[aria-label^="Modality:"]'
+        chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2, button[role="combobox"][aria-label="Mode"]'
     };
 
     let MODE_ORG_CONFIG = {
@@ -1820,45 +1820,28 @@
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
         static detect(container) {
-            // 优先读取模型选择器中选中的分类。
+            // 在当前模型选择器内读取选中的分类。
+            let btnContainer = null;
             if (container) {
-                const modes = { text: 'text', search: 'search', image: 'image', code: 'code' };
                 for (let root = container; root && root !== document.body; root = root.parentElement) {
-                    const tabs = [...root.querySelectorAll('button[aria-label]')].filter(button =>
-                        Object.prototype.hasOwnProperty.call(modes, (button.getAttribute('aria-label') || '').trim().toLowerCase()));
-                    if (tabs.length >= 2) {
-                        const selected = tabs.find(button => button.getAttribute('aria-pressed') === 'true' ||
-                            button.getAttribute('data-state') === 'active' ||
-                            button.classList.contains('bg-surface-primary') ||
-                            (button.classList.contains('bg-surface-tertiary') && button.classList.contains('border-border-medium')));
-                        return selected ? modes[selected.getAttribute('aria-label').trim().toLowerCase()] : null;
-                    }
+                    btnContainer = root.querySelector(SELECTORS.arenaButtons);
+                    if (btnContainer) break;
                 }
+            } else {
+                btnContainer = document.querySelector(SELECTORS.arenaButtons);
             }
-            const modalityButton = document.querySelector('button[aria-label^="Modality:"]');
-            if (modalityButton) {
-                const label = (modalityButton.getAttribute('aria-label') || '').toLowerCase();
-                if (label.includes('search')) return 'search';
-                if (label.includes('image')) return 'image';
-                if (label.includes('video')) return 'video';
-                if (label.includes('code')) return 'code';
-                if (label.includes('text')) return 'text';
-                // 自动模式不能确定模型分类，等待用户选定具体分类。
-                if (label.includes('auto')) return container ? null : 'text';
-            }
-            const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
-                const buttons = btnContainer.querySelectorAll('button');
-                for (const btn of buttons) {
-                    if (btn.classList.contains('bg-surface-primary')) {
-                        const text = (btn.textContent || '').trim().toLowerCase();
-                        if (text.includes('text')) return 'text';
-                        if (text.includes('code')) return 'code';
-                        if (text.includes('image')) return 'image';
-                        if (text.includes('search')) return 'search';
-                        if (text.includes('video')) return 'video';
-                    }
+                const selected = btnContainer.querySelector('button[aria-pressed="true"]') ||
+                    [...btnContainer.querySelectorAll('button')].find(button =>
+                        button.classList.contains('bg-surface-primary') ||
+                        (button.classList.contains('bg-surface-tertiary') && button.classList.contains('border-border-medium')));
+                if (selected) {
+                    const label = (selected.getAttribute('title') || selected.getAttribute('aria-label') || selected.textContent || '').trim().toLowerCase();
+                    const mode = label.match(/^(text|search|image|code|video)(?:\b|$)/);
+                    if (mode) return mode[1];
                 }
+                // 选择器存在但无法确认选中项时，不按网址猜测分类。
+                return null;
             }
             const url = new URL(window.location.href);
             const modality = url.searchParams.get('chat-modality');
@@ -2203,10 +2186,9 @@
 
         getAllContainers() {
             const result = [];
-            const isNewUI = !!document.querySelector('button[aria-label^="Modality:"], button[role="combobox"][aria-label="Mode"]');
             const dropdownContainers = document.querySelectorAll('[cmdk-group-items]');
             dropdownContainers.forEach(container => {
-                const options = container.querySelectorAll(isNewUI ? '[cmdk-item][role="option"][data-model-id]' : '[cmdk-item][role="option"]');
+                const options = container.querySelectorAll('[cmdk-item][role="option"]');
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'dropdown' });
                 }
@@ -2214,7 +2196,8 @@
             if (result.length > 0) return result;
             const drawerContainers = document.querySelectorAll('div.relative.px-4');
             drawerContainers.forEach(container => {
-                const options = container.querySelectorAll(isNewUI ? 'button[data-model-id]' : 'button.w-full');
+                const modernOptions = container.querySelectorAll('button[data-model-id]');
+                const options = modernOptions.length ? modernOptions : container.querySelectorAll('button.w-full');
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'drawer' });
                 }
@@ -2436,10 +2419,9 @@
         startObserving() {
             let timer = null;
             this.observer = new MutationObserver((mutations) => {
-                // 分类切换可能只改变按钮属性。
+                // 关注模型分类按钮的选中状态，以及模型列表的节点变化。
                 if (!mutations.some(m => m.type === 'childList' ||
-                    (m.type === 'attributes' && m.target.matches?.('button[aria-label]') &&
-                    /^(?:text|search|image|code|modality:.*)$/i.test(m.target.getAttribute('aria-label') || '')))) return;
+                    (m.type === 'attributes' && m.target.matches?.('button') && m.target.closest(SELECTORS.arenaButtons)))) return;
                 if (this.onMutation) this.onMutation();
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
@@ -2451,7 +2433,7 @@
                     }, 50);
                 }
             });
-            this.observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'aria-label', 'aria-pressed', 'data-state'] });
+            this.observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'aria-pressed'] });
         }
 
         stopObserving() {
@@ -2761,7 +2743,7 @@
             }
 
             fab.onclick = (e) => {
-                // 触屏点击已在 pointerup 中处理，忽略随后产生的兼容点击事件。
+                // 触屏点击在指针抬起时处理，避免兼容点击重复触发。
                 if (fab.dataset.touchHandled && e.detail !== 0) {
                     delete fab.dataset.touchHandled;
                     return;
@@ -2781,11 +2763,12 @@
         bindFabDrag(fab) {
             let drag = null;
             fab.addEventListener('pointerdown', (e) => {
-                if (this.dm.data.settings.lockFabPosition || !e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
                 const rect = fab.getBoundingClientRect();
                 drag = { id: e.pointerId, x: e.clientX, y: e.clientY,
                     right: window.innerWidth - rect.right, top: rect.top,
-                    width: rect.width, height: rect.height, moved: false };
+                    width: rect.width, height: rect.height, moved: false,
+                    locked: this.dm.data.settings.lockFabPosition };
                 fab.setPointerCapture(e.pointerId);
             });
             fab.addEventListener('pointermove', (e) => {
@@ -2796,7 +2779,7 @@
                     fab.dataset.dragged = 'true';
                     fab.classList.add('dragging');
                 }
-                if (!drag.moved) return;
+                if (!drag.moved || drag.locked) return;
                 fab.style.right = Math.max(0, Math.min(window.innerWidth - drag.width, drag.right - dx)) + 'px';
                 fab.style.top = Math.max(0, Math.min(window.innerHeight - drag.height, drag.top + dy)) + 'px';
                 fab.style.bottom = 'auto';
@@ -2804,7 +2787,7 @@
             });
             const finish = (e) => {
                 if (!drag || e.pointerId !== drag.id) return;
-                const moved = drag.moved;
+                const moved = drag.moved, locked = drag.locked;
                 drag = null;
                 fab.classList.remove('dragging');
                 if (!moved && e.pointerType === 'touch' && e.type === 'pointerup') {
@@ -2813,13 +2796,13 @@
                     setTimeout(() => { delete fab.dataset.touchHandled; }, 800);
                 }
                 if (moved) {
-                    this.dm.data.settings.fabPosition = {
-                        right: parseFloat(fab.style.right),
-                        top: parseFloat(fab.style.top),
-                        bottom: null
-                    };
-                    this.dm.save();
-                    // 浏览器可能不触发拖动后的点击事件，也要清除标记。
+                    if (!locked) {
+                        this.dm.data.settings.fabPosition = {
+                            right: parseFloat(fab.style.right), top: parseFloat(fab.style.top), bottom: null
+                        };
+                        this.dm.save();
+                    }
+                    // 浏览器未触发拖动后的点击事件时也需要清除标记。
                     setTimeout(() => { delete fab.dataset.dragged; }, 0);
                 }
             };
