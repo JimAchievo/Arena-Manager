@@ -2,11 +2,10 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.2.1
+// @version      5.3.0
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
-// @match        *://*arena.ai/*
-// @match        *://canaryarena.ai/*
+// @match        *://arena.ai/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
@@ -23,7 +22,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.2.1';
+    const VERSION = '5.3.0';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -56,7 +55,6 @@
                 starredFirst: '收藏优先',
                 nameAZ: '名称 A-Z',
                 nameZA: '名称 Z-A',
-                latestAdded: '最新添加',
                 models: '个模型',
                 multiSelect: '多选',
                 show: '显示',
@@ -77,7 +75,6 @@
                 byType: '按类型',
                 features: '特性',
                 vision: '视觉',
-                pdfUpload: 'PDF 上传',
                 universal: '综合',
                 t2iOnly: '仅文生图',
                 i2iOnly: '仅图生图',
@@ -97,7 +94,6 @@
                 save: '保存',
                 confirm: '确认',
                 confirmTitle: '确认操作',
-                confirmMsg: '确定要执行此操作吗？',
                 scanResult: '扫描结果',
                 scannedCount: '本次扫描到',
                 modelsText: '个模型',
@@ -121,7 +117,6 @@
                 gistTokenPlaceholder: '输入 GitHub Personal Access Token',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '留空则自动创建',
-                syncNow: '立即同步',
                 exported: '已导出',
                 importSuccess: '导入成功',
                 importFailed: '导入失败',
@@ -197,7 +192,6 @@
                 visibleStatus: '可见状态',
                 visibleYes: '已启用',
                 visibleNo: '已隐藏',
-                rankInMode: '排序位置',
                 rankOf: '第 {0} 位 / 共 {1} 个',
                 iconEdit: '图标',
                 iconPlaceholder: '单个字符',
@@ -240,7 +234,6 @@
                 starredFirst: 'Starred First',
                 nameAZ: 'Name A-Z',
                 nameZA: 'Name Z-A',
-                latestAdded: 'Latest Added',
                 models: 'models',
                 multiSelect: 'Multi-Select',
                 show: 'Show',
@@ -261,7 +254,6 @@
                 byType: 'By Type',
                 features: 'Features',
                 vision: 'Vision',
-                pdfUpload: 'PDF Upload',
                 universal: 'Universal',
                 t2iOnly: 'Text-to-Image',
                 i2iOnly: 'Image-to-Image',
@@ -281,7 +273,6 @@
                 save: 'Save',
                 confirm: 'Confirm',
                 confirmTitle: 'Confirm',
-                confirmMsg: 'Are you sure?',
                 scanResult: 'Scan Result',
                 scannedCount: 'Scanned',
                 modelsText: 'models',
@@ -305,7 +296,6 @@
                 gistTokenPlaceholder: 'Enter GitHub Personal Access Token',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Leave empty to auto create',
-                syncNow: 'Sync Now',
                 exported: 'Exported',
                 importSuccess: 'Import successful',
                 importFailed: 'Import failed',
@@ -381,7 +371,6 @@
                 visibleStatus: 'Visibility',
                 visibleYes: 'Enabled',
                 visibleNo: 'Hidden',
-                rankInMode: 'Rank',
                 rankOf: '#{0} of {1}',
                 iconEdit: 'Icon',
                 iconPlaceholder: 'Single char',
@@ -424,7 +413,6 @@
                 starredFirst: '收藏優先',
                 nameAZ: '名稱 A-Z',
                 nameZA: '名稱 Z-A',
-                latestAdded: '最新添加',
                 models: '個模型',
                 multiSelect: '多選',
                 show: '顯示',
@@ -445,7 +433,6 @@
                 byType: '按類型',
                 features: '特性',
                 vision: '視覺',
-                pdfUpload: 'PDF 上傳',
                 universal: '綜合',
                 t2iOnly: '僅文生圖',
                 i2iOnly: '僅圖生圖',
@@ -465,7 +452,6 @@
                 save: '儲存',
                 confirm: '確認',
                 confirmTitle: '確認操作',
-                confirmMsg: '確定要執行此操作嗎？',
                 scanResult: '掃描結果',
                 scannedCount: '本次掃描到',
                 modelsText: '個模型',
@@ -489,7 +475,6 @@
                 gistTokenPlaceholder: '輸入 GitHub Personal Access Token',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '留空則自動創建',
-                syncNow: '立即同步',
                 exported: '已匯出',
                 importSuccess: '匯入成功',
                 importFailed: '匯入失敗',
@@ -565,7 +550,6 @@
                 visibleStatus: '可見狀態',
                 visibleYes: '已啟用',
                 visibleNo: '已隱藏',
-                rankInMode: '排序位置',
                 rankOf: '第 {0} 位 / 共 {1} 個',
                 iconEdit: '圖標',
                 iconPlaceholder: '單個字符',
@@ -608,7 +592,6 @@
                 starredFirst: 'お気に入り優先',
                 nameAZ: '名前 A-Z',
                 nameZA: '名前 Z-A',
-                latestAdded: '最新追加',
                 models: 'モデル',
                 multiSelect: '複数選択',
                 show: '表示',
@@ -629,7 +612,6 @@
                 byType: 'タイプ別',
                 features: '機能',
                 vision: 'ビジョン',
-                pdfUpload: 'PDFアップロード',
                 universal: '汎用',
                 t2iOnly: 'テキストから画像',
                 i2iOnly: '画像から画像',
@@ -649,7 +631,6 @@
                 save: '保存',
                 confirm: '確認',
                 confirmTitle: '確認',
-                confirmMsg: '実行しますか？',
                 scanResult: 'スキャン結果',
                 scannedCount: 'スキャン済み',
                 modelsText: 'モデル',
@@ -673,7 +654,6 @@
                 gistTokenPlaceholder: 'GitHub Personal Access Token を入力',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '空白で自動作成',
-                syncNow: '今すぐ同期',
                 exported: 'エクスポート完了',
                 importSuccess: 'インポート成功',
                 importFailed: 'インポート失敗',
@@ -749,7 +729,6 @@
                 visibleStatus: '表示状態',
                 visibleYes: '有効',
                 visibleNo: '非表示',
-                rankInMode: '順位',
                 rankOf: '{1}中{0}位',
                 iconEdit: 'アイコン',
                 iconPlaceholder: '1文字',
@@ -792,7 +771,6 @@
                 starredFirst: '즐겨찾기 우선',
                 nameAZ: '이름 A-Z',
                 nameZA: '이름 Z-A',
-                latestAdded: '최근 추가',
                 models: '모델',
                 multiSelect: '다중 선택',
                 show: '표시',
@@ -813,7 +791,6 @@
                 byType: '유형별',
                 features: '기능',
                 vision: '비전',
-                pdfUpload: 'PDF 업로드',
                 universal: '통합',
                 t2iOnly: '텍스트→이미지',
                 i2iOnly: '이미지→이미지',
@@ -833,7 +810,6 @@
                 save: '저장',
                 confirm: '확인',
                 confirmTitle: '확인',
-                confirmMsg: '실행하시겠습니까?',
                 scanResult: '스캔 결과',
                 scannedCount: '스캔됨',
                 modelsText: '모델',
@@ -857,7 +833,6 @@
                 gistTokenPlaceholder: 'GitHub Personal Access Token 입력',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: '비워두면 자동 생성',
-                syncNow: '지금 동기화',
                 exported: '내보내기 완료',
                 importSuccess: '가져오기 성공',
                 importFailed: '가져오기 실패',
@@ -933,7 +908,6 @@
                 visibleStatus: '표시 상태',
                 visibleYes: '활성화',
                 visibleNo: '숨김',
-                rankInMode: '순위',
                 rankOf: '{1}개 중 {0}위',
                 iconEdit: '아이콘',
                 iconPlaceholder: '한 글자',
@@ -976,7 +950,6 @@
                 starredFirst: 'Favoritos Primero',
                 nameAZ: 'Nombre A-Z',
                 nameZA: 'Nombre Z-A',
-                latestAdded: 'Recién Añadido',
                 models: 'modelos',
                 multiSelect: 'Selección Múltiple',
                 show: 'Mostrar',
@@ -997,7 +970,6 @@
                 byType: 'Por Tipo',
                 features: 'Características',
                 vision: 'Visión',
-                pdfUpload: 'Carga de PDF',
                 universal: 'Universal',
                 t2iOnly: 'Texto a Imagen',
                 i2iOnly: 'Imagen a Imagen',
@@ -1017,7 +989,6 @@
                 save: 'Guardar',
                 confirm: 'Confirmar',
                 confirmTitle: 'Confirmar',
-                confirmMsg: '¿Está seguro?',
                 scanResult: 'Resultado del Escaneo',
                 scannedCount: 'Escaneados',
                 modelsText: 'modelos',
@@ -1041,7 +1012,6 @@
                 gistTokenPlaceholder: 'Ingrese GitHub Personal Access Token',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Dejar vacío para crear automáticamente',
-                syncNow: 'Sincronizar Ahora',
                 exported: 'Exportado',
                 importSuccess: 'Importación exitosa',
                 importFailed: 'Importación fallida',
@@ -1117,7 +1087,6 @@
                 visibleStatus: 'Estado de Visibilidad',
                 visibleYes: 'Habilitado',
                 visibleNo: 'Oculto',
-                rankInMode: 'Posición',
                 rankOf: '#{0} de {1}',
                 iconEdit: 'Icono',
                 iconPlaceholder: 'Un carácter',
@@ -1160,7 +1129,6 @@
                 starredFirst: 'Favoris en Premier',
                 nameAZ: 'Nom A-Z',
                 nameZA: 'Nom Z-A',
-                latestAdded: 'Récemment Ajouté',
                 models: 'modèles',
                 multiSelect: 'Sélection Multiple',
                 show: 'Afficher',
@@ -1181,7 +1149,6 @@
                 byType: 'Par Type',
                 features: 'Fonctionnalités',
                 vision: 'Vision',
-                pdfUpload: 'Téléversement PDF',
                 universal: 'Universel',
                 t2iOnly: 'Texte vers Image',
                 i2iOnly: 'Image vers Image',
@@ -1201,7 +1168,6 @@
                 save: 'Enregistrer',
                 confirm: 'Confirmer',
                 confirmTitle: 'Confirmer',
-                confirmMsg: 'Êtes-vous sûr?',
                 scanResult: 'Résultat du Scan',
                 scannedCount: 'Scannés',
                 modelsText: 'modèles',
@@ -1225,7 +1191,6 @@
                 gistTokenPlaceholder: 'Entrez le GitHub Personal Access Token',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Laisser vide pour créer automatiquement',
-                syncNow: 'Synchroniser Maintenant',
                 exported: 'Exporté',
                 importSuccess: 'Importation réussie',
                 importFailed: 'Importation échouée',
@@ -1301,7 +1266,6 @@
                 visibleStatus: 'État de Visibilité',
                 visibleYes: 'Activé',
                 visibleNo: 'Masqué',
-                rankInMode: 'Position',
                 rankOf: '#{0} sur {1}',
                 iconEdit: 'Icône',
                 iconPlaceholder: 'Un caractère',
@@ -1344,7 +1308,6 @@
                 starredFirst: 'Favoriten Zuerst',
                 nameAZ: 'Name A-Z',
                 nameZA: 'Name Z-A',
-                latestAdded: 'Zuletzt Hinzugefügt',
                 models: 'Modelle',
                 multiSelect: 'Mehrfachauswahl',
                 show: 'Anzeigen',
@@ -1365,7 +1328,6 @@
                 byType: 'Nach Typ',
                 features: 'Funktionen',
                 vision: 'Vision',
-                pdfUpload: 'PDF-Upload',
                 universal: 'Universal',
                 t2iOnly: 'Text zu Bild',
                 i2iOnly: 'Bild zu Bild',
@@ -1385,7 +1347,6 @@
                 save: 'Speichern',
                 confirm: 'Bestätigen',
                 confirmTitle: 'Bestätigen',
-                confirmMsg: 'Sind Sie sicher?',
                 scanResult: 'Scan-Ergebnis',
                 scannedCount: 'Gescannt',
                 modelsText: 'Modelle',
@@ -1409,7 +1370,6 @@
                 gistTokenPlaceholder: 'GitHub Personal Access Token eingeben',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Leer lassen für automatische Erstellung',
-                syncNow: 'Jetzt Synchronisieren',
                 exported: 'Exportiert',
                 importSuccess: 'Import erfolgreich',
                 importFailed: 'Import fehlgeschlagen',
@@ -1485,7 +1445,6 @@
                 visibleStatus: 'Sichtbarkeitsstatus',
                 visibleYes: 'Aktiviert',
                 visibleNo: 'Versteckt',
-                rankInMode: 'Position',
                 rankOf: '#{0} von {1}',
                 iconEdit: 'Symbol',
                 iconPlaceholder: 'Ein Zeichen',
@@ -1528,7 +1487,6 @@
                 starredFirst: 'Избранное первым',
                 nameAZ: 'Имя А-Я',
                 nameZA: 'Имя Я-А',
-                latestAdded: 'Недавно добавленные',
                 models: 'моделей',
                 multiSelect: 'Множественный выбор',
                 show: 'Показать',
@@ -1549,7 +1507,6 @@
                 byType: 'По типу',
                 features: 'Функции',
                 vision: 'Зрение',
-                pdfUpload: 'Загрузка PDF',
                 universal: 'Универсальный',
                 t2iOnly: 'Текст в изображение',
                 i2iOnly: 'Изображение в изображение',
@@ -1569,7 +1526,6 @@
                 save: 'Сохранить',
                 confirm: 'Подтвердить',
                 confirmTitle: 'Подтверждение',
-                confirmMsg: 'Вы уверены?',
                 scanResult: 'Результат сканирования',
                 scannedCount: 'Отсканировано',
                 modelsText: 'моделей',
@@ -1593,7 +1549,6 @@
                 gistTokenPlaceholder: 'Введите GitHub Personal Access Token',
                 gistId: 'Gist ID',
                 gistIdPlaceholder: 'Оставьте пустым для автоматического создания',
-                syncNow: 'Синхронизировать сейчас',
                 exported: 'Экспортировано',
                 importSuccess: 'Импорт успешен',
                 importFailed: 'Импорт не удался',
@@ -1669,7 +1624,6 @@
                 visibleStatus: 'Статус видимости',
                 visibleYes: 'Включено',
                 visibleNo: 'Скрыто',
-                rankInMode: 'Позиция',
                 rankOf: '#{0} из {1}',
                 iconEdit: 'Иконка',
                 iconPlaceholder: 'Один символ',
@@ -1694,13 +1648,12 @@
 
     // ==================== 2. 选择器与配置 ====================
     const SELECTORS = {
+        dropdownGroup: '[cmdk-group-items]',
         modelOptionDropdown: '[cmdk-item][role="option"]',
-        dropdownList: '[cmdk-list]',
         drawerContainer: 'div.relative.px-4',
         modelOptionDrawer: 'button.w-full',
         modelName: 'span.truncate',
-        arenaButtons: '[data-arena-buttons="true"]',
-        chatContainer: 'div.flex.w-full.min-w-0.flex-row.items-center.justify-center.gap-2'
+        arenaButtons: '[data-arena-buttons="true"]'
     };
 
     let MODE_ORG_CONFIG = {
@@ -1810,28 +1763,62 @@
     ];
 
     const IMAGE_TYPE_ORDER = { universal: 0, t2i: 1, i2i: 2 };
-
-    const VIEW_MODES = {
-        grid: { icon: '⊞', label: 'grid' },
-        compact: { icon: '⊟', label: 'compact' },
-        list: { icon: '☰', label: 'list' }
+    // 把超长指纹字符串搅拌成短编号（碰撞概率可忽略）
+    const svgKey = (s) => {
+        let h = 0x811c9dc5;
+        for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619) >>> 0;
+        return h.toString(36) + '-' + s.length;
     };
+    // 把 SVG 内部所有 id 按出现顺序统一改名，并同步替换引用
+    // 目的：消除 React 每次挂载生成的随机 id，让同一图标在任何时候都得到同一个字符串
+    const normalizeSvgIds = (svg) => {
+        const ids = [];
+        const re = /\sid="([^"]+)"/g;
+        let m;
+        while ((m = re.exec(svg))) if (!ids.includes(m[1])) ids.push(m[1]);
+        let out = svg;
+        ids.forEach((id, i) => {
+            const n = 'am' + i;
+            out = out.split('"' + id + '"').join('"' + n + '"');
+            out = out.split('#' + id + ')').join('#' + n + ')');
+            out = out.split('#' + id + '"').join('#' + n + '"');
+        });
+        return out;
+    };
+
+    const NAME_COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 
     // ==================== 3. 模式检测器 ====================
     class ModeDetector {
         static detect() {
             const btnContainer = document.querySelector(SELECTORS.arenaButtons);
             if (btnContainer) {
-                const buttons = btnContainer.querySelectorAll('button');
-                for (const btn of buttons) {
-                    if (btn.classList.contains('bg-surface-primary')) {
-                        const text = (btn.textContent || '').trim().toLowerCase();
-                        if (text.includes('text')) return 'text';
-                        if (text.includes('code')) return 'code';
-                        if (text.includes('image')) return 'image';
-                        if (text.includes('search')) return 'search';
-                        if (text.includes('video')) return 'video';
+                const buttons = [...btnContainer.querySelectorAll('button')];
+                const labelOf = b => (b.getAttribute('aria-label') || b.getAttribute('title') || b.textContent || '').trim().toLowerCase();
+                const toMode = s => {
+                    if (s.includes('text')) return 'text';
+                    if (s.includes('code')) return 'code';
+                    if (s.includes('image')) return 'image';
+                    if (s.includes('search')) return 'search';
+                    if (s.includes('video')) return 'video';
+                    return null;
+                };
+                // 1. 优先按激活态判断（aria-pressed 是无障碍标准属性，比类名稳定）
+                for (const b of buttons) {
+                    if (b.getAttribute('aria-pressed') === 'true' || b.classList.contains('bg-surface-tertiary')) {
+                        const m = toMode(labelOf(b));
+                        if (m) return m;
                     }
+                }
+                // 2. 非 Auto 模式下只有一个按钮可用，用它兜底
+                const enabled = buttons.filter(b => !b.disabled && b.getAttribute('aria-disabled') !== 'true' && b.dataset.disabled !== 'true');
+                if (enabled.length === 1) {
+                    const m = toMode(labelOf(enabled[0]));
+                    if (m) return m;
+                }
+                if (!this._warned) {
+                    this._warned = true;
+                    console.warn('[Arena Manager] 模式识别失败，已回落 URL/默认值。Arena 可能改版了，请反馈。');
                 }
             }
             const url = new URL(window.location.href);
@@ -1863,6 +1850,7 @@
             if (!this.data.models) this.data.models = {};
             if (!this.data.orgOrder) this.data.orgOrder = {};
             if (!this.data.settings) this.data.settings = {};
+            if (!this.data.orgSvg) this.data.orgSvg = {};
             if (!this.data.iconOrgMap) this.data.iconOrgMap = JSON.parse(GM_getValue(ICON_ORG_MAP_KEY) || '{}');
             if (this.data.settings.showNewAlert === undefined) this.data.settings.showNewAlert = true;
             if (this.data.settings.defaultVisible === undefined) this.data.settings.defaultVisible = true;
@@ -1890,7 +1878,26 @@
             catch (e) { console.error('[LMM] Load failed:', e); return {}; }
         }
 
-        save() { GM_setValue(STORAGE_KEY, JSON.stringify(this.data)); }
+        save() {
+            if (this._locked || this._saveTimer) return;
+            this._saveTimer = setTimeout(() => { this._saveTimer = null; this.saveNow(); }, 200);
+        }
+        saveNow() {
+            if (this._locked) return;
+            this._cancelSave();
+            GM_setValue(STORAGE_KEY, JSON.stringify(this.data));
+            if (this.onChange) this.onChange();
+        }
+        // 只在确实有待写改动时补写，绝不无条件下盘
+        flush() {
+            if (this._locked || !this._saveTimer) return;
+            this._cancelSave();
+            GM_setValue(STORAGE_KEY, JSON.stringify(this.data));
+        }
+        _cancelSave() {
+            if (this._saveTimer) { clearTimeout(this._saveTimer); this._saveTimer = null; }
+        }
+
         getModel(name) { return this.data.models[name]; }
         setModel(name, data) { this.data.models[name] = { ...this.data.models[name], ...data }; this.save(); }
 
@@ -1942,6 +1949,32 @@
             this.data.orgOrder[mode] = order;
             this.save();
         }
+        // 统一排序规则：自定义顺序 → Image 类型 → 组织顺序 → 名称自然序
+        // 下拉框、面板「已启用」、模型详情位次三处共用，保证结果绝不分叉
+        comparator(mode) {
+            const customRank = new Map(this.getModelOrder(mode).map((n, i) => [n, i]));
+            const orgRank = new Map(this.getOrgOrder(mode).filter(o => o !== '---').map((o, i) => [o, i]));
+            const isImage = mode === 'image';
+            return (a, b) => {
+                if (customRank.size > 0) {
+                    const ai = customRank.has(a.name) ? customRank.get(a.name) : Infinity;
+                    const bi = customRank.has(b.name) ? customRank.get(b.name) : Infinity;
+                    if (ai !== bi) return ai < bi ? -1 : 1;
+                }
+                if (isImage) {
+                    const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
+                    const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
+                    if (ta !== tb) return ta - tb;
+                }
+                const oa = orgRank.has(a.company) ? orgRank.get(a.company) : 9999;
+                const ob = orgRank.has(b.company) ? orgRank.get(b.company) : 9999;
+                if (oa !== ob) return oa - ob;
+                const c = NAME_COLLATOR.compare(a.name, b.name);
+                if (c !== 0) return c;
+                // 绝对兜底：保证任意两个不同名字都能分出唯一胜负
+                return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+            };
+        }
         updateModel(name, updates) { if (!this.data.models[name]) return; Object.assign(this.data.models[name], updates); this.save(); }
 
         addModeToModel(name, mode) {
@@ -1992,7 +2025,12 @@
                         this.data.groups[imported.groupName] = Object.keys(imported.models || {});
                     }
                 } else {
+                    const keepGist = this.data.settings?.gistToken || '';
+                    const keepAdmin = this.data.settings?.adminToken || '';
                     this.data = imported;
+                    if (!this.data.settings) this.data.settings = {};
+                    if (!this.data.settings.gistToken) this.data.settings.gistToken = keepGist;
+                    if (!this.data.settings.adminToken) this.data.settings.adminToken = keepAdmin;
                 }
                 this.ensureDefaults();
                 this.save();
@@ -2014,8 +2052,11 @@
         }
 
         deleteAllData() {
+            this._locked = true;
+            this._cancelSave();
             GM_setValue(STORAGE_KEY, '{}');
             GM_setValue(LOGO_CACHE_KEY, '{}');
+            GM_setValue(ICON_ORG_MAP_KEY, '{}');
             location.reload();
         }
 
@@ -2100,8 +2141,7 @@
 
             return {
                 visible: this.data.settings.defaultVisible, company, icon, companyManual: false,
-                modes: [mode], starred: false, isNew: true, vision, note: '',
-                fileUpload: featureFlags.fileUpload || false
+                modes: [mode], starred: false, isNew: true, vision, note: ''
             };
         }
 
@@ -2116,9 +2156,27 @@
             fresh.modes = model.modes;
             fresh.vision = model.vision;
             fresh.note = model.note || '';
-            fresh.fileUpload = model.fileUpload || false;
             this.data.models[name] = fresh;
             this.save();
+        }
+
+        reidentifyAll() {
+            let changed = false;
+            Object.entries(this.data.models).forEach(([name, m]) => {
+                if (m.companyManual) return;
+                for (const rule of COMPANY_RULES) {
+                    if (rule.patterns.some(p => p.test(name))) {
+                        if (m.company !== rule.company || m.icon !== rule.icon) {
+                            m.company = rule.company;
+                            m.icon = rule.icon;
+                            changed = true;
+                        }
+                        return;
+                    }
+                }
+            });
+            if (changed) this.save();
+            return changed;
         }
 
         async loadRemoteConfig() {
@@ -2161,15 +2219,13 @@
         constructor(dm) {
             this.dm = dm;
             this.scanSession = { active: false, startedAt: null, scannedModels: new Set(), scannedModes: new Set() };
-            this.onMutation = null;
             this.observer = null;
             this.initHistoryHook();
         }
-
         initHistoryHook() {
             const originalPush = history.pushState;
             const originalReplace = history.replaceState;
-            const onUrlChange = () => { setTimeout(() => { this.scan(); this.applyFilters(); if (this.onMutation) this.onMutation(); }, 150); };
+            const onUrlChange = () => { setTimeout(() => { this.scan(); this.applyFilters(); }, 150); };
             history.pushState = function() { originalPush.apply(this, arguments); onUrlChange(); };
             history.replaceState = function() { originalReplace.apply(this, arguments); onUrlChange(); };
             window.addEventListener('popstate', onUrlChange);
@@ -2177,17 +2233,15 @@
 
         getAllContainers() {
             const result = [];
-            const dropdownContainers = document.querySelectorAll('[cmdk-group-items]');
-            dropdownContainers.forEach(container => {
-                const options = container.querySelectorAll('[cmdk-item][role="option"]');
+            document.querySelectorAll(SELECTORS.dropdownGroup).forEach(container => {
+                const options = container.querySelectorAll(SELECTORS.modelOptionDropdown);
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'dropdown' });
                 }
             });
             if (result.length > 0) return result;
-            const drawerContainers = document.querySelectorAll('div.relative.px-4');
-            drawerContainers.forEach(container => {
-                const options = container.querySelectorAll('button.w-full');
+            document.querySelectorAll(SELECTORS.drawerContainer).forEach(container => {
+                const options = container.querySelectorAll(SELECTORS.modelOptionDrawer);
                 if (options.length > 0) {
                     result.push({ container, options: [...options], mode: 'drawer' });
                 }
@@ -2195,133 +2249,123 @@
             return result;
         }
 
-        extractInfo(el, layoutMode = 'dropdown') {
+        extractInfo(el, layoutMode = 'dropdown', light = false) {
             const nameEl = el.querySelector(SELECTORS.modelName);
             const name = nameEl?.textContent?.trim();
             if (!name || name.length < 2) return null;
-
-            const svgPaths = el.querySelectorAll('svg path');
+            // Arena 路由模型（Max）由网站自己置顶，不纳入管理
+            if (name === 'Max' && /router/i.test(el.textContent || '')) return null;
+            if (light) return { name };
             let hasVision = false;
             let hasRIU = false;
-            let hasGeneration = false;
-            let hasFileUpload = false;
-
-            // 提取特性标签特征
-            svgPaths.forEach(path => {
+            el.querySelectorAll('svg path').forEach(path => {
                 const d = path.getAttribute('d') || '';
                 if (d.includes('M2 14C2 16.2')) hasVision = true;
                 if (d.includes('M13 21H3.6') || d.includes('19 19V16')) hasRIU = true;
-                if (d.includes('M21 3.6V20.4')) hasGeneration = true;
-                if (d.includes('M15 2H6')) hasFileUpload = true;
             });
-
-            // 精准提取第一个 SVG 作为组织 Logo 并生成指纹
             const firstSvg = el.querySelector('svg');
-            let svgFingerprint = '';
-            let svgHtml = '';
+            let svgHash = '';
+            let svg = '';
             if (firstSvg) {
-                svgHtml = firstSvg.outerHTML;
-                const logoPaths = firstSvg.querySelectorAll('path');
-                let ds = [];
-                logoPaths.forEach(p => {
-                    const d = p.getAttribute('d');
-                    if (d) ds.push(d);
-                });
-                if (ds.length > 0) {
-                    ds.sort();
-                    svgFingerprint = ds.join('|');
+                const raw = firstSvg.outerHTML;
+                this._svgCache = this._svgCache || new Map();
+                const hit = this._svgCache.get(raw);
+                if (hit) {
+                    svgHash = hit.svgHash;
+                    svg = hit.svg;
+                } else {
+                    svg = normalizeSvgIds(raw);
+                    const ds = [];
+                    firstSvg.querySelectorAll('path').forEach(p => {
+                        const d = p.getAttribute('d');
+                        if (d) ds.push(d);
+                    });
+                    if (ds.length > 0) {
+                        ds.sort();
+                        svgHash = svgKey(ds.join('|'));
+                    }
+                    if (this._svgCache.size > 400) this._svgCache.clear();
+                    this._svgCache.set(raw, { svgHash, svg });
                 }
             }
-
-            const featureFlags = {
-                vision: hasVision,
-                riu: hasRIU,
-                generation: hasGeneration,
-                fileUpload: hasFileUpload
-            };
-
-            return { name, featureFlags, svgFingerprint, svgHtml };
+            return { name, featureFlags: { vision: hasVision, riu: hasRIU }, svgHash, svg };
         }
 
         scan() {
             const containers = this.getAllContainers();
             if (containers.length === 0) return;
-
             const currentMode = ModeDetector.detect();
             const newModels = [];
-
+            let dirty = false;
             containers.forEach(({ options, mode: layoutMode }) => {
                 options.forEach(el => {
                     const info = this.extractInfo(el, layoutMode);
                     if (!info) return;
-
                     if (this.scanSession.active) {
                         this.scanSession.scannedModels.add(info.name);
                         this.scanSession.scannedModes.add(currentMode);
                     }
-
                     let model = this.dm.getModel(info.name);
                     if (!model) {
-                        const data = this.dm.analyze(info.name, currentMode, info.featureFlags, info.svgFingerprint);
-                        data.svgHtml = info.svgHtml;
+                        const data = this.dm.analyze(info.name, currentMode, info.featureFlags, info.svgHash);
                         this.dm.setModel(info.name, data);
-
-                        // 学习图标指纹
-                        if (data.company !== 'Other' && info.svgFingerprint) {
-                            this.dm.data.iconOrgMap[info.svgFingerprint] = data.company;
-                            GM_setValue(ICON_ORG_MAP_KEY, JSON.stringify(this.dm.data.iconOrgMap));
-                        }
+                        model = this.dm.getModel(info.name);
                         newModels.push(info.name);
                     } else {
                         this.dm.addModeToModel(info.name, currentMode);
-
-                        // 更新 svgHtml
-                        if (info.svgHtml && model.svgHtml !== info.svgHtml) {
-                            this.dm.updateModel(info.name, { svgHtml: info.svgHtml });
-                        }
-
-                        // 学习并修正组织
-                        if (info.svgFingerprint) {
-                            // 如果模型已有明确组织，学习其指纹
-                            if (model.company && model.company !== 'Other') {
-                                if (!this.dm.data.iconOrgMap[info.svgFingerprint] || this.dm.data.iconOrgMap[info.svgFingerprint] !== model.company) {
-                                    this.dm.data.iconOrgMap[info.svgFingerprint] = model.company;
-                                    GM_setValue(ICON_ORG_MAP_KEY, JSON.stringify(this.dm.data.iconOrgMap));
-                                }
+                    }
+                    // 图标：已识别组织存一份共享的；Other 仍按模型各存
+                    if (info.svg) {
+                        if (model.company && model.company !== 'Other') {
+                            if (this.dm.data.orgSvg[model.company] !== info.svg) {
+                                this.dm.data.orgSvg[model.company] = info.svg;
+                                dirty = true;
                             }
-                            // 若模型是 Other 但指纹库里已知组织，则修正
-                            else if (this.dm.data.iconOrgMap[info.svgFingerprint]) {
-                                const newCompany = this.dm.data.iconOrgMap[info.svgFingerprint];
-                                const rule = COMPANY_RULES.find(r => r.company === newCompany);
-                                const newIcon = rule ? rule.icon : '❔';
-                                this.dm.updateModel(info.name, { company: newCompany, icon: newIcon });
+                            if (model.svgHtml) { delete model.svgHtml; dirty = true; }
+                        } else if (model.svgHtml !== info.svg) {
+                            model.svgHtml = info.svg;
+                            dirty = true;
+                        }
+                    }
+                    // 指纹学习与组织修正
+                    if (info.svgHash) {
+                        if (model.company && model.company !== 'Other') {
+                            if (this.dm.data.iconOrgMap[info.svgHash] !== model.company) {
+                                this.dm.data.iconOrgMap[info.svgHash] = model.company;
+                                dirty = true;
+                            }
+                        } else if (this.dm.data.iconOrgMap[info.svgHash]) {
+                            const newCompany = this.dm.data.iconOrgMap[info.svgHash];
+                            const rule = COMPANY_RULES.find(r => r.company === newCompany);
+                            model.company = newCompany;
+                            model.icon = rule ? rule.icon : '❔';
+                            dirty = true;
+                            if (info.svg) {
+                                this.dm.data.orgSvg[newCompany] = info.svg;
+                                delete model.svgHtml;
                             }
                         }
-
-                        if (currentMode === 'image' && typeof model.vision === 'boolean') {
-                            const hasVision = info.featureFlags.vision;
-                            const hasRIU = info.featureFlags.riu;
-                            let vision = 't2i';
-                            if (hasVision && hasRIU) vision = 'i2i';
-                            else if (hasVision && !hasRIU) vision = 'universal';
-                            this.dm.updateModel(info.name, { vision });
-                        } else if (currentMode !== 'image' && info.featureFlags.vision && model.vision === false) {
-                            this.dm.updateModel(info.name, { vision: true });
-                        }
-                        if (info.featureFlags.fileUpload && !model.fileUpload) {
-                            this.dm.updateModel(info.name, { fileUpload: true });
-                        }
+                    }
+                    // 视觉特性
+                    if (currentMode === 'image' && typeof model.vision === 'boolean') {
+                        const v = info.featureFlags.vision, r = info.featureFlags.riu;
+                        model.vision = (v && r) ? 'i2i' : (v && !r) ? 'universal' : 't2i';
+                        dirty = true;
+                    } else if (currentMode !== 'image' && info.featureFlags.vision && model.vision === false) {
+                        model.vision = true;
+                        dirty = true;
                     }
                 });
             });
-
+            if (dirty) this.dm.save();
             if (newModels.length > 0 && this.dm.data.settings.showNewAlert) {
                 const t = this.getT();
                 const msg = newModels.length <= 3
                 ? `${t('newModelFound')}: ${newModels.slice(0, 3).join(', ')}`
-                    : t('newModelsFound').replace('{0}', newModels.length);
+                : t('newModelsFound').replace('{0}', newModels.length);
                 this.toast(msg);
             }
+            return dirty || newModels.length > 0;
         }
 
         getT() {
@@ -2349,73 +2393,50 @@
         applyFilters() {
             const containers = this.getAllContainers();
             if (containers.length === 0) return;
-
-            const currentMode = ModeDetector.detect();
-            const orgOrder = this.dm.getOrgOrder(currentMode);
-            const customOrder = this.dm.getModelOrder(currentMode);
-            const hasCustomOrder = customOrder && customOrder.length > 0;
-
-            containers.forEach(({ container, options, mode: layoutMode }) => {
+            const cmp = this.dm.comparator(ModeDetector.detect());
+            containers.forEach(({ options, mode: layoutMode }) => {
                 const parent = options[0]?.parentElement;
                 if (parent) {
                     parent.style.display = 'flex';
                     parent.style.flexDirection = 'column';
                 }
-
+                const items = [];
                 options.forEach(el => {
-                    const info = this.extractInfo(el, layoutMode);
-                    if (!info) return;
+                    const info = this.extractInfo(el, layoutMode, true);
+                    // 路由模型（Max）：放行并置顶，交给 Arena 自己管
+                    if (!info) { el.style.display = ''; el.style.order = -1; return; }
                     const model = this.dm.getModel(info.name);
-                    if (!model) return;
-
+                    if (!model) { el.style.display = ''; return; }
                     const visible = this.dm.isVisible(info.name);
                     el.style.display = visible ? '' : 'none';
-
-                    if (visible) {
-                        let order = 0;
-                        if (model.starred) {
-                            order = -99999 + (info.name.charCodeAt(0) || 0) * 0.001;
-                        } else if (hasCustomOrder) {
-                            const customIndex = customOrder.indexOf(info.name);
-                            if (customIndex !== -1) {
-                                order = customIndex;
-                            } else {
-                                order = 50000 + (info.name.charCodeAt(0) || 0) * 0.01;
-                            }
-                        } else {
-                            let baseOrder = 10000;
-                            if (currentMode === 'image' && typeof model.vision === 'string') {
-                                baseOrder += (IMAGE_TYPE_ORDER[model.vision] ?? 3) * 10000;
-                            }
-                            const orgIndex = orgOrder.indexOf(model.company);
-                            const orgScore = (orgIndex !== -1 ? orgIndex : 900) * 100;
-                            order = baseOrder + orgScore + (info.name.charCodeAt(0) || 0) * 0.01;
-                        }
-                        el.style.order = Math.floor(order);
-                    }
+                    if (visible) items.push({ el, m: { name: info.name, ...model } });
                 });
+                items.sort((a, b) => cmp(a.m, b.m));
+                items.forEach((it, i) => { it.el.style.order = i; });
             });
         }
-
 
         toast(msg, type = 'info') {
             document.querySelectorAll('.lmm-toast').forEach(t => t.remove());
             const t = document.createElement('div'); t.className = `lmm-toast lmm-toast-${type}`;
-            t.innerHTML = `<span>${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️'}</span><span>${msg}</span><button class="lmm-toast-x">×</button>`;
+            t.innerHTML = `<span>${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️'}</span><span class="lmm-toast-msg"></span><button class="lmm-toast-x">×</button>`;
+            t.querySelector('.lmm-toast-msg').textContent = msg;
             document.body.appendChild(t); t.querySelector('.lmm-toast-x').onclick = () => t.remove(); setTimeout(() => t.remove(), 4000);
         }
 
         startObserving() {
             let timer = null;
-            this.observer = new MutationObserver(() => {
-                if (this.onMutation) this.onMutation();
+            const ours = n => n && n.closest && n.closest('.lmm-panel, .lmm-modal, .lmm-modal-overlay, .lmm-overlay, .lmm-toast, .lmm-fab');
+            this.observer = new MutationObserver(records => {
+                // 我们自己重绘产生的变动一律忽略，否则会陷入「重绘→扫描→重绘」死循环
+                if (records.every(r => ours(r.target))) return;
                 const containers = this.getAllContainers();
                 if (containers.length > 0) {
                     clearTimeout(timer);
                     timer = setTimeout(() => {
-                        this.scan();
+                        const changed = this.scan();
                         this.applyFilters();
-                        if (this.onScanComplete) this.onScanComplete();
+                        if (changed && this.onScanComplete) this.onScanComplete();
                     }, 50);
                 }
             });
@@ -2443,7 +2464,7 @@
             this.currentMode = 'all';
             this.visibleSubMode = 'text';
             this.viewMode = 'grid';
-            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all', hasFileUpload: 'all' };
+            this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
             this.sort = { by: 'org', order: 'asc' };
             this.isMultiSelectMode = false;
             this.selectedModels = new Set();
@@ -2456,9 +2477,7 @@
             this.adminClickCount = 0;
             this.adminClickTimer = null;
             this.remoteDate = null;
-            this.pageHasChatUI = true;
         }
-
         t(key) {
             const lang = this.dm.getLanguage();
             return I18N[lang]?.ui?.[key] || I18N['zh-CN'].ui[key] || key;
@@ -2470,6 +2489,7 @@
             this.createPanel();
             this.createEditModal();
             this.createConfirmModal();
+            this.createInputModal();
             this.createScanResultModal();
             this.createGroupModal();
             this.createSettingsModal();
@@ -2575,8 +2595,9 @@
                 .lmm-sidebar-folder-content { display: none; padding-left: 8px; }
                 .lmm-sidebar-folder-content.open { display: block; }
 
-                .lmm-list { flex: 1; overflow-y: auto; padding: 10px; }
-                .lmm-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+                .lmm-list { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
+                .lmm-list-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; padding: 10px 10px 8px; flex-shrink: 0; }
+                .lmm-list-body { flex: 1; overflow-y: auto; min-height: 0; padding: 0 10px 10px; }
                 .lmm-count { color: var(--lmm-text2); font-size: 12px; }
                 .lmm-batch { display: flex; gap: 5px; flex-wrap: wrap; }
 
@@ -2682,7 +2703,6 @@
                 .lmm-detail-row:last-child { border-bottom: none; }
                 .lmm-detail-label { width: 80px; font-size: 11px; color: var(--lmm-text2); flex-shrink: 0; }
                 .lmm-detail-value { flex: 1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
-                .lmm-detail-value input { max-width: 60px; }
 
                 @media (max-width: 600px) {
                     .lmm-panel { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
@@ -2939,7 +2959,9 @@
                             <span class="lmm-count" id="lmm-count"></span>
                             <div class="lmm-batch" id="lmm-batch"></div>
                         </div>
-                        <div class="lmm-grid" id="lmm-grid"></div>
+                        <div class="lmm-list-body">
+                            <div class="lmm-grid" id="lmm-grid"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="lmm-footer">
@@ -2964,6 +2986,7 @@
             this.panel.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 el.placeholder = this.t(el.dataset.i18nPlaceholder);
             });
+            this.$$('.lmm-view-btn').forEach(btn => { btn.title = this.t(btn.dataset.view); });
             // 更新排序下拉框（使用正确图标）
             const sortSelect = this.$('#lmm-sort');
             if (sortSelect) {
@@ -3493,6 +3516,49 @@
             });
         }
 
+        createInputModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'lmm-modal-overlay';
+            document.body.appendChild(modalOverlay);
+            this.inputModalOverlay = modalOverlay;
+            const modal = document.createElement('div');
+            modal.className = 'lmm-modal';
+            modal.innerHTML = `
+            <div class="lmm-modal-title" id="lmm-input-title"></div>
+            <div class="lmm-modal-body"><input type="text" class="lmm-form-input" id="lmm-input-field"></div>
+            <div class="lmm-modal-footer">
+                <button class="lmm-btn" id="lmm-input-no"></button>
+                <button class="lmm-btn lmm-btn-primary" id="lmm-input-yes"></button>
+            </div>
+        `;
+            document.body.appendChild(modal);
+            this.inputModal = modal;
+        }
+
+        showInput(title, value, onConfirm) {
+            const field = this.inputModal.querySelector('#lmm-input-field');
+            this.inputModal.querySelector('#lmm-input-title').textContent = title;
+            this.inputModal.querySelector('#lmm-input-no').textContent = this.t('cancel');
+            this.inputModal.querySelector('#lmm-input-yes').textContent = this.t('save');
+            field.value = value || '';
+            const close = () => {
+                this.inputModalOverlay.classList.remove('open');
+                this.inputModal.classList.remove('open');
+            };
+            const submit = () => {
+                const v = field.value.trim();
+                close();
+                if (v) onConfirm(v);
+            };
+            this.inputModal.querySelector('#lmm-input-yes').onclick = submit;
+            this.inputModal.querySelector('#lmm-input-no').onclick = close;
+            this.inputModalOverlay.onclick = close;
+            field.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } };
+            this.inputModalOverlay.classList.add('open');
+            this.inputModal.classList.add('open');
+            setTimeout(() => { field.focus(); field.select(); }, 50);
+        }
+
         showConfirm(title, msg, onConfirm) {
             this.confirmModal.querySelector('#lmm-confirm-title').textContent = title;
             this.confirmModal.querySelector('#lmm-confirm-msg').textContent = msg;
@@ -3622,12 +3688,6 @@
                     this.refresh();
                 }, 150);
             };
-            searchInput.onkeydown = e => {
-                if (e.key === 'Enter') {
-                    const firstCard = this.$('.lmm-card');
-                    if (firstCard) firstCard.click();
-                }
-            };
 
             this.$('#lmm-org').onchange = e => { this.filter.org = e.target.value; this.refresh(); };
             this.$('#lmm-sort').onchange = e => {
@@ -3656,6 +3716,11 @@
 
             this.$('#lmm-model-sort-btn').onclick = () => {
                 this.isModelSortMode = !this.isModelSortMode;
+                if (this.isModelSortMode) {
+                    this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
+                    this.$('#lmm-search').value = '';
+                    this.$('#lmm-org').value = 'all';
+                }
                 this.updateSubbar();
                 this.refresh();
             };
@@ -3683,28 +3748,29 @@
             document.addEventListener('keydown', e => {
                 if (e.ctrlKey && e.shiftKey && (e.key === 'M' || e.key === 'm')) {
                     e.preventDefault();
-                    if (this.pageHasChatUI) this.toggle();
+                    this.toggle();
                 }
                 if (e.key === 'Escape') {
-                    if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
+                    const shut = (modal, overlay) => {
+                        overlay.classList.remove('open');
+                        modal.classList.remove('open');
+                    };
+                    if (this.inputModal.classList.contains('open')) shut(this.inputModal, this.inputModalOverlay);
+                    else if (this.confirmModal.classList.contains('open')) shut(this.confirmModal, this.confirmModalOverlay);
+                    else if (this.scanModal.classList.contains('open')) shut(this.scanModal, this.scanModalOverlay);
+                    else if (this.diffModal.classList.contains('open')) this.closeDiffModal();
                     else if (this.groupSelectModal.classList.contains('open')) this.closeGroupSelectModal();
                     else if (this.groupModal.classList.contains('open')) this.closeGroupModal();
                     else if (this.editModal.classList.contains('open')) this.closeEditModal();
-                    else if (this.confirmModal.classList.contains('open')) {
-                        this.confirmModalOverlay.classList.remove('open');
-                        this.confirmModal.classList.remove('open');
-                    }
-                    else if (this.scanModal.classList.contains('open')) {
-                        this.scanModalOverlay.classList.remove('open');
-                        this.scanModal.classList.remove('open');
-                    }
-                    else if (this.diffModal.classList.contains('open')) this.closeDiffModal();
+                    else if (this.settingsModal.classList.contains('open')) this.closeSettingsModal();
                     else if (this.isOpen) this.close();
                 }
-                if (e.key === '/' && this.isOpen && !e.ctrlKey && !e.metaKey) {
-                    const searchInput = this.$('#lmm-search');
-                    if (document.activeElement !== searchInput) {
+                if (e.key === '/' && this.isOpen && !this.isModelSortMode && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    const ae = document.activeElement;
+                    const typing = ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.tagName === 'SELECT' || ae.isContentEditable);
+                    if (!typing) {
                         e.preventDefault();
+                        const searchInput = this.$('#lmm-search');
                         searchInput.focus();
                         searchInput.select();
                     }
@@ -3721,6 +3787,7 @@
             this.overlay.classList.add('open');
             this.updateI18n();
             this.updateTopbar();
+            this.updateSubbar();
             this.refresh();
             this.updateSidebar();
         }
@@ -3734,6 +3801,7 @@
             this.isSortMode = false;
             this.isModelSortMode = false;
             this.updateGridView();
+            this.updateFilterLock();
             this.panel.classList.remove('open');
             this.overlay.classList.remove('open');
             this.scanner.applyFilters();
@@ -3781,11 +3849,12 @@
             topbar.querySelectorAll('.lmm-topbar-item').forEach(item => {
                 item.onclick = () => {
                     this.currentMode = item.dataset.mode;
-                    this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all', hasFileUpload: 'all' };
+                    this.filter = { search: '', org: 'all', imageType: 'all', hasVision: 'all' };
                     this.$('#lmm-search').value = '';
                     this.$('#lmm-org').value = 'all';
                     this.isTier2Expanded = false;
                     this.isModelSortMode = false;
+                    this.isSortMode = false;
                     this.updateGridView();
                     this.updateTopbar();
                     this.updateSidebar();
@@ -3802,6 +3871,7 @@
             if (this.currentMode === 'visible') {
                 subbar.style.display = 'flex';
                 content.classList.add('visible-mode');
+                this.$('#lmm-sort').style.display = 'none';
                 subbar.querySelectorAll('.lmm-subbar-item').forEach(el => {
                     el.classList.toggle('active', el.dataset.mode === this.visibleSubMode);
                 });
@@ -3821,6 +3891,7 @@
             } else {
                 subbar.style.display = 'none';
                 content.classList.remove('visible-mode');
+                this.$('#lmm-sort').style.display = '';
             }
         }
 
@@ -3858,10 +3929,6 @@
         }
 
         updateSidebar() {
-            if (this.currentMode === 'visible') {
-                this.$('#lmm-content').classList.remove('visible-mode');
-            }
-
             const modeModels = this.getModelsInCurrentMode();
             const sidebarMode = this.getSidebarMode();
             const orgOrder = this.dm.getOrgOrder(sidebarMode);
@@ -3869,12 +3936,13 @@
             const showImageTypes = sidebarMode === 'image';
 
             const visionCount = modeModels.filter(m => m.vision === true).length;
-            const showVisionFilter = visionCount > 0 && sidebarMode !== 'image';
-            const fileUploadCount = modeModels.filter(m => m.fileUpload === true).length;
-            const showFileUploadFilter = fileUploadCount > 0 && ['text', 'code', 'search'].includes(sidebarMode);
-            const showFeaturesSection = showVisionFilter || showFileUploadFilter;
+            const showFeaturesSection = visionCount > 0 && sidebarMode !== 'image';
 
-            let html = `<div class="lmm-sidebar-header"><span class="lmm-sidebar-title">${this.t('byOrg')}</span><button class="lmm-sidebar-btn ${this.isSortMode ? 'active' : ''}" id="lmm-sort-btn">${this.isSortMode ? this.t('done') : this.t('sort')}</button>${this.isSortMode ? `<button class="lmm-sidebar-btn reset" id="lmm-sort-reset">${this.t('reset')}</button>` : ''}</div><div id="lmm-org-list"></div>`;
+            const canSortOrgs = this.currentMode === 'visible' || ['text', 'search', 'image', 'code', 'video'].includes(this.currentMode);
+            const sortBtns = canSortOrgs
+            ? `<button class="lmm-sidebar-btn ${this.isSortMode ? 'active' : ''}" id="lmm-sort-btn">${this.isSortMode ? this.t('done') : this.t('sort')}</button>${this.isSortMode ? `<button class="lmm-sidebar-btn reset" id="lmm-sort-reset">${this.t('reset')}</button>` : ''}`
+            : '';
+            let html = `<div class="lmm-sidebar-header"><span class="lmm-sidebar-title">${this.t('byOrg')}</span>${sortBtns}</div><div id="lmm-org-list"></div>`;
 
             if (showImageTypes) {
                 html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('byType')}</span></div><div id="lmm-image-type-list"></div>`;
@@ -3889,9 +3957,8 @@
             const orgs = {};
             modeModels.forEach(m => {
                 const c = m.company || 'Other';
-                if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔', svgHtml: m.svgHtml || '' };
+                if (!orgs[c]) orgs[c] = { cnt: 0, icon: m.icon || '❔' };
                 orgs[c].cnt++;
-                if (!orgs[c].svgHtml && m.svgHtml) orgs[c].svgHtml = m.svgHtml;
             });
 
             const allOrgItems = [];
@@ -3948,7 +4015,7 @@
 
             const tier2Total = tier2.reduce((sum, c) => sum + c.cnt, 0);
             const hasOther = orgs.Other;
-            this.renderOrgList(tier1, tier2, tier2Total, hasOther, []);
+            this.renderOrgList(tier1, tier2, tier2Total, hasOther);
 
             if (showImageTypes) {
                 const imageTypes = { universal: 0, t2i: 0, i2i: 0 };
@@ -3986,24 +4053,15 @@
             if (showFeaturesSection) {
                 const featuresList = this.$('#lmm-features-list');
                 if (featuresList) {
-                    let featHtml = '';
-                    if (showVisionFilter) {
-                        featHtml += `<div class="lmm-sidebar-item ${this.filter.hasVision === 'yes' ? 'active' : ''}" data-feature="vision"><span class="icon">👓</span> <span>${this.t('vision')}</span> <span class="cnt">${visionCount}</span></div>`;
-                    }
-                    if (showFileUploadFilter) {
-                        featHtml += `<div class="lmm-sidebar-item ${this.filter.hasFileUpload === 'yes' ? 'active' : ''}" data-feature="fileUpload"><span class="icon">📄</span> <span>${this.t('pdfUpload')}</span> <span class="cnt">${fileUploadCount}</span></div>`;
-                    }
-                    featuresList.innerHTML = featHtml;
+                    featuresList.innerHTML = `<div class="lmm-sidebar-item ${this.filter.hasVision === 'yes' ? 'active' : ''}" data-feature="vision"><span class="icon">👓</span> <span>${this.t('vision')}</span> <span class="cnt">${visionCount}</span></div>`;
                     featuresList.querySelectorAll('.lmm-sidebar-item').forEach(item => {
                         item.onclick = () => {
-                            const feature = item.dataset.feature;
-                            const filterKey = feature === 'vision' ? 'hasVision' : 'hasFileUpload';
                             if (item.classList.contains('active')) {
                                 item.classList.remove('active');
-                                this.filter[filterKey] = 'all';
+                                this.filter.hasVision = 'all';
                             } else {
                                 item.classList.add('active');
-                                this.filter[filterKey] = 'yes';
+                                this.filter.hasVision = 'yes';
                             }
                             this.collapseTier2();
                             this.refresh();
@@ -4012,7 +4070,8 @@
                 }
             }
 
-            this.$('#lmm-sort-btn').onclick = () => this.toggleSortMode();
+            const orgSortBtn = this.$('#lmm-sort-btn');
+            if (orgSortBtn) orgSortBtn.onclick = () => this.toggleSortMode();
             if (this.isSortMode) {
                 this.$('#lmm-sort-reset').onclick = () => {
                     const sm = this.getSidebarMode();
@@ -4029,7 +4088,7 @@
             }
         }
 
-        renderOrgList(tier1, tier2, tier2Total, hasOther, other) {
+        renderOrgList(tier1, tier2, tier2Total, hasOther) {
             const list = this.$('#lmm-org-list');
             const sidebarMode = this.getSidebarMode();
             const config = MODE_ORG_CONFIG[sidebarMode] || MODE_ORG_CONFIG.text;
@@ -4057,7 +4116,6 @@
                 if (tier2.length > 0) {
                     html += `<div class="lmm-sidebar-folder" id="lmm-tier2-folder"><span class="icon">${this.isTier2Expanded ? '📂' : '📁'}</span><span>${this.t('moreOrgs')}</span><span class="cnt">${tier2Total}</span></div><div class="lmm-sidebar-folder-content ${this.isTier2Expanded ? 'open' : ''}" id="lmm-tier2-content">${tier2.map(c => renderItem(c, true)).join('')}</div>`;
                 }
-                other.forEach(c => {html += renderItem(c, false)});
                 if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
             }
             list.innerHTML = html;
@@ -4139,17 +4197,6 @@
                         this.dm.setOrgOrder(sidebarMode, order);
                     }
                 }
-            } else {
-                const list = this.$('#lmm-org-list');
-                const newOrder = [];
-                for (const child of list.children) {
-                    if (child.id === 'lmm-tier-separator') {
-                        newOrder.push('---');
-                    } else if (child.dataset && child.dataset.org) {
-                        newOrder.push(child.dataset.org);
-                    }
-                }
-                this.dm.setOrgOrder(sidebarMode, newOrder);
             }
             this.updateSidebar();
         }
@@ -4209,7 +4256,6 @@
                         const names = Array.from(grid.children).map(el => el.dataset.name).filter(Boolean);
                         this.dm.setModelOrder(this.visibleSubMode, names);
                         this.scanner.applyFilters();
-                        this.triggerSyncOnChange();
                     }
                 }
             };
@@ -4262,43 +4308,12 @@
             if (this.filter.org !== 'all') models = models.filter(m => m.company === this.filter.org);
             if (this.filter.imageType !== 'all') models = models.filter(m => m.vision === this.filter.imageType);
             if (this.filter.hasVision === 'yes') models = models.filter(m => m.vision === true);
-            if (this.filter.hasFileUpload === 'yes') models = models.filter(m => m.fileUpload === true);
 
             const sidebarMode = this.getSidebarMode();
             const orgOrder = this.dm.getOrgOrder(sidebarMode);
 
             if (this.currentMode === 'visible') {
-                const customOrder = this.dm.getModelOrder(this.visibleSubMode);
-                if (customOrder.length > 0) {
-                    models.sort((a, b) => {
-                        let ai = customOrder.indexOf(a.name);
-                        let bi = customOrder.indexOf(b.name);
-                        if (ai === -1) ai = 9999;
-                        if (bi === -1) bi = 9999;
-                        if (ai !== bi) return ai - bi;
-                        if (sidebarMode === 'image') {
-                            const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                            const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                            if (ta !== tb) return ta - tb;
-                        }
-                        const cai = orgOrder.indexOf(a.company);
-                        const cbi = orgOrder.indexOf(b.company);
-                        return (cai === -1 ? 999 : cai) - (cbi === -1 ? 999 : cbi);
-                    });
-                    return models;
-                }
-                models.sort((a, b) => {
-                    if (sidebarMode === 'image') {
-                        const ta = IMAGE_TYPE_ORDER[a.vision] ?? 3;
-                        const tb = IMAGE_TYPE_ORDER[b.vision] ?? 3;
-                        if (ta !== tb) return ta - tb;
-                    }
-                    const ai = orgOrder.indexOf(a.company);
-                    const bi = orgOrder.indexOf(b.company);
-                    const c = (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-                    return c !== 0 ? c : a.name.localeCompare(b.name);
-                });
-                return models;
+                return models.sort(this.dm.comparator(this.visibleSubMode));
             }
 
             models.sort((a, b) => {
@@ -4345,15 +4360,22 @@
         }
 
         revertMultiSelectChanges() {
+            let changed = false;
             this.multiSelectBackup.forEach((visible, name) => {
-                if (this.dm.getModel(name)) {
-                    this.dm.setVisibility(name, visible);
+                const m = this.dm.getModel(name);
+                if (m && (m.visible !== false) !== visible) {
+                    m.visible = visible;
+                    changed = true;
                 }
             });
             if (this.multiSelectGroupBackup) {
-                this.dm.data.groups = JSON.parse(JSON.stringify(this.multiSelectGroupBackup));
-                this.dm.save();
+                const backup = JSON.stringify(this.multiSelectGroupBackup);
+                if (JSON.stringify(this.dm.data.groups) !== backup) {
+                    this.dm.data.groups = JSON.parse(backup);
+                    changed = true;
+                }
             }
+            if (changed) this.dm.save();
             this.scanner.applyFilters();
         }
 
@@ -4363,7 +4385,6 @@
             });
             this.refresh();
             this.scanner.applyFilters();
-            this.triggerSyncOnChange();
         }
 
         multiSelectHide() {
@@ -4372,7 +4393,6 @@
             });
             this.refresh();
             this.scanner.applyFilters();
-            this.triggerSyncOnChange();
         }
 
         multiSelectAddToGroup() {
@@ -4404,7 +4424,6 @@
                     this.scanner.toast(this.t('addedToGroup'), 'success');
                     this.updateTopbar();
                     this.refresh();
-                    this.triggerSyncOnChange();
                 };
             });
 
@@ -4423,9 +4442,18 @@
             GM_setValue(LOGO_CACHE_KEY, JSON.stringify(this.logoCache));
         }
 
+        uniqueSvgIds(svg) {
+            if (svg.indexOf('id=') === -1) return svg;
+            this.svgUid = (this.svgUid || 0) + 1;
+            const p = 'am' + this.svgUid + '-';
+            return svg.replace(/id="([^"]+)"/g, (m, id) => `id="${p}${id}"`)
+                .replace(/url\(#([^)]+)\)/g, (m, id) => `url(#${p}${id})`);
+        }
+
         getOrgLogoHtml(company, fallbackIcon = '❔', svgHtml = '') {
-            if (svgHtml) {
-                return `<span class="lmm-dynamic-svg">${svgHtml}</span>`;
+            const svg = (this.dm.data.orgSvg || {})[company] || svgHtml;
+            if (svg) {
+                return `<span class="lmm-dynamic-svg">${this.uniqueSvgIds(svg)}</span>`;
             }
             const rule = COMPANY_RULES.find(r => r.company === company);
             if (rule) {
@@ -4500,14 +4528,6 @@
                 this.updateSidebar();
                 this.refresh();
             }
-        }
-
-        checkPageContext() {
-            const hasChatUI = !!document.querySelector(SELECTORS.chatContainer);
-            if (hasChatUI === this.pageHasChatUI) return;
-            this.pageHasChatUI = hasChatUI;
-            if (this.fab) this.fab.style.display = hasChatUI ? '' : 'none';
-            if (!hasChatUI && this.isOpen) this.close();
         }
 
         createDiffModal() {
@@ -4653,7 +4673,7 @@
             }
 
             const trunc = (arr, max = 5) => {
-                const s = arr.slice(0, max).join(', ');
+                const s = arr.slice(0, max).map(n => this.esc(n)).join(', ');
                 return arr.length > max ? `${s} +${arr.length - max}` : s;
             };
             const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
@@ -4690,8 +4710,8 @@
 
             if (groupCount > 0) {
                 html += `<div class="lmm-diff-section"><label class="lmm-diff-category"><input type="checkbox" checked data-diff="groups"> ${this.t('groupChanges')}</label><div class="lmm-diff-details">`;
-                if (diff.groups.added.length) html += `<div>${this.t('newGroups')}: ${diff.groups.added.join(', ')}</div>`;
-                if (diff.groups.modified.length) html += `<div>${this.t('modifiedGroups')}: ${diff.groups.modified.join(', ')}</div>`;
+                if (diff.groups.added.length) html += `<div>${this.t('newGroups')}: ${diff.groups.added.map(n => this.esc(n)).join(', ')}</div>`;
+                if (diff.groups.modified.length) html += `<div>${this.t('modifiedGroups')}: ${diff.groups.modified.map(n => this.esc(n)).join(', ')}</div>`;
                 html += '</div></div>';
             }
 
@@ -4876,7 +4896,7 @@
             this.scanner.toast(this.t('removedFromGroup'), 'success');
             this.updateTopbar();
             this.refresh();
-            this.triggerSyncOnChange();
+
         }
 
         renderBatchButtons() {
@@ -4918,8 +4938,8 @@
         }
 
         esc(s) {
-            if (!s) return '';
-            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+            if (s === null || s === undefined || s === '') return '';
+            return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
         }
 
         getModeIcons(modes) {
@@ -4930,12 +4950,22 @@
             return sorted.length > 0 ? sorted.map(m => icons[m]) : ['❓'];
         }
 
+        updateFilterLock() {
+            const lock = this.isModelSortMode;
+            const search = this.$('#lmm-search');
+            const org = this.$('#lmm-org');
+            search.disabled = lock;
+            org.disabled = lock;
+            search.style.opacity = lock ? '0.5' : '';
+            org.style.opacity = lock ? '0.5' : '';
+        }
+
         refresh() {
             const grid = this.$('#lmm-grid');
             const models = this.getFiltered();
             const sidebarMode = this.getSidebarMode();
-
             this.updateGridView();
+            this.updateFilterLock();
             this.renderBatchButtons();
 
             if (models.length === 0) {
@@ -4956,7 +4986,6 @@
                     const imgTypeTag = (sidebarMode === 'image' && typeof m.vision === 'string' && imgTypeLabels[m.vision])
                     ? `<span class="lmm-tag imgtype">${imgTypeLabels[m.vision].icon}</span>` : '';
                     const visionTag = m.vision === true ? `<span class="lmm-tag vision">👓</span>` : '';
-                    const fileUploadTag = m.fileUpload ? `<span class="lmm-tag vision">📄</span>` : '';
                     const modelGroups = this.dm.getModelGroups(m.name);
                     const groupTags = modelGroups.slice(0, 2).map(() => `<span class="lmm-tag group">📁</span>`).join('');
 
@@ -4987,7 +5016,6 @@
                                     ${this.getModeIcons(modes).map(icon => `<span class="lmm-tag mode">${icon}</span>`).join('')}
                                     ${imgTypeTag}
                                     ${visionTag}
-                                    ${fileUploadTag}
                                     ${groupTags}
                                     ${m.isNew ? `<span class="lmm-tag new">${this.t('newFound')}</span>` : ''}
                                 </div>
@@ -5025,7 +5053,6 @@
                             this.refresh();
                             this.updateStats();
                             this.updateFabBadge();
-                            this.triggerSyncOnChange();
                         };
                         card.ondblclick = () => this.openEditModal(name);
 
@@ -5036,7 +5063,6 @@
                                 this.dm.toggleStar(name);
                                 this.refresh();
                                 this.updateTopbar();
-                                this.triggerSyncOnChange();
                             };
                         }
 
@@ -5064,35 +5090,6 @@
             this.$('#lmm-t').textContent = modeModels.length;
         }
 
-        // 计算模型在当前模式下的排序位置
-        getModelRank(name) {
-            if (this.currentMode !== 'visible') return null;
-            const models = this.getModelsInCurrentMode().filter(m => m.visible !== false);
-            const customOrder = this.dm.getModelOrder(this.visibleSubMode);
-
-            if (customOrder.length > 0) {
-                const sorted = [...models].sort((a, b) => {
-                    let ai = customOrder.indexOf(a.name);
-                    let bi = customOrder.indexOf(b.name);
-                    if (ai === -1) ai = 9999;
-                    if (bi === -1) bi = 9999;
-                    return ai - bi;
-                });
-                const idx = sorted.findIndex(m => m.name === name);
-                return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-            }
-
-            const sidebarMode = this.getSidebarMode();
-            const orgOrder = this.dm.getOrgOrder(sidebarMode);
-            const sorted = [...models].sort((a, b) => {
-                const ai = orgOrder.indexOf(a.company);
-                const bi = orgOrder.indexOf(b.company);
-                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-            });
-            const idx = sorted.findIndex(m => m.name === name);
-            return idx !== -1 ? { rank: idx + 1, total: sorted.length } : null;
-        }
-
         openEditModal(name) {
             const m = this.dm.getModel(name);
             if (!m) return;
@@ -5108,30 +5105,11 @@
             // 计算排序位置
             let rankInfo = '';
             if (isVisible) {
+                const all = this.dm.getAllModels();
                 modes.forEach(mode => {
-                    const visibleModels = this.dm.getAllModels().filter(
-                        md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode)
-                    );
-                    const customOrder = this.dm.getModelOrder(mode);
-                    const orgOrder = this.dm.getOrgOrder(mode);
-
-                    let sorted;
-                    if (customOrder.length > 0) {
-                        sorted = [...visibleModels].sort((a, b) => {
-                            let ai = customOrder.indexOf(a.name);
-                            let bi = customOrder.indexOf(b.name);
-                            if (ai === -1) ai = 9999;
-                            if (bi === -1) bi = 9999;
-                            return ai - bi;
-                        });
-                    } else {
-                        sorted = [...visibleModels].sort((a, b) => {
-                            const ai = orgOrder.indexOf(a.company);
-                            const bi = orgOrder.indexOf(b.company);
-                            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi) || a.name.localeCompare(b.name);
-                        });
-                    }
-
+                    const sorted = all
+                    .filter(md => md.visible !== false && Array.isArray(md.modes) && md.modes.includes(mode))
+                    .sort(this.dm.comparator(mode));
                     const idx = sorted.findIndex(md => md.name === name);
                     if (idx !== -1) {
                         const modeIcons = { text: '📝', search: '🔍', image: '🎨', code: '💻', video: '🎬' };
@@ -5194,10 +5172,6 @@
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('vision')}</span>
                     <span class="lmm-detail-value">${visionDisplay}</span>
-                </div>
-                <div class="lmm-detail-row">
-                    <span class="lmm-detail-label">${this.t('pdfUpload')}</span>
-                    <span class="lmm-detail-value">${m.fileUpload ? this.t('on') : this.t('off')}</span>
                 </div>
                 <div class="lmm-detail-row">
                     <span class="lmm-detail-label">${this.t('belongGroups')}</span>
@@ -5298,7 +5272,6 @@
             this.updateSidebar();
             this.updateTopbar();
             this.scanner.toast(this.t('saved'), 'success');
-            this.triggerSyncOnChange();
         }
 
         resetEdit() {
@@ -5309,7 +5282,6 @@
             this.updateSidebar();
             this.updateTopbar();
             this.scanner.toast(this.t('restored'), 'success');
-            this.triggerSyncOnChange();
         }
 
         openGroupModal() {
@@ -5339,7 +5311,6 @@
                 this.renderGroupList();
                 this.updateTopbar();
                 this.scanner.toast(this.t('groupCreated'), 'success');
-                this.triggerSyncOnChange();
             } else {
                 this.scanner.toast(this.t('groupExists'), 'warning');
             }
@@ -5381,26 +5352,24 @@
                 };
 
                 item.querySelector('.lmm-rename-btn').onclick = () => {
-                    const newName = prompt(this.t('inputNewName'), name);
-                    if (newName && newName.trim() && newName !== name) {
-                        if (this.dm.renameGroup(name, newName.trim())) {
+                    this.showInput(this.t('inputNewName'), name, newName => {
+                        if (newName === name) return;
+                        if (this.dm.renameGroup(name, newName)) {
                             this.renderGroupList();
                             this.updateTopbar();
                             this.scanner.toast(this.t('renamed'), 'success');
-                            this.triggerSyncOnChange();
                         } else {
                             this.scanner.toast(this.t('nameExists'), 'warning');
                         }
-                    }
+                    });
                 };
                 item.querySelector('.lmm-delete-btn').onclick = () => {
-                    if (confirm(this.t('confirmDelete').replace('{0}', name))) {
+                    this.showConfirm(this.t('confirmTitle'), this.t('confirmDelete').replace('{0}', name), () => {
                         this.dm.deleteGroup(name);
                         this.renderGroupList();
                         this.updateTopbar();
                         this.scanner.toast(this.t('deleted'), 'success');
-                        this.triggerSyncOnChange();
-                    }
+                    });
                 };
             });
         }
@@ -5452,8 +5421,9 @@
         const dm = new DataManager();
         const scanner = new Scanner(dm);
         const ui = new UI(dm, scanner);
+        dm.onChange = () => ui.triggerSyncOnChange();
+        window.addEventListener('pagehide', () => dm.flush());
         ui.init();
-        scanner.onMutation = () => ui.checkPageContext();
         scanner.onScanComplete = () => {
             if (ui.isOpen) {
                 ui.updateSidebar();
@@ -5461,11 +5431,10 @@
             }
         };
         scanner.startObserving();
-        ui.checkPageContext();
-        setTimeout(() => { scanner.scan(); ui.checkPageContext(); }, 2000);
-
+        setTimeout(() => scanner.scan(), 2000);
         // 异步加载远程配置并刷新
         dm.loadRemoteConfig().then(() => {
+            dm.reidentifyAll();
             scanner.scan();
             if (ui.isOpen) {
                 ui.updateSidebar();
