@@ -2,7 +2,7 @@
 // @name         Arena Manager
 // @namespace    http://tampermonkey.net/
 // @icon         https://arena.ai/favicon.ico
-// @version      5.3.0
+// @version      5.3.1
 // @description  智能管理 Arena 模型显示
 // @author       Jim Achievo
 // @match        *://arena.ai/*
@@ -22,7 +22,7 @@
     'use strict';
 
     const STORAGE_KEY = 'arena_manager_v5';
-    const VERSION = '5.3.0';
+    const VERSION = '5.3.1';
     const REPO_OWNER = 'JimAchievo';
     const REPO_NAME = 'Arena-Manager';
     const RECOMMENDED_FILE = 'recommended-config.json';
@@ -1659,7 +1659,7 @@
     let MODE_ORG_CONFIG = {
         text: {
             tier1: ['Anthropic', 'Meta', 'Google', 'OpenAI', 'Alibaba', 'SpaceXAI', 'Z.ai', 'Baidu', 'Xiaomi', 'Moonshot', 'DeepSeek', 'Bytedance', 'MiniMax', 'Meituan', 'Amazon', 'Mistral', 'Nvidia', 'Tencent'],
-            tier2: ['StepFun', 'Arcee AI', 'Cohere', 'Inception AI', 'Ant Group', 'Ai2', 'IBM', 'Microsoft AI', 'Prime Intellect', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
+            tier2: ['Thinking Machines', 'StepFun', 'Arcee AI', 'Cohere', 'Inception AI', 'Ant Group', 'Ai2', 'IBM', 'Microsoft AI', 'Prime Intellect', '01 AI', 'NexusFlow', 'AI21 Labs', 'Reka AI', 'HuggingFace', 'Databricks', 'InternLM', 'OpenChat', 'Snowflake', 'NousResearch', 'UC Berkeley', 'Upstage AI', 'Cognitive Computations', 'MosaicML', 'TII', 'UW', 'Together AI', 'Stanford', 'RWKV', 'OpenAssistant', 'Stability AI'],
             useFolder: true
         },
         search: {
@@ -1753,6 +1753,7 @@
         { patterns: [/^step/i], company: 'StepFun', icon: '👣' },
         { patterns: [/^Together AI/i], company: 'stripedhyena', icon: '' },
         { patterns: [/^hunyuan/i], company: 'Tencent', icon: '🐧' },
+        { patterns: [/^inkling/i], company: 'Thinking Machines', icon: '🌫' },
         { patterns: [/^falcon/i], company: 'TII', icon: '' },
         { patterns: [/^starling/i], company: 'UC Berkeley', icon: '' },
         { patterns: [/^solar/i], company: 'Upstage AI', icon: '' },
@@ -3536,6 +3537,8 @@
         }
 
         showInput(title, value, onConfirm) {
+            this.inputModalOverlay.style.zIndex = '100003';
+            this.inputModal.style.zIndex = '100004';
             const field = this.inputModal.querySelector('#lmm-input-field');
             this.inputModal.querySelector('#lmm-input-title').textContent = title;
             this.inputModal.querySelector('#lmm-input-no').textContent = this.t('cancel');
@@ -3560,6 +3563,8 @@
         }
 
         showConfirm(title, msg, onConfirm) {
+            this.confirmModalOverlay.style.zIndex = '100003';
+            this.confirmModal.style.zIndex = '100004';
             this.confirmModal.querySelector('#lmm-confirm-title').textContent = title;
             this.confirmModal.querySelector('#lmm-confirm-msg').textContent = msg;
             this.confirmModal.querySelector('#lmm-confirm-no').textContent = this.t('cancel');
@@ -3608,9 +3613,7 @@
                 if (toDelete.length > 0) {
                     this.dm.deleteModels(toDelete);
                     this.scanner.toast(`${this.t('deleted')} ${toDelete.length}`, 'success');
-                    this.refresh();
-                    this.updateSidebar();
-                    this.updateTopbar();
+                    this.refreshAll();
                 }
                 closeScan();
             };
@@ -3656,9 +3659,7 @@
                     const reader = new FileReader();
                     reader.onload = ev => {
                         if (this.dm.import(ev.target.result)) {
-                            this.refresh();
-                            this.updateSidebar();
-                            this.updateTopbar();
+                            this.refreshAll();
                             this.scanner.toast(this.t('importSuccess'), 'success');
                         } else {
                             this.scanner.toast(this.t('importFailed'), 'warning');
@@ -3671,8 +3672,7 @@
 
             this.$('#lmm-clear-new').onclick = () => {
                 this.dm.clearNewFlags();
-                this.refresh();
-                this.updateFabBadge();
+                this.refreshAll();
                 this.scanner.toast(this.t('marksCleared'), 'success');
             };
 
@@ -3818,6 +3818,7 @@
             const counts = this.getModeCounts();
             const groups = this.dm.getGroupNames();
             const topbar = this.$('#lmm-topbar');
+            const keepScroll = topbar.scrollLeft;
 
             const items = [
                 { key: 'all', icon: '📋', label: this.t('all'), count: counts.all },
@@ -3846,6 +3847,7 @@
             }
 
             topbar.innerHTML = html;
+            topbar.scrollLeft = keepScroll;
             topbar.querySelectorAll('.lmm-topbar-item').forEach(item => {
                 item.onclick = () => {
                     this.currentMode = item.dataset.mode;
@@ -3952,7 +3954,10 @@
                 html += `<div class="lmm-sidebar-header" style="margin-top:12px"><span class="lmm-sidebar-title">${this.t('features')}</span></div><div id="lmm-features-list"></div>`;
             }
 
-            this.$('#lmm-sidebar').innerHTML = html;
+            const sidebarEl = this.$('#lmm-sidebar');
+            const keepSidebarScroll = sidebarEl.scrollTop;
+            sidebarEl.innerHTML = html;
+            sidebarEl.scrollTop = keepSidebarScroll;
 
             const orgs = {};
             modeModels.forEach(m => {
@@ -4110,7 +4115,6 @@
                     html += `<div class="lmm-sidebar-separator" id="lmm-tier-separator">── ${this.t('moreOrgs')} ──</div>`;
                 }
                 html += tier2.map(c => renderItem(c, false)).join('');
-                if (hasOther) html += renderItem({ name: 'Other', icon: '❔', cnt: hasOther.cnt }, false);
             } else {
                 html = tier1.map(c => renderItem(c, false)).join('');
                 if (tier2.length > 0) {
@@ -4383,7 +4387,7 @@
             this.selectedModels.forEach(name => {
                 this.dm.setVisibility(name, true);
             });
-            this.refresh();
+            this.refreshAll();
             this.scanner.applyFilters();
         }
 
@@ -4391,7 +4395,7 @@
             this.selectedModels.forEach(name => {
                 this.dm.setVisibility(name, false);
             });
-            this.refresh();
+            this.refreshAll();
             this.scanner.applyFilters();
         }
 
@@ -4926,7 +4930,7 @@
                 batch.querySelector('#lmm-multi-invert').onclick = () => this.multiInvert();
                 batch.querySelector('#lmm-multi-revert').onclick = () => {
                     this.revertMultiSelectChanges();
-                    this.refresh();
+                    this.refreshAll();
                 };
                 batch.querySelector('#lmm-multi-exit').onclick = () => this.exitMultiSelectMode();
             } else {
@@ -4948,6 +4952,14 @@
             const order = ['text', 'search', 'image', 'code', 'video'];
             const sorted = order.filter(m => modes.includes(m));
             return sorted.length > 0 ? sorted.map(m => icons[m]) : ['❓'];
+        }
+
+        refreshAll() {
+            this.updateTopbar();
+            this.updateSubbar();
+            this.updateSidebar();
+            this.refresh();
+            this.updateFabBadge();
         }
 
         updateFilterLock() {
@@ -5050,9 +5062,7 @@
                             if (e.target.closest('.lmm-card-actions')) return;
                             const newVis = !this.dm.isVisible(name);
                             this.dm.setVisibility(name, newVis);
-                            this.refresh();
-                            this.updateStats();
-                            this.updateFabBadge();
+                            this.refreshAll();
                         };
                         card.ondblclick = () => this.openEditModal(name);
 
@@ -5061,8 +5071,7 @@
                             starBtn.onclick = (e) => {
                                 e.stopPropagation();
                                 this.dm.toggleStar(name);
-                                this.refresh();
-                                this.updateTopbar();
+                                this.refreshAll();
                             };
                         }
 
@@ -5424,22 +5433,14 @@
         dm.onChange = () => ui.triggerSyncOnChange();
         window.addEventListener('pagehide', () => dm.flush());
         ui.init();
-        scanner.onScanComplete = () => {
-            if (ui.isOpen) {
-                ui.updateSidebar();
-                ui.refresh();
-            }
-        };
+        scanner.onScanComplete = () => { if (ui.isOpen) ui.refreshAll(); };
         scanner.startObserving();
         setTimeout(() => scanner.scan(), 2000);
         // 异步加载远程配置并刷新
         dm.loadRemoteConfig().then(() => {
             dm.reidentifyAll();
             scanner.scan();
-            if (ui.isOpen) {
-                ui.updateSidebar();
-                ui.refresh();
-            }
+            if (ui.isOpen) ui.refreshAll();
         });
     }
 
