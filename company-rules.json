@@ -63,6 +63,7 @@
     { "patterns": ["/^step/i"], "company": "StepFun", "icon": "👣" },
     { "patterns": ["/^Together AI/i"], "company": "stripedhyena", "icon": "" },
     { "patterns": ["/^hunyuan/i"], "company": "Tencent", "icon": "🐧" },
+    { "patterns": ["/^inkling/i"], "company": "Thinking Machines", "icon": "🌫" },
     { "patterns": ["/^falcon/i"], "company": "TII", "icon": "" },
     { "patterns": ["/^starling/i"], "company": "UC Berkeley", "icon": "" },
     { "patterns": ["/^solar/i"], "company": "Upstage AI", "icon": "" },
